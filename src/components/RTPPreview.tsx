@@ -82,8 +82,8 @@ export default function RTPPreview({
         ref={previewRef}
         className="relative overflow-hidden rounded-lg shadow-2xl"
         style={{
-          width: '1280px',
-          height: '1280px',
+          width: '1600px',
+          height: '1600px',
           backgroundColor: selectedStyle.backgroundColor,
           backgroundImage: `url(${selectedBackground})`,
           backgroundSize: 'cover',
