@@ -855,7 +855,6 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     description: "Layout cyberpunk dengan efek matrix hijau"
   },
   {
-  {
     id: "galaxy2",
     name: "Galaxy",
     description: "Layout galaxy dengan efek nebula dan bintang"
