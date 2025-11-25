@@ -91,7 +91,7 @@ export default function ClassicLayout({
   }));
 
   return (
-    <div className="relative z-10 flex flex-col min-h-full">
+    <div className="relative z-10 flex flex-col min-h-full" style={{ fontFamily: 'var(--font-rajdhani), sans-serif' }}>
       {/* Pattern Overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-0 opacity-50 mix-blend-overlay"

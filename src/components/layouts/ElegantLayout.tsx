@@ -95,7 +95,7 @@ export default function ElegantLayout({
   }));
 
   return (
-    <div className="relative z-10 flex flex-col min-h-full p-8">
+    <div className="relative z-10 flex flex-col min-h-full p-8" style={{ fontFamily: 'var(--font-exo2), sans-serif' }}>
       {/* Decorative Pattern */}
       <div
         className="absolute inset-0 opacity-10"

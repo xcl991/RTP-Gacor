@@ -119,7 +119,7 @@ export default function CyberLayout({
   }));
 
   return (
-    <div className="relative z-10 flex flex-col min-h-full p-6">
+    <div className="relative z-10 flex flex-col min-h-full p-6" style={{ fontFamily: 'var(--font-chakra), sans-serif' }}>
       {/* Matrix Rain Effect Background */}
       <div
         className="absolute inset-0 opacity-5"

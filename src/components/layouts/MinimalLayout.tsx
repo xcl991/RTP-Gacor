@@ -85,7 +85,7 @@ export default function MinimalLayout({
   }));
 
   return (
-    <div className="relative z-10 flex flex-col min-h-full p-8 bg-gray-50">
+    <div className="relative z-10 flex flex-col min-h-full p-8 bg-gray-50" style={{ fontFamily: 'var(--font-blackops), sans-serif' }}>
       {/* Header */}
       <div className="text-center mb-10">
         <img

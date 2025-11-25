@@ -25,7 +25,7 @@ export default function DefaultLayout({
   getCurrentDate
 }: DefaultLayoutProps) {
   return (
-    <div className="relative z-10 flex flex-col p-8">
+    <div className="relative z-10 flex flex-col p-8" style={{ fontFamily: 'var(--font-orbitron), sans-serif' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <img
@@ -39,10 +39,10 @@ export default function DefaultLayout({
 
         <div className="text-right">
           <h1
-            className="text-5xl font-bold mb-2"
+            className="text-4xl font-black mb-2 uppercase tracking-wider"
             style={{
               color: selectedStyle.primaryColor,
-              textShadow: `0 0 20px ${selectedStyle.primaryColor}`
+              textShadow: `0 0 20px ${selectedStyle.primaryColor}, 0 0 40px ${selectedStyle.primaryColor}50`
             }}
           >
             INFO TOP GAMES GACOR HARI INI

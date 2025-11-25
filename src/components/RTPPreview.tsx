@@ -87,25 +87,25 @@ export default function RTPPreview({
       </div>
 
       {/* Preview Container */}
-      <div 
+      <div
         ref={previewRef}
         className="relative overflow-hidden rounded-lg shadow-2xl"
         style={{
           width: '1200px',
           minHeight: '1600px',
           height: 'auto',
-          backgroundColor: selectedStyle.backgroundColor,
+          background: `linear-gradient(180deg, ${selectedStyle.backgroundColor} 0%, ${selectedStyle.primaryColor}15 50%, ${selectedStyle.backgroundColor} 100%)`,
           backgroundImage: `url(${selectedBackground})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           margin: '0 auto'
         }}
       >
-        {/* Overlay */}
+        {/* Color Overlay based on style */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.7) 100%)'
+            background: `radial-gradient(ellipse at 50% 30%, ${selectedStyle.primaryColor}30 0%, transparent 50%), radial-gradient(ellipse at 50% 70%, ${selectedStyle.secondaryColor}20 0%, transparent 50%), radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.8) 100%)`
           }}
         />
 

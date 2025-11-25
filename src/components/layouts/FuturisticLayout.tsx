@@ -100,7 +100,7 @@ export default function FuturisticLayout({
   }));
 
   return (
-    <div className="relative z-10 flex flex-col min-h-full p-8">
+    <div className="relative z-10 flex flex-col min-h-full p-8" style={{ fontFamily: 'var(--font-teko), sans-serif' }}>
       {/* Overlay Mesh */}
       <div
         className="absolute inset-0 z-0 opacity-80"

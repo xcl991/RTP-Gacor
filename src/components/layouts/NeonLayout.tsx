@@ -97,7 +97,7 @@ export default function NeonLayout({
   }));
 
   return (
-    <div className="relative z-10 flex flex-col min-h-full p-6">
+    <div className="relative z-10 flex flex-col min-h-full p-6" style={{ fontFamily: 'var(--font-russo), sans-serif' }}>
       {/* Neon Grid Background */}
       <div
         className="absolute inset-0 opacity-20"
