@@ -1,8 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
-import { Camera } from 'lucide-react';
-import html2canvas from 'html2canvas';
 import DefaultLayout from './layouts/DefaultLayout';
 import ClassicLayout from './layouts/ClassicLayout';
 import FuturisticLayout from './layouts/FuturisticLayout';
@@ -37,29 +34,6 @@ export default function RTPPreview({
   selectedPgSoftGames,
   selectedLayout
 }: RTPPreviewProps) {
-  const previewRef = useRef<HTMLDivElement>(null);
-
-  const handleDownload = async () => {
-    if (previewRef.current) {
-      try {
-        const canvas = await html2canvas(previewRef.current, {
-          scale: 2,
-          backgroundColor: null,
-          logging: false,
-          useCORS: true,
-          allowTaint: true
-        });
-        
-        const link = document.createElement('a');
-        link.download = `rtp-${selectedWebsite.name.toLowerCase()}-${Date.now()}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
-      } catch (error) {
-        console.error('Error generating image:', error);
-      }
-    }
-  };
-
   const getCurrentDate = () => {
     const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
     const months = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
@@ -75,20 +49,8 @@ export default function RTPPreview({
 
   return (
     <div className="space-y-4">
-      {/* Download Button */}
-      <div className="flex justify-end">
-        <button
-          onClick={handleDownload}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors shadow-lg"
-        >
-          <Camera className="w-5 h-5" />
-          Generate & Download Image
-        </button>
-      </div>
-
       {/* Preview Container */}
       <div
-        ref={previewRef}
         className="relative overflow-hidden rounded-lg shadow-2xl"
         style={{
           width: '1200px',
