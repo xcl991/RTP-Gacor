@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, TimeSlot, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game } from '@/types';
 
 interface CyberGameCardProps {
   game: Game;
@@ -87,7 +87,7 @@ function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor }: Cyber
 interface CyberLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   pragmaticCount: number;
@@ -98,7 +98,7 @@ interface CyberLayoutProps {
 export default function CyberLayout({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedPragmaticGames,
   selectedPgSoftGames,
   pragmaticCount,
@@ -154,7 +154,7 @@ export default function CyberLayout({
             </div>
             <div className="text-right font-mono">
               <div className="text-sm" style={{ color: primaryColor }}>[{getCurrentDate()}]</div>
-              <div className="text-xl font-bold text-white">{selectedTimeSlot.label}</div>
+              <div className="text-xl font-bold text-white">{customTimeLabel}</div>
             </div>
           </div>
         </div>

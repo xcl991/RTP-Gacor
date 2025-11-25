@@ -1,12 +1,12 @@
 'use client';
 
 import GameGrid from '../GameGrid';
-import { RTPStyle, TimeSlot, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game } from '@/types';
 
 interface DefaultLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   pragmaticCount: number;
@@ -17,7 +17,7 @@ interface DefaultLayoutProps {
 export default function DefaultLayout({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedPragmaticGames,
   selectedPgSoftGames,
   pragmaticCount,
@@ -58,7 +58,7 @@ export default function DefaultLayout({
                 textShadow: `0 0 10px ${selectedStyle.secondaryColor}`
               }}
             >
-              {selectedTimeSlot.label}
+              {customTimeLabel}
             </span>
           </div>
         </div>

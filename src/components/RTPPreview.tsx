@@ -7,12 +7,12 @@ import NeonLayout from './layouts/NeonLayout';
 import ElegantLayout from './layouts/ElegantLayout';
 import CyberLayout from './layouts/CyberLayout';
 import MinimalLayout from './layouts/MinimalLayout';
-import { RTPStyle, TimeSlot, WebsiteOption, Game, LayoutOption, TextureOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, LayoutOption, TextureOption } from '@/types';
 
 interface RTPPreviewProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedBackground: string;
   selectedTexture: TextureOption;
   pragmaticCount: number;
@@ -25,7 +25,7 @@ interface RTPPreviewProps {
 export default function RTPPreview({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedBackground,
   selectedTexture,
   pragmaticCount,
@@ -88,7 +88,7 @@ export default function RTPPreview({
           <DefaultLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
-            selectedTimeSlot={selectedTimeSlot}
+            customTimeLabel={customTimeLabel}
             selectedPragmaticGames={selectedPragmaticGames}
             selectedPgSoftGames={selectedPgSoftGames}
             pragmaticCount={pragmaticCount}
@@ -101,7 +101,7 @@ export default function RTPPreview({
           <ClassicLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
-            selectedTimeSlot={selectedTimeSlot}
+            customTimeLabel={customTimeLabel}
             selectedPragmaticGames={selectedPragmaticGames}
             selectedPgSoftGames={selectedPgSoftGames}
             pragmaticCount={pragmaticCount}
@@ -114,7 +114,7 @@ export default function RTPPreview({
           <FuturisticLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
-            selectedTimeSlot={selectedTimeSlot}
+            customTimeLabel={customTimeLabel}
             selectedPragmaticGames={selectedPragmaticGames}
             selectedPgSoftGames={selectedPgSoftGames}
             pragmaticCount={pragmaticCount}
@@ -127,7 +127,7 @@ export default function RTPPreview({
           <NeonLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
-            selectedTimeSlot={selectedTimeSlot}
+            customTimeLabel={customTimeLabel}
             selectedPragmaticGames={selectedPragmaticGames}
             selectedPgSoftGames={selectedPgSoftGames}
             pragmaticCount={pragmaticCount}
@@ -140,7 +140,7 @@ export default function RTPPreview({
           <ElegantLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
-            selectedTimeSlot={selectedTimeSlot}
+            customTimeLabel={customTimeLabel}
             selectedPragmaticGames={selectedPragmaticGames}
             selectedPgSoftGames={selectedPgSoftGames}
             pragmaticCount={pragmaticCount}
@@ -153,7 +153,7 @@ export default function RTPPreview({
           <CyberLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
-            selectedTimeSlot={selectedTimeSlot}
+            customTimeLabel={customTimeLabel}
             selectedPragmaticGames={selectedPragmaticGames}
             selectedPgSoftGames={selectedPgSoftGames}
             pragmaticCount={pragmaticCount}
@@ -166,7 +166,7 @@ export default function RTPPreview({
           <MinimalLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
-            selectedTimeSlot={selectedTimeSlot}
+            customTimeLabel={customTimeLabel}
             selectedPragmaticGames={selectedPragmaticGames}
             selectedPgSoftGames={selectedPgSoftGames}
             pragmaticCount={pragmaticCount}

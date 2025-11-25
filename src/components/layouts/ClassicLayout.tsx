@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, TimeSlot, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game } from '@/types';
 
 interface ClassicGameCardProps {
   game: Game;
@@ -62,7 +62,7 @@ function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
 interface ClassicLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   pragmaticCount: number;
@@ -73,7 +73,7 @@ interface ClassicLayoutProps {
 export default function ClassicLayout({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedPragmaticGames,
   selectedPgSoftGames,
   pragmaticCount,
@@ -133,7 +133,7 @@ export default function ClassicLayout({
             }}
           >
             <span className="text-3xl font-black text-white tracking-widest">
-              {selectedTimeSlot.label}
+              {customTimeLabel}
             </span>
           </div>
         </div>

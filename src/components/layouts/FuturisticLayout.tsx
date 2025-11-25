@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, TimeSlot, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game } from '@/types';
 
 interface FuturisticGameCardProps {
   game: Game;
@@ -71,7 +71,7 @@ function FuturisticGameCard({ game, rtp, style }: FuturisticGameCardProps) {
 interface FuturisticLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   pragmaticCount: number;
@@ -82,7 +82,7 @@ interface FuturisticLayoutProps {
 export default function FuturisticLayout({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedPragmaticGames,
   selectedPgSoftGames,
   pragmaticCount,
@@ -149,7 +149,7 @@ export default function FuturisticLayout({
               {getCurrentDate()}
             </span>
             <span className="text-2xl font-bold" style={{ color: selectedStyle.primaryColor, textShadow: `0 0 10px ${selectedStyle.primaryColor}` }}>
-              {selectedTimeSlot.label}
+              {customTimeLabel}
             </span>
           </div>
         </div>

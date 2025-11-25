@@ -9,7 +9,7 @@ import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption, TextureOption } 
 export default function Home() {
   const [selectedWebsite, setSelectedWebsite] = useState<WebsiteOption>(WEBSITES[0]);
   const [selectedStyle, setSelectedStyle] = useState<RTPStyle>(RTP_STYLES[0]);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot>(TIME_SLOTS[2]);
+  const [customTimeLabel, setCustomTimeLabel] = useState<string>('18:00 - 00:00 WIB');
   const [selectedBackground, setSelectedBackground] = useState<string>(BACKGROUNDS[0]);
   const [selectedTexture, setSelectedTexture] = useState<TextureOption>(TEXTURE_OPTIONS[0]);
   const [pragmaticCount, setPragmaticCount] = useState<number>(8);
@@ -44,11 +44,6 @@ export default function Home() {
     generateRandomGames();
   };
 
-  const shuffleTime = () => {
-    const randomIndex = Math.floor(Math.random() * TIME_SLOTS.length);
-    setSelectedTimeSlot(TIME_SLOTS[randomIndex]);
-  };
-
   const shuffleBackground = () => {
     const randomIndex = Math.floor(Math.random() * BACKGROUNDS.length);
     setSelectedBackground(BACKGROUNDS[randomIndex]);
@@ -62,7 +57,6 @@ export default function Home() {
           selectedWebsite={selectedWebsite}
           onWebsiteChange={setSelectedWebsite}
           onShuffleGames={shuffleGames}
-          onShuffleTime={shuffleTime}
           onShuffleBackground={shuffleBackground}
           selectedStyle={selectedStyle}
           onStyleChange={setSelectedStyle}
@@ -74,6 +68,8 @@ export default function Home() {
           onPgSoftCountChange={setPgSoftCount}
           selectedLayout={selectedLayout}
           onLayoutChange={setSelectedLayout}
+          customTimeLabel={customTimeLabel}
+          onCustomTimeLabelChange={setCustomTimeLabel}
         />
 
         {/* Main Content */}
@@ -93,7 +89,7 @@ export default function Home() {
             <RTPPreview
               selectedWebsite={selectedWebsite}
               selectedStyle={selectedStyle}
-              selectedTimeSlot={selectedTimeSlot}
+              customTimeLabel={customTimeLabel}
               selectedBackground={selectedBackground}
               selectedTexture={selectedTexture}
               pragmaticCount={pragmaticCount}

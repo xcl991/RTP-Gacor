@@ -9,7 +9,6 @@ interface HeaderProps {
   selectedWebsite: WebsiteOption;
   onWebsiteChange: (website: WebsiteOption) => void;
   onShuffleGames: () => void;
-  onShuffleTime: () => void;
   onShuffleBackground: () => void;
   selectedStyle: RTPStyle;
   onStyleChange: (style: RTPStyle) => void;
@@ -21,13 +20,14 @@ interface HeaderProps {
   onPgSoftCountChange: (count: number) => void;
   selectedLayout: LayoutOption;
   onLayoutChange: (layout: LayoutOption) => void;
+  customTimeLabel: string;
+  onCustomTimeLabelChange: (label: string) => void;
 }
 
 export default function Header({
   selectedWebsite,
   onWebsiteChange,
   onShuffleGames,
-  onShuffleTime,
   onShuffleBackground,
   selectedStyle,
   onStyleChange,
@@ -38,7 +38,9 @@ export default function Header({
   onPragmaticCountChange,
   onPgSoftCountChange,
   selectedLayout,
-  onLayoutChange
+  onLayoutChange,
+  customTimeLabel,
+  onCustomTimeLabelChange
 }: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = useState(false);
@@ -127,13 +129,17 @@ export default function Header({
           Acak Games
         </button>
 
-        <button
-          onClick={onShuffleTime}
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
-        >
+        {/* Custom Time Input */}
+        <div className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg">
           <Clock className="w-4 h-4" />
-          Acak Jam
-        </button>
+          <input
+            type="text"
+            value={customTimeLabel}
+            onChange={(e) => onCustomTimeLabelChange(e.target.value)}
+            placeholder="00:00 - 06:00 WIB"
+            className="w-40 px-2 py-1 bg-purple-700 text-white rounded border border-purple-500 focus:border-purple-300 focus:outline-none text-sm"
+          />
+        </div>
 
         <button
           onClick={onShuffleBackground}

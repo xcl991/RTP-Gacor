@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, TimeSlot, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game } from '@/types';
 
 interface NeonGameCardProps {
   game: Game;
@@ -65,7 +65,7 @@ function NeonGameCard({ game, rtp, glowColor }: NeonGameCardProps) {
 interface NeonLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   pragmaticCount: number;
@@ -76,7 +76,7 @@ interface NeonLayoutProps {
 export default function NeonLayout({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedPragmaticGames,
   selectedPgSoftGames,
   pragmaticCount,
@@ -147,7 +147,7 @@ export default function NeonLayout({
               textShadow: `0 0 10px ${secondaryColor}`
             }}
           >
-            {selectedTimeSlot.label}
+            {customTimeLabel}
           </span>
         </div>
       </div>

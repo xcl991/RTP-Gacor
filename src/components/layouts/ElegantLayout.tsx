@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, TimeSlot, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game } from '@/types';
 
 interface ElegantGameCardProps {
   game: Game;
@@ -63,7 +63,7 @@ function ElegantGameCard({ game, rtp, primaryColor, secondaryColor }: ElegantGam
 interface ElegantLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   pragmaticCount: number;
@@ -74,7 +74,7 @@ interface ElegantLayoutProps {
 export default function ElegantLayout({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedPragmaticGames,
   selectedPgSoftGames,
   pragmaticCount,
@@ -134,7 +134,7 @@ export default function ElegantLayout({
           <div className="flex items-center justify-center gap-6">
             <span style={{ color: primaryColor }}>{getCurrentDate()}</span>
             <span className="w-px h-4" style={{ background: primaryColor }} />
-            <span style={{ color: secondaryColor }}>{selectedTimeSlot.label}</span>
+            <span style={{ color: secondaryColor }}>{customTimeLabel}</span>
           </div>
         </div>
       </div>

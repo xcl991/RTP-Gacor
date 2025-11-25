@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, TimeSlot, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game } from '@/types';
 
 interface MinimalGameCardProps {
   game: Game;
@@ -53,7 +53,7 @@ function MinimalGameCard({ game, rtp, primaryColor, secondaryColor }: MinimalGam
 interface MinimalLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
-  selectedTimeSlot: TimeSlot;
+  customTimeLabel: string;
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   pragmaticCount: number;
@@ -64,7 +64,7 @@ interface MinimalLayoutProps {
 export default function MinimalLayout({
   selectedWebsite,
   selectedStyle,
-  selectedTimeSlot,
+  customTimeLabel,
   selectedPragmaticGames,
   selectedPgSoftGames,
   pragmaticCount,
@@ -100,7 +100,7 @@ export default function MinimalLayout({
         <div className="flex items-center justify-center gap-3">
           <span style={{ color: primaryColor }}>{getCurrentDate()}</span>
           <span className="w-1 h-1 rounded-full" style={{ background: primaryColor }} />
-          <span style={{ color: secondaryColor }}>{selectedTimeSlot.label}</span>
+          <span style={{ color: secondaryColor }}>{customTimeLabel}</span>
         </div>
       </div>
 
