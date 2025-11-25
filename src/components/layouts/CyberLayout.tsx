@@ -15,7 +15,7 @@ function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor }: Cyber
 
   return (
     <div
-      className="relative overflow-hidden"
+      className="relative overflow-hidden w-[180px]"
       style={{
         background: '#0a0a0a',
         clipPath: 'polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%)',
@@ -183,7 +183,7 @@ export default function CyberLayout({
             alt="Pragmatic Play"
           />
         </div>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           {pragmaticGamesWithRTP.map((game, index) => (
             <CyberGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}
@@ -210,7 +210,7 @@ export default function CyberLayout({
             alt="PG Soft"
           />
         </div>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           {pgSoftGamesWithRTP.map((game, index) => (
             <CyberGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}

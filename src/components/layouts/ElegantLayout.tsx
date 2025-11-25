@@ -12,7 +12,7 @@ interface ElegantGameCardProps {
 function ElegantGameCard({ game, rtp, primaryColor, secondaryColor }: ElegantGameCardProps) {
   return (
     <div
-      className="rounded-lg overflow-hidden"
+      className="rounded-lg overflow-hidden w-[180px]"
       style={{
         background: 'linear-gradient(145deg, #2a2215 0%, #1a1508 100%)',
         border: `1px solid ${primaryColor}`,
@@ -153,7 +153,7 @@ export default function ElegantLayout({
           />
           <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PRAGMATIC PLAY</span>
         </div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           {pragmaticGamesWithRTP.map((game, index) => (
             <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}
@@ -181,7 +181,7 @@ export default function ElegantLayout({
           />
           <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PG SOFT</span>
         </div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           {pgSoftGamesWithRTP.map((game, index) => (
             <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}

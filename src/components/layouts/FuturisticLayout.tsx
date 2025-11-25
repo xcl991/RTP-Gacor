@@ -11,7 +11,7 @@ interface FuturisticGameCardProps {
 function FuturisticGameCard({ game, rtp, style }: FuturisticGameCardProps) {
   return (
     <div
-      className="rounded-lg overflow-hidden shadow-lg"
+      className="rounded-lg overflow-hidden shadow-lg w-[180px]"
       style={{
         background: '#0f172a',
         border: '1px solid #334155'
@@ -163,7 +163,7 @@ export default function FuturisticLayout({
           border: '3px solid rgba(255,255,255,0.05)'
         }}
       >
-        <div className="flex-1 grid grid-cols-4 gap-2">
+        <div className="flex-1 flex flex-wrap justify-center gap-2">
           {pragmaticGamesWithRTP.map((game, index) => (
             <FuturisticGameCard
               key={`pragmatic-${index}`}
@@ -211,7 +211,7 @@ export default function FuturisticLayout({
           border: '3px solid rgba(255,255,255,0.05)'
         }}
       >
-        <div className="flex-1 grid grid-cols-4 gap-2">
+        <div className="flex-1 flex flex-wrap justify-center gap-2">
           {pgSoftGamesWithRTP.map((game, index) => (
             <FuturisticGameCard
               key={`pgsoft-${index}`}

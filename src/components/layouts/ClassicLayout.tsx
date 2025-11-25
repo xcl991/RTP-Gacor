@@ -14,7 +14,7 @@ function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
 
   return (
     <div
-      className="rounded-lg overflow-hidden shadow-lg"
+      className="rounded-lg overflow-hidden shadow-lg w-[180px]"
       style={{
         background: 'rgba(0,0,0,0.7)',
         border: '1px solid #cb9b24'
@@ -153,7 +153,7 @@ export default function ClassicLayout({
               alt="Pragmatic Play"
             />
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {pragmaticGamesWithRTP.map((game, index) => (
               <ClassicGameCard
                 key={`pragmatic-${index}`}
@@ -181,7 +181,7 @@ export default function ClassicLayout({
               alt="PG Soft"
             />
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {pgSoftGamesWithRTP.map((game, index) => (
               <ClassicGameCard
                 key={`pgsoft-${index}`}

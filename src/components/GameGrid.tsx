@@ -11,7 +11,7 @@ interface GameCardProps {
 function GameCard({ game, rtp, style }: GameCardProps) {
   return (
     <div
-      className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
+      className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 w-[180px]"
       style={{
         backgroundColor: style.backgroundColor,
         border: `2px solid ${style.primaryColor}`
@@ -134,7 +134,7 @@ export default function GameGrid({
       </div>
 
       {/* Games Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {gamesWithRTP.map((game, index) => (
           <GameCard 
             key={`${game.name}-${index}`}

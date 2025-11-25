@@ -12,7 +12,7 @@ interface MinimalGameCardProps {
 function MinimalGameCard({ game, rtp, primaryColor, secondaryColor }: MinimalGameCardProps) {
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow w-[180px]">
       <div className="relative w-full aspect-square overflow-hidden bg-gray-100">
         <img
           src={game.src}
@@ -114,7 +114,7 @@ export default function MinimalLayout({
           />
           <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${primaryColor}, transparent)` }} />
         </div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           {pragmaticGamesWithRTP.map((game, index) => (
             <MinimalGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}
@@ -131,7 +131,7 @@ export default function MinimalLayout({
           />
           <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${secondaryColor}, transparent)` }} />
         </div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           {pgSoftGamesWithRTP.map((game, index) => (
             <MinimalGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}

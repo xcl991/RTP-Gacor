@@ -11,7 +11,7 @@ interface NeonGameCardProps {
 function NeonGameCard({ game, rtp, glowColor }: NeonGameCardProps) {
   return (
     <div
-      className="rounded-xl overflow-hidden relative group"
+      className="rounded-xl overflow-hidden relative group w-[180px]"
       style={{
         background: 'linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%)',
         border: `2px solid ${glowColor}`,
@@ -163,7 +163,7 @@ export default function NeonLayout({
           />
           <div className="flex-1 h-1 rounded" style={{ background: `linear-gradient(90deg, ${primaryColor}, transparent)` }} />
         </div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="flex flex-wrap justify-center gap-3">
           {pragmaticGamesWithRTP.map((game, index) => (
             <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} />
           ))}
@@ -181,7 +181,7 @@ export default function NeonLayout({
           />
           <div className="flex-1 h-1 rounded" style={{ background: `linear-gradient(90deg, ${secondaryColor}, transparent)` }} />
         </div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="flex flex-wrap justify-center gap-3">
           {pgSoftGamesWithRTP.map((game, index) => (
             <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} />
           ))}
