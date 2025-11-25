@@ -112,7 +112,7 @@ export default function RTPPreview({
         {/* Texture Overlay */}
         {selectedTexture.pattern !== 'none' && (
           <div
-            className="absolute inset-0 opacity-20 pointer-events-none"
+            className="absolute inset-0 opacity-50 pointer-events-none"
             style={{
               backgroundImage: selectedTexture.pattern,
               backgroundRepeat: 'repeat'
