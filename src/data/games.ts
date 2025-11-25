@@ -644,24 +644,44 @@ export const WEBSITES: WebsiteOption[] = [
     logo: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi6dGGITtEJUQlpAVrZjw_qoubWVYUUE3A8j_jEKeFU6kTBOZdkrm4RmTr-8m_Hu5mqxSv_ntcIWQfPRdYji-fLp2IZu5nXOMd7YNXaYou-k4z9Fj3MWeJ3brj4s3B1TYlZM-4QMDoiU24CJoQiOC_dlfgd1tdpDdJL-VhziXfvzEfg8F7Kg6R7znUheugw/w556-h104/GALAXY77BET%20FIX.png"
   },
   {
-    id: "sultan88",
-    name: "SULTAN88",
-    logo: "https://example.com/logo-sultan88.png"
+    id: "agen77bet",
+    name: "AGEN77BET",
+    logo: "https://www.agen77betlunjp.com/_next/image?url=https%3A%2F%2F9996777888.com%2FV1114%2Fimages%2Flogo_icon%2Fweb_logo%2Flight_1727103660.01726_AGEN77BET%2520(1).png%3Fv%3D3&w=1080&q=75"
   },
   {
-    id: "rajacasino",
-    name: "RAJACASINO88",
-    logo: "https://example.com/logo-rajacasino.png"
+    id: "asiaplay17",
+    name: "ASIAPLAY17",
+    logo: "https://www.asiaplay17silat.com/_next/image?url=https%3A%2F%2F9996777888.com%2FV1023%2Fimages%2Flogo_icon%2Fweb_logo%2Flight_1658910649.48611_VICTORY%2520LOGO.png%3Fv%3D2&w=1080&q=75"
   },
   {
-    id: "mpo777",
-    name: "MPO777",
-    logo: "https://example.com/logo-mpo777.png"
+    id: "darumaplay77",
+    name: "DARUMAPLAY77",
+    logo: "https://darumaplay77lock.com/images/logoweb.png"
   },
   {
-    id: "boswin168",
-    name: "BOSWIN168",
-    logo: "https://example.com/logo-boswin168.png"
+    id: "marvel77",
+    name: "MARVEL77",
+    logo: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjsyaAlqKvXk02lrruNmvJ56_EorNKUWNCcTKuVvz3h7Z1yHDpV4u73oX_kY10ZJJ29vTTrczE0DwgSiU0LxbB7-JWzAOp9wBc2Vy9cKsAIkZTaWfpcpF1dleivmh8HHCO79GklLtT2h-0MdC4huKyHfqpsbNR4z6UaQww0MWRFhThRsfczBxmUo2cpAg-N/w537-h100/MARVEL77%20FIX.png"
+  },
+  {
+    id: "pegasusplay77",
+    name: "PEGASUSPLAY77",
+    logo: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgCEvxehWR03_HVk6E7YgxM_NkFmu23Zu6kqM0vDlDKv8KaXPgyFavq_JOOwOfL_GmtLpH6WlOOCzjoicJebV-Kh8Vg_bXgv0EVUWok7J5m_xrQRv7uZgWz-5EGJnLvR_iSbYSMKfIirdsCCld60_lGI2PEmSLQUSBQuHxtN1FggxcAHMyfnbhMv0WlT064/w597-h131/PEGASUSPLAY77.png"
+  },
+  {
+    id: "playwin77",
+    name: "PLAYWIN77",
+    logo: "https://playwin77earth.com/images/logoweb.png"
+  },
+  {
+    id: "republik77",
+    name: "REPUBLIK77",
+    logo: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSVl_969IWAvoLhZ6XBh-eKgVZ2P3cWp6rJqchHmXa8jkOMB4m-6TYVD3U2gsixUIxftUkbQtqsTlejeg0_LQCrh-Kx7s2cKsDAczhToTlEZnGT3uHDPYLjs4rbchsSk3tCPeiMuIRPqsdvmIclflhWWJLMt3WwgZo596D1ZSDMJ-fmTQPPv1aaE8AYhE6/w600-h127/REPUBLIK77%20FIX.png"
+  },
+  {
+    id: "taipan77",
+    name: "TAIPAN77",
+    logo: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZv2sibamPDnYDT6G738Nuo3S7KHzTGIZLqo7VJYapihz6Cw5WpzBTmQ6JHkKdarha2USFg_bIZFaKCSbYLq80lHr98kwu9YXxIaxeb_jkQ_Cv7GovEbW9jTqfIFi8EE-y5mfHYm30IC3UC1rqw9bBM2jlxrTtAjRuAEyckPmTU05rUydUwoGa8dIPwRTm/w631-h118/TAIPAN77%20FIX.png"
   }
 ];
 
