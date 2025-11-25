@@ -83,7 +83,8 @@ export default function RTPPreview({
         className="relative overflow-hidden rounded-lg shadow-2xl"
         style={{
           width: '1920px',
-          height: '1920px',
+          minHeight: '1920px',
+          height: 'auto',
           backgroundColor: selectedStyle.backgroundColor,
           backgroundImage: `url(${selectedBackground})`,
           backgroundSize: 'cover',
@@ -100,7 +101,7 @@ export default function RTPPreview({
         />
 
         {/* Content */}
-        <div className="relative z-10 h-full flex flex-col p-8">
+        <div className="relative z-10 flex flex-col p-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <img 
@@ -140,7 +141,7 @@ export default function RTPPreview({
           </div>
 
           {/* Games Container */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1">
             {/* Pragmatic Play Section */}
             <GameGrid
               title="PRAGMATIC PLAY"
