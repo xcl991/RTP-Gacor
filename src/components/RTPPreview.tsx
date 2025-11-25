@@ -56,10 +56,11 @@ export default function RTPPreview({
           width: '1200px',
           minHeight: '1600px',
           height: 'auto',
-          background: `linear-gradient(180deg, ${selectedStyle.backgroundColor} 0%, ${selectedStyle.primaryColor}15 50%, ${selectedStyle.backgroundColor} 100%)`,
+          backgroundColor: selectedStyle.backgroundColor,
           backgroundImage: `url(${selectedBackground})`,
-          backgroundSize: 'cover',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           margin: '0 auto'
         }}
       >
