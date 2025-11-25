@@ -683,7 +683,7 @@ export const BACKGROUNDS = [
 export const RTP_STYLES: RTPStyle[] = [
   {
     id: "galaxy",
-    name: "Galaxy Style",
+    name: "Galaxy",
     primaryColor: "#00f0ff",
     secondaryColor: "#ffd700",
     backgroundColor: "#050b14",
@@ -691,7 +691,7 @@ export const RTP_STYLES: RTPStyle[] = [
   },
   {
     id: "neon",
-    name: "Neon Style",
+    name: "Neon Pink",
     primaryColor: "#ff00ff",
     secondaryColor: "#00ff00",
     backgroundColor: "#0a0a0a",
@@ -699,7 +699,7 @@ export const RTP_STYLES: RTPStyle[] = [
   },
   {
     id: "royal",
-    name: "Royal Style",
+    name: "Royal Purple",
     primaryColor: "#ffd700",
     secondaryColor: "#ff6b6b",
     backgroundColor: "#1a1a2e",
@@ -707,7 +707,7 @@ export const RTP_STYLES: RTPStyle[] = [
   },
   {
     id: "ocean",
-    name: "Ocean Style",
+    name: "Ocean Blue",
     primaryColor: "#00b4d8",
     secondaryColor: "#90e0ef",
     backgroundColor: "#03045e",
@@ -715,11 +715,91 @@ export const RTP_STYLES: RTPStyle[] = [
   },
   {
     id: "forest",
-    name: "Forest Style",
+    name: "Forest Green",
     primaryColor: "#52b788",
     secondaryColor: "#95d5b2",
     backgroundColor: "#081c15",
     accentColor: "#2d6a4f"
+  },
+  {
+    id: "sunset",
+    name: "Sunset Orange",
+    primaryColor: "#ff6b35",
+    secondaryColor: "#ffb627",
+    backgroundColor: "#1a0a00",
+    accentColor: "#f7931e"
+  },
+  {
+    id: "crimson",
+    name: "Crimson Red",
+    primaryColor: "#dc143c",
+    secondaryColor: "#ff6b6b",
+    backgroundColor: "#1a0505",
+    accentColor: "#b22234"
+  },
+  {
+    id: "midnight",
+    name: "Midnight",
+    primaryColor: "#6366f1",
+    secondaryColor: "#a5b4fc",
+    backgroundColor: "#0f0f23",
+    accentColor: "#4338ca"
+  },
+  {
+    id: "emerald",
+    name: "Emerald",
+    primaryColor: "#10b981",
+    secondaryColor: "#6ee7b7",
+    backgroundColor: "#021a0f",
+    accentColor: "#059669"
+  },
+  {
+    id: "amber",
+    name: "Amber Gold",
+    primaryColor: "#f59e0b",
+    secondaryColor: "#fcd34d",
+    backgroundColor: "#1a1400",
+    accentColor: "#d97706"
+  },
+  {
+    id: "rose",
+    name: "Rose Pink",
+    primaryColor: "#f43f5e",
+    secondaryColor: "#fda4af",
+    backgroundColor: "#1a0508",
+    accentColor: "#e11d48"
+  },
+  {
+    id: "teal",
+    name: "Teal",
+    primaryColor: "#14b8a6",
+    secondaryColor: "#5eead4",
+    backgroundColor: "#021a17",
+    accentColor: "#0d9488"
+  },
+  {
+    id: "violet",
+    name: "Violet",
+    primaryColor: "#8b5cf6",
+    secondaryColor: "#c4b5fd",
+    backgroundColor: "#0f0720",
+    accentColor: "#7c3aed"
+  },
+  {
+    id: "cyan",
+    name: "Cyan",
+    primaryColor: "#06b6d4",
+    secondaryColor: "#67e8f9",
+    backgroundColor: "#021517",
+    accentColor: "#0891b2"
+  },
+  {
+    id: "lime",
+    name: "Lime",
+    primaryColor: "#84cc16",
+    secondaryColor: "#bef264",
+    backgroundColor: "#0a1a00",
+    accentColor: "#65a30d"
   }
 ];
 

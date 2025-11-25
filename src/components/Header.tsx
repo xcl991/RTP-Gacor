@@ -11,7 +11,8 @@ interface HeaderProps {
   onShuffleGames: () => void;
   onShuffleTime: () => void;
   onShuffleBackground: () => void;
-  onShuffleStyle: () => void;
+  selectedStyle: RTPStyle;
+  onStyleChange: (style: RTPStyle) => void;
   pragmaticCount: number;
   pgSoftCount: number;
   onPragmaticCountChange: (count: number) => void;
@@ -26,7 +27,8 @@ export default function Header({
   onShuffleGames,
   onShuffleTime,
   onShuffleBackground,
-  onShuffleStyle,
+  selectedStyle,
+  onStyleChange,
   pragmaticCount,
   pgSoftCount,
   onPragmaticCountChange,
@@ -36,6 +38,7 @@ export default function Header({
 }: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = useState(false);
+  const [isStyleDropdownOpen, setIsStyleDropdownOpen] = useState(false);
 
   return (
     <div className="bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-xl">
@@ -135,13 +138,43 @@ export default function Header({
           Acak Background
         </button>
 
-        <button
-          onClick={onShuffleStyle}
-          className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg transition-colors"
-        >
-          <Palette className="w-4 h-4" />
-          Acak Style
-        </button>
+        {/* Base Color Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsStyleDropdownOpen(!isStyleDropdownOpen)}
+            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <div
+              className="w-4 h-4 rounded-full border border-white/30"
+              style={{ backgroundColor: selectedStyle.primaryColor }}
+            />
+            <span className="font-semibold">{selectedStyle.name}</span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+
+          {isStyleDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto">
+              {RTP_STYLES.map((style) => (
+                <button
+                  key={style.id}
+                  onClick={() => {
+                    onStyleChange(style);
+                    setIsStyleDropdownOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left ${
+                    selectedStyle.id === style.id ? 'bg-gray-700' : ''
+                  }`}
+                >
+                  <div
+                    className="w-5 h-5 rounded-full border border-white/30"
+                    style={{ backgroundColor: style.primaryColor }}
+                  />
+                  <span className="text-white">{style.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Game Count Controls */}
         <div className="flex items-center gap-4 bg-gray-800 px-4 py-2 rounded-lg">

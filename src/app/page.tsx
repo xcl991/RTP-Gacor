@@ -53,11 +53,6 @@ export default function Home() {
     setSelectedBackground(BACKGROUNDS[randomIndex]);
   };
 
-  const shuffleStyle = () => {
-    const randomIndex = Math.floor(Math.random() * RTP_STYLES.length);
-    setSelectedStyle(RTP_STYLES[randomIndex]);
-  };
-
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -68,7 +63,8 @@ export default function Home() {
           onShuffleGames={shuffleGames}
           onShuffleTime={shuffleTime}
           onShuffleBackground={shuffleBackground}
-          onShuffleStyle={shuffleStyle}
+          selectedStyle={selectedStyle}
+          onStyleChange={setSelectedStyle}
           pragmaticCount={pragmaticCount}
           pgSoftCount={pgSoftCount}
           onPragmaticCountChange={setPragmaticCount}

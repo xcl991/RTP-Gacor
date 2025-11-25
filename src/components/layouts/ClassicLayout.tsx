@@ -23,15 +23,17 @@ function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
         border: '1px solid #555'
       }}
     >
-      <img
-        src={game.src}
-        alt={game.name}
-        className="w-full aspect-square object-contain bg-black/50 rounded-md mb-2"
-        style={{ border: '1px solid #cb9b24' }}
-        onError={(e) => {
-          (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
-        }}
-      />
+      <div className="flex justify-center mb-2">
+        <img
+          src={game.src}
+          alt={game.name}
+          className="object-contain bg-black/50 rounded-md"
+          style={{ width: '50px', height: '50px', border: '1px solid #cb9b24' }}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
+          }}
+        />
+      </div>
       <div
         className="h-5 rounded overflow-hidden relative"
         style={{ background: '#222', border: '1px solid #444' }}
