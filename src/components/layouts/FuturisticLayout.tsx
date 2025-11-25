@@ -53,8 +53,8 @@ function FuturisticGameCard({ game, rtp, style }: FuturisticGameCardProps) {
             className="h-full relative"
             style={{
               width: `${rtp}%`,
-              background: style.primaryColor,
-              boxShadow: `0 0 10px ${style.primaryColor}`
+              background: `linear-gradient(90deg, ${style.primaryColor}, ${style.secondaryColor})`,
+              boxShadow: `0 0 10px ${style.secondaryColor}`
             }}
           >
             <div

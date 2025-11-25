@@ -10,11 +10,6 @@ interface MinimalGameCardProps {
 }
 
 function MinimalGameCard({ game, rtp, primaryColor, secondaryColor }: MinimalGameCardProps) {
-  const getStatusColor = (rtp: number) => {
-    if (rtp >= 95) return primaryColor;
-    if (rtp >= 90) return secondaryColor;
-    return '#6b7280';
-  };
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
@@ -35,13 +30,17 @@ function MinimalGameCard({ game, rtp, primaryColor, secondaryColor }: MinimalGam
             <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all"
-                style={{ width: `${rtp}%`, background: getStatusColor(rtp) }}
+                style={{
+                  width: `${rtp}%`,
+                  background: `linear-gradient(90deg, ${primaryColor}, ${secondaryColor})`,
+                  boxShadow: `0 0 10px ${secondaryColor}`
+                }}
               />
             </div>
           </div>
           <span
             className="text-sm font-semibold"
-            style={{ color: getStatusColor(rtp) }}
+            style={{ color: primaryColor }}
           >
             {rtp}%
           </span>

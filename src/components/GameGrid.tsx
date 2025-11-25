@@ -54,12 +54,12 @@ function GameCard({ game, rtp, style }: GameCardProps) {
         
         {/* RTP Bar */}
         <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full transition-all duration-500 relative"
             style={{
               width: `${rtp}%`,
-              backgroundColor: style.primaryColor,
-              boxShadow: `0 0 5px ${style.primaryColor}`
+              background: `linear-gradient(90deg, ${style.primaryColor}, ${style.secondaryColor})`,
+              boxShadow: `0 0 10px ${style.secondaryColor}`
             }}
           >
             <div className="absolute right-0 top-0 w-1 h-full bg-white animate-pulse"></div>

@@ -9,11 +9,8 @@ interface ClassicGameCardProps {
 }
 
 function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
-  const getBarColor = (rtp: number) => {
-    if (rtp >= 95) return 'linear-gradient(90deg, #22c55e, #4ade80)';
-    if (rtp >= 90) return 'linear-gradient(90deg, #eab308, #facc15)';
-    return 'linear-gradient(90deg, #ef4444, #f87171)';
-  };
+  const primaryColor = style.primaryColor;
+  const secondaryColor = style.secondaryColor;
 
   return (
     <div
@@ -52,7 +49,8 @@ function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
             className="h-full rounded"
             style={{
               width: `${rtp}%`,
-              background: getBarColor(rtp)
+              background: `linear-gradient(90deg, ${primaryColor}, ${secondaryColor})`,
+              boxShadow: `0 0 10px ${secondaryColor}`
             }}
           />
         </div>
