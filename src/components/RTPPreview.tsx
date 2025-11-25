@@ -114,7 +114,7 @@ export default function RTPPreview({
           <div
             className="absolute inset-0 opacity-50 pointer-events-none"
             style={{
-              backgroundImage: selectedTexture.pattern,
+              backgroundImage: selectedTexture.pattern.replace(/%23ffffff/g, encodeURIComponent(selectedStyle.primaryColor)),
               backgroundRepeat: 'repeat'
             }}
           />
