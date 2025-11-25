@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUNDS, GAMES_PRAGMATIC, GAMES_PGSOFT } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot, Game } from '@/types';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUNDS, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS } from '@/data/games';
+import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption } from '@/types';
 
 export default function Home() {
   const [selectedWebsite, setSelectedWebsite] = useState<WebsiteOption>(WEBSITES[0]);
@@ -13,7 +13,8 @@ export default function Home() {
   const [selectedBackground, setSelectedBackground] = useState<string>(BACKGROUNDS[0]);
   const [pragmaticCount, setPragmaticCount] = useState<number>(8);
   const [pgSoftCount, setPgSoftCount] = useState<number>(8);
-  
+  const [selectedLayout, setSelectedLayout] = useState<LayoutOption>(LAYOUT_OPTIONS[0]);
+
   // States untuk menyimpan game yang sudah terpilih
   const [selectedPragmaticGames, setSelectedPragmaticGames] = useState<Game[]>([]);
   const [selectedPgSoftGames, setSelectedPgSoftGames] = useState<Game[]>([]);
@@ -72,6 +73,8 @@ export default function Home() {
           pgSoftCount={pgSoftCount}
           onPragmaticCountChange={setPragmaticCount}
           onPgSoftCountChange={setPgSoftCount}
+          selectedLayout={selectedLayout}
+          onLayoutChange={setSelectedLayout}
         />
 
         {/* Main Content */}
@@ -97,6 +100,7 @@ export default function Home() {
               pgSoftCount={pgSoftCount}
               selectedPragmaticGames={selectedPragmaticGames}
               selectedPgSoftGames={selectedPgSoftGames}
+              selectedLayout={selectedLayout}
             />
           </div>
         </div>

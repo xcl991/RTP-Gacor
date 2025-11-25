@@ -1,4 +1,4 @@
-import { Game, RTPStyle, WebsiteOption, TimeSlot } from '@/types';
+import { Game, RTPStyle, WebsiteOption, TimeSlot, LayoutOption } from '@/types';
 
 export const GAMES_PRAGMATIC: Game[] = [
   {name: "Santa's Slay", src: "https://img.viva88athenae.com/pp/images/vs10santasl.png"},
@@ -234,5 +234,23 @@ export const RTP_STYLES: RTPStyle[] = [
     secondaryColor: "#95d5b2",
     backgroundColor: "#081c15",
     accentColor: "#2d6a4f"
+  }
+];
+
+export const LAYOUT_OPTIONS: LayoutOption[] = [
+  {
+    id: "default",
+    name: "Default",
+    description: "Layout standar dengan header dan grid games"
+  },
+  {
+    id: "classic",
+    name: "Classic",
+    description: "Layout klasik dengan grid vertikal 3 kolom per provider"
+  },
+  {
+    id: "futuristic",
+    name: "Futuristic",
+    description: "Layout futuristik dengan sidebar provider dan grid 4 kolom"
   }
 ];

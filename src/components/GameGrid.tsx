@@ -10,7 +10,7 @@ interface GameCardProps {
 
 function GameCard({ game, rtp, style }: GameCardProps) {
   return (
-    <div 
+    <div
       className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
       style={{
         backgroundColor: style.backgroundColor,
@@ -18,18 +18,18 @@ function GameCard({ game, rtp, style }: GameCardProps) {
       }}
     >
       {/* Game Image */}
-      <div className="relative w-full h-48 overflow-hidden">
-          <img 
-            src={game.src}
-            alt={`${game.name} game preview`}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
-            }}
-          />
-        
+      <div className="relative w-full aspect-square overflow-hidden">
+        <img
+          src={game.src}
+          alt={`${game.name} game preview`}
+          className="w-full h-full object-contain bg-black/50"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
+          }}
+        />
+
         {/* RTP Badge */}
-        <div 
+        <div
           className="absolute top-2 right-2 px-3 py-1 rounded-full font-bold text-sm shadow-lg"
           style={{
             backgroundColor: style.secondaryColor,

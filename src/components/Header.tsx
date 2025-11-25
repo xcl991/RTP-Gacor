@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Shuffle, Clock, Image, Palette, Hash } from 'lucide-react';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot } from '@/types';
+import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout } from 'lucide-react';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS } from '@/data/games';
+import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption } from '@/types';
 
 interface HeaderProps {
   selectedWebsite: WebsiteOption;
@@ -16,6 +16,8 @@ interface HeaderProps {
   pgSoftCount: number;
   onPragmaticCountChange: (count: number) => void;
   onPgSoftCountChange: (count: number) => void;
+  selectedLayout: LayoutOption;
+  onLayoutChange: (layout: LayoutOption) => void;
 }
 
 export default function Header({
@@ -28,9 +30,12 @@ export default function Header({
   pragmaticCount,
   pgSoftCount,
   onPragmaticCountChange,
-  onPgSoftCountChange
+  onPgSoftCountChange,
+  selectedLayout,
+  onLayoutChange
 }: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = useState(false);
 
   return (
     <div className="bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-xl">
@@ -41,15 +46,15 @@ export default function Header({
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
           >
-            <img 
-              src={selectedWebsite.logo} 
+            <img
+              src={selectedWebsite.logo}
               alt={`${selectedWebsite.name} logo`}
               className="w-6 h-6 object-contain"
             />
             <span className="font-semibold">{selectedWebsite.name}</span>
             <ChevronDown className="w-4 h-4" />
           </button>
-          
+
           {isDropdownOpen && (
             <div className="absolute top-full left-0 mt-2 w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
               {WEBSITES.map((website) => (
@@ -61,12 +66,44 @@ export default function Header({
                   }}
                   className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left"
                 >
-                  <img 
-                    src={website.logo} 
+                  <img
+                    src={website.logo}
                     alt={`${website.name} logo`}
                     className="w-6 h-6 object-contain"
                   />
                   <span className="text-white">{website.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Layout Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsLayoutDropdownOpen(!isLayoutDropdownOpen)}
+            className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <Layout className="w-4 h-4" />
+            <span className="font-semibold">{selectedLayout.name}</span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+
+          {isLayoutDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-72 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
+              {LAYOUT_OPTIONS.map((layout) => (
+                <button
+                  key={layout.id}
+                  onClick={() => {
+                    onLayoutChange(layout);
+                    setIsLayoutDropdownOpen(false);
+                  }}
+                  className={`w-full flex flex-col px-4 py-3 hover:bg-gray-700 transition-colors text-left ${
+                    selectedLayout.id === layout.id ? 'bg-gray-700' : ''
+                  }`}
+                >
+                  <span className="text-white font-semibold">{layout.name}</span>
+                  <span className="text-gray-400 text-sm">{layout.description}</span>
                 </button>
               ))}
             </div>

@@ -34,3 +34,9 @@ export interface GeneratorConfig {
   backgroundId: string;
   styleId: string;
 }
+
+export interface LayoutOption {
+  id: string;
+  name: string;
+  description: string;
+}
