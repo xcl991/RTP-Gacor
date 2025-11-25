@@ -40,3 +40,9 @@ export interface LayoutOption {
   name: string;
   description: string;
 }
+
+export interface TextureOption {
+  id: string;
+  name: string;
+  pattern: string;
+}

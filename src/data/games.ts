@@ -1,4 +1,4 @@
-import { Game, RTPStyle, WebsiteOption, TimeSlot, LayoutOption } from '@/types';
+import { Game, RTPStyle, WebsiteOption, TimeSlot, LayoutOption, TextureOption } from '@/types';
 
 export const GAMES_PRAGMATIC: Game[] = [
   {name: "Santa's Slay", src: "https://img.viva88athenae.com/pp/images/vs10santasl.png"},
@@ -838,5 +838,43 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     id: "minimal",
     name: "Minimal",
     description: "Layout minimalis clean dengan background putih"
+  }
+];
+
+export const TEXTURE_OPTIONS: TextureOption[] = [
+  {
+    id: "none",
+    name: "None",
+    pattern: "none"
+  },
+  {
+    id: "grid",
+    name: "Grid",
+    pattern: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
+  },
+  {
+    id: "dots",
+    name: "Dots",
+    pattern: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='1.5' fill='%23ffffff' fill-opacity='0.1'/%3E%3C/svg%3E\")"
+  },
+  {
+    id: "diagonal",
+    name: "Diagonal Lines",
+    pattern: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M-1,1 l2,-2 M0,10 l10,-10 M9,11 l2,-2' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E\")"
+  },
+  {
+    id: "diamond",
+    name: "Diamond",
+    pattern: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E\")"
+  },
+  {
+    id: "hexagon",
+    name: "Hexagon",
+    pattern: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
+  },
+  {
+    id: "circuit",
+    name: "Circuit",
+    pattern: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
   }
 ];

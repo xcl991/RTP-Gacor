@@ -10,13 +10,14 @@ import NeonLayout from './layouts/NeonLayout';
 import ElegantLayout from './layouts/ElegantLayout';
 import CyberLayout from './layouts/CyberLayout';
 import MinimalLayout from './layouts/MinimalLayout';
-import { RTPStyle, TimeSlot, WebsiteOption, Game, LayoutOption } from '@/types';
+import { RTPStyle, TimeSlot, WebsiteOption, Game, LayoutOption, TextureOption } from '@/types';
 
 interface RTPPreviewProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
   selectedTimeSlot: TimeSlot;
   selectedBackground: string;
+  selectedTexture: TextureOption;
   pragmaticCount: number;
   pgSoftCount: number;
   selectedPragmaticGames: Game[];
@@ -29,6 +30,7 @@ export default function RTPPreview({
   selectedStyle,
   selectedTimeSlot,
   selectedBackground,
+  selectedTexture,
   pragmaticCount,
   pgSoftCount,
   selectedPragmaticGames,
@@ -106,6 +108,17 @@ export default function RTPPreview({
             background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.7) 100%)'
           }}
         />
+
+        {/* Texture Overlay */}
+        {selectedTexture.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 opacity-20 pointer-events-none"
+            style={{
+              backgroundImage: selectedTexture.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
 
         {/* Content - Render based on selected layout */}
         {selectedLayout.id === 'default' && (

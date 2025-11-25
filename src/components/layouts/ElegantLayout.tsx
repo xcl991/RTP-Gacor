@@ -12,38 +12,48 @@ interface ElegantGameCardProps {
 function ElegantGameCard({ game, rtp, primaryColor, secondaryColor }: ElegantGameCardProps) {
   return (
     <div
-      className="rounded-lg overflow-hidden p-2"
+      className="rounded-lg overflow-hidden"
       style={{
-        background: 'linear-gradient(145deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 100%)',
+        background: 'linear-gradient(145deg, #2a2215 0%, #1a1508 100%)',
         border: `1px solid ${primaryColor}`,
         boxShadow: `0 4px 20px ${primaryColor}30`
       }}
     >
-      <div className="flex justify-center mb-2">
+      <div className="relative w-full aspect-square overflow-hidden" style={{ borderBottom: `1px solid ${primaryColor}` }}>
         <img
           src={game.src}
           alt={game.name}
-          className="object-contain bg-black/30 rounded"
-          style={{ width: '50px', height: '50px', border: `1px solid ${primaryColor}` }}
+          className="w-full h-full object-contain bg-black/30"
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
           }}
         />
-      </div>
-      <div
-        className="h-5 rounded overflow-hidden relative"
-        style={{ background: '#0d0a04', border: `1px solid ${primaryColor}50` }}
-      >
         <div
-          className="h-full flex items-center justify-center text-xs font-bold"
+          className="absolute top-2 right-2 px-3 py-1 rounded font-bold text-lg"
           style={{
-            width: `${rtp}%`,
-            background: `linear-gradient(90deg, ${primaryColor}, ${secondaryColor})`,
-            color: '#000',
-            textShadow: '0 0 2px rgba(255,255,255,0.5)'
+            background: `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`,
+            color: '#1a1508',
+            boxShadow: `0 2px 10px ${primaryColor}80`
           }}
         >
           {rtp}%
+        </div>
+      </div>
+      <div className="p-3">
+        <h3
+          className="font-semibold text-sm text-center truncate mb-2"
+          style={{ color: primaryColor }}
+        >
+          {game.name}
+        </h3>
+        <div className="h-2 rounded-full overflow-hidden" style={{ background: '#0d0a04', border: `1px solid ${primaryColor}50` }}>
+          <div
+            className="h-full rounded-full"
+            style={{
+              width: `${rtp}%`,
+              background: `linear-gradient(90deg, ${primaryColor}, ${secondaryColor})`
+            }}
+          />
         </div>
       </div>
     </div>

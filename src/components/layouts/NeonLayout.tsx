@@ -11,38 +11,51 @@ interface NeonGameCardProps {
 function NeonGameCard({ game, rtp, glowColor }: NeonGameCardProps) {
   return (
     <div
-      className="rounded-lg overflow-hidden relative group p-2"
+      className="rounded-xl overflow-hidden relative group"
       style={{
         background: 'linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%)',
         border: `2px solid ${glowColor}`,
-        boxShadow: `0 0 15px ${glowColor}40`
+        boxShadow: `0 0 20px ${glowColor}40, inset 0 0 20px ${glowColor}10`
       }}
     >
-      <div className="flex justify-center mb-2">
+      <div className="relative w-full aspect-square overflow-hidden">
         <img
           src={game.src}
           alt={game.name}
-          className="object-contain bg-black/50 rounded"
-          style={{ width: '50px', height: '50px', border: `1px solid ${glowColor}` }}
+          className="w-full h-full object-contain bg-black/50"
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
           }}
         />
-      </div>
-      <div
-        className="h-5 rounded overflow-hidden relative"
-        style={{ background: '#0a0a15', border: '1px solid #333' }}
-      >
         <div
-          className="h-full flex items-center justify-center text-xs font-bold text-white"
+          className="absolute top-2 right-2 px-3 py-1 rounded-lg font-black text-lg"
           style={{
-            width: `${rtp}%`,
-            background: `linear-gradient(90deg, ${glowColor}80, ${glowColor})`,
-            boxShadow: `0 0 10px ${glowColor}`,
-            textShadow: '1px 1px 0 #000'
+            background: 'rgba(0,0,0,0.9)',
+            color: glowColor,
+            border: `2px solid ${glowColor}`,
+            boxShadow: `0 0 15px ${glowColor}`,
+            textShadow: `0 0 10px ${glowColor}`
           }}
         >
           {rtp}%
+        </div>
+      </div>
+      <div className="p-3" style={{ background: 'linear-gradient(to bottom, #1a1a2e, #0f0f1a)' }}>
+        <h3
+          className="font-bold text-sm text-center truncate mb-2"
+          style={{ color: glowColor, textShadow: `0 0 5px ${glowColor}` }}
+        >
+          {game.name}
+        </h3>
+        <div className="h-2 rounded-full overflow-hidden" style={{ background: '#0a0a15', border: '1px solid #333' }}>
+          <div
+            className="h-full rounded-full"
+            style={{
+              width: `${rtp}%`,
+              background: `linear-gradient(90deg, ${glowColor}80, ${glowColor})`,
+              boxShadow: `0 0 10px ${glowColor}`
+            }}
+          />
         </div>
       </div>
     </div>

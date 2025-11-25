@@ -17,36 +17,44 @@ function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
 
   return (
     <div
-      className="rounded-lg p-2 shadow-lg"
+      className="rounded-lg overflow-hidden shadow-lg"
       style={{
         background: 'rgba(0,0,0,0.7)',
-        border: '1px solid #555'
+        border: '1px solid #cb9b24'
       }}
     >
-      <div className="flex justify-center mb-2">
+      <div className="relative w-full aspect-square overflow-hidden">
         <img
           src={game.src}
           alt={game.name}
-          className="object-contain bg-black/50 rounded-md"
-          style={{ width: '50px', height: '50px', border: '1px solid #cb9b24' }}
+          className="w-full h-full object-contain bg-black/50"
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
           }}
         />
-      </div>
-      <div
-        className="h-5 rounded overflow-hidden relative"
-        style={{ background: '#222', border: '1px solid #444' }}
-      >
         <div
-          className="h-full flex items-center justify-center text-xs font-bold text-white"
+          className="absolute top-2 right-2 px-2 py-1 rounded font-bold text-sm"
           style={{
-            width: `${rtp}%`,
-            background: getBarColor(rtp),
-            textShadow: '1px 1px 0 #000, -1px -1px 0 #000'
+            background: 'linear-gradient(135deg, #fef08a, #eab308)',
+            color: '#000'
           }}
         >
           {rtp}%
+        </div>
+      </div>
+      <div className="p-2">
+        <h3 className="text-white text-xs font-semibold text-center truncate mb-2">{game.name}</h3>
+        <div
+          className="h-2 rounded overflow-hidden"
+          style={{ background: '#222' }}
+        >
+          <div
+            className="h-full rounded"
+            style={{
+              width: `${rtp}%`,
+              background: getBarColor(rtp)
+            }}
+          />
         </div>
       </div>
     </div>

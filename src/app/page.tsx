@@ -3,14 +3,15 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUNDS, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption } from '@/types';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUNDS, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS } from '@/data/games';
+import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption, TextureOption } from '@/types';
 
 export default function Home() {
   const [selectedWebsite, setSelectedWebsite] = useState<WebsiteOption>(WEBSITES[0]);
   const [selectedStyle, setSelectedStyle] = useState<RTPStyle>(RTP_STYLES[0]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot>(TIME_SLOTS[2]);
   const [selectedBackground, setSelectedBackground] = useState<string>(BACKGROUNDS[0]);
+  const [selectedTexture, setSelectedTexture] = useState<TextureOption>(TEXTURE_OPTIONS[0]);
   const [pragmaticCount, setPragmaticCount] = useState<number>(8);
   const [pgSoftCount, setPgSoftCount] = useState<number>(8);
   const [selectedLayout, setSelectedLayout] = useState<LayoutOption>(LAYOUT_OPTIONS[0]);
@@ -65,6 +66,8 @@ export default function Home() {
           onShuffleBackground={shuffleBackground}
           selectedStyle={selectedStyle}
           onStyleChange={setSelectedStyle}
+          selectedTexture={selectedTexture}
+          onTextureChange={setSelectedTexture}
           pragmaticCount={pragmaticCount}
           pgSoftCount={pgSoftCount}
           onPragmaticCountChange={setPragmaticCount}
@@ -92,6 +95,7 @@ export default function Home() {
               selectedStyle={selectedStyle}
               selectedTimeSlot={selectedTimeSlot}
               selectedBackground={selectedBackground}
+              selectedTexture={selectedTexture}
               pragmaticCount={pragmaticCount}
               pgSoftCount={pgSoftCount}
               selectedPragmaticGames={selectedPragmaticGames}

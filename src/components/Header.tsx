@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout } from 'lucide-react';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption } from '@/types';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS, TEXTURE_OPTIONS } from '@/data/games';
+import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption, TextureOption } from '@/types';
 
 interface HeaderProps {
   selectedWebsite: WebsiteOption;
@@ -13,6 +13,8 @@ interface HeaderProps {
   onShuffleBackground: () => void;
   selectedStyle: RTPStyle;
   onStyleChange: (style: RTPStyle) => void;
+  selectedTexture: TextureOption;
+  onTextureChange: (texture: TextureOption) => void;
   pragmaticCount: number;
   pgSoftCount: number;
   onPragmaticCountChange: (count: number) => void;
@@ -29,6 +31,8 @@ export default function Header({
   onShuffleBackground,
   selectedStyle,
   onStyleChange,
+  selectedTexture,
+  onTextureChange,
   pragmaticCount,
   pgSoftCount,
   onPragmaticCountChange,
@@ -39,6 +43,7 @@ export default function Header({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = useState(false);
   const [isStyleDropdownOpen, setIsStyleDropdownOpen] = useState(false);
+  const [isTextureDropdownOpen, setIsTextureDropdownOpen] = useState(false);
 
   return (
     <div className="bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-xl">
@@ -170,6 +175,45 @@ export default function Header({
                     style={{ backgroundColor: style.primaryColor }}
                   />
                   <span className="text-white">{style.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Texture Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsTextureDropdownOpen(!isTextureDropdownOpen)}
+            className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+            </svg>
+            <span className="font-semibold">{selectedTexture.name}</span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+
+          {isTextureDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
+              {TEXTURE_OPTIONS.map((texture) => (
+                <button
+                  key={texture.id}
+                  onClick={() => {
+                    onTextureChange(texture);
+                    setIsTextureDropdownOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left ${
+                    selectedTexture.id === texture.id ? 'bg-gray-700' : ''
+                  }`}
+                >
+                  <div
+                    className="w-6 h-6 rounded border border-white/30 bg-gray-900"
+                    style={{
+                      backgroundImage: texture.pattern !== 'none' ? texture.pattern : 'none'
+                    }}
+                  />
+                  <span className="text-white">{texture.name}</span>
                 </button>
               ))}
             </div>

@@ -17,26 +17,34 @@ function MinimalGameCard({ game, rtp, primaryColor, secondaryColor }: MinimalGam
   };
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow p-2">
-      <div className="flex justify-center mb-2">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className="relative w-full aspect-square overflow-hidden bg-gray-100">
         <img
           src={game.src}
           alt={game.name}
-          className="object-contain bg-gray-100 rounded"
-          style={{ width: '50px', height: '50px', border: `1px solid ${primaryColor}30` }}
+          className="w-full h-full object-contain"
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23f3f4f6"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%239ca3af" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
           }}
         />
       </div>
-      <div
-        className="h-5 bg-gray-100 rounded-full overflow-hidden"
-      >
-        <div
-          className="h-full rounded-full flex items-center justify-center text-xs font-bold text-white"
-          style={{ width: `${rtp}%`, background: getStatusColor(rtp) }}
-        >
-          {rtp}%
+      <div className="p-4">
+        <h3 className="font-medium text-gray-900 text-sm truncate mb-3">{game.name}</h3>
+        <div className="flex items-center justify-between">
+          <div className="flex-1 mr-3">
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${rtp}%`, background: getStatusColor(rtp) }}
+              />
+            </div>
+          </div>
+          <span
+            className="text-sm font-semibold"
+            style={{ color: getStatusColor(rtp) }}
+          >
+            {rtp}%
+          </span>
         </div>
       </div>
     </div>

@@ -15,9 +15,10 @@ function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor }: Cyber
 
   return (
     <div
-      className="relative overflow-hidden p-2"
+      className="relative overflow-hidden"
       style={{
         background: '#0a0a0a',
+        clipPath: 'polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%)',
         border: `1px solid ${primaryColor}`
       }}
     >
@@ -34,31 +35,49 @@ function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor }: Cyber
         </div>
       )}
 
-      <div className="flex justify-center mb-2">
+      <div className="relative w-full aspect-square overflow-hidden">
         <img
           src={game.src}
           alt={game.name}
-          className="object-contain bg-black/50 rounded"
-          style={{ width: '50px', height: '50px', border: `1px solid ${primaryColor}` }}
+          className="w-full h-full object-contain bg-black/50"
+          style={{ filter: 'contrast(1.1)' }}
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
           }}
         />
-      </div>
-      <div
-        className="h-5 rounded-sm overflow-hidden"
-        style={{ background: '#1a1a1a' }}
-      >
+        {/* Scan Line Effect */}
         <div
-          className="h-full flex items-center justify-center text-xs font-bold text-white"
+          className="absolute inset-0 pointer-events-none opacity-10"
           style={{
-            width: `${rtp}%`,
-            background: `linear-gradient(90deg, ${primaryColor}, ${isHot ? secondaryColor : primaryColor})`,
-            boxShadow: `0 0 10px ${isHot ? secondaryColor : primaryColor}`,
-            textShadow: '1px 1px 0 #000'
+            backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, ${primaryColor}20 2px, ${primaryColor}20 4px)`
+          }}
+        />
+        <div
+          className="absolute top-2 right-2 px-3 py-1 font-mono font-bold text-lg"
+          style={{
+            background: 'rgba(0,0,0,0.9)',
+            border: `1px solid ${primaryColor}`,
+            color: primaryColor,
+            textShadow: `0 0 5px ${primaryColor}`
           }}
         >
           {rtp}%
+        </div>
+      </div>
+      <div className="p-2" style={{ background: 'linear-gradient(to bottom, #111, #0a0a0a)' }}>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-mono" style={{ color: primaryColor }}>#{String(index + 1).padStart(2, '0')}</span>
+          <h3 className="font-bold text-sm truncate text-white flex-1">{game.name}</h3>
+        </div>
+        <div className="h-1.5 rounded-sm overflow-hidden" style={{ background: '#1a1a1a' }}>
+          <div
+            className="h-full"
+            style={{
+              width: `${rtp}%`,
+              background: `linear-gradient(90deg, ${primaryColor}, ${isHot ? secondaryColor : primaryColor})`,
+              boxShadow: `0 0 10px ${isHot ? secondaryColor : primaryColor}`
+            }}
+          />
         </div>
       </div>
     </div>
