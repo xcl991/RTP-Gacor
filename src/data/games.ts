@@ -858,6 +858,26 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     id: "minimal",
     name: "Minimal",
     description: "Layout minimalis clean dengan background putih"
+  },
+  {
+    id: "galaxy2",
+    name: "Galaxy",
+    description: "Layout galaxy dengan efek nebula dan bintang"
+  },
+  {
+    id: "casinoluxury",
+    name: "Casino Luxury",
+    description: "Layout casino elegan dengan tema kartu dan gold"
+  },
+  {
+    id: "cyberpunk2",
+    name: "Cyberpunk Terminal",
+    description: "Layout terminal cyberpunk dengan list vertikal"
+  },
+  {
+    id: "steampunk",
+    name: "Steampunk",
+    description: "Layout Victorian steampunk dengan efek gear"
   }
 ];
 

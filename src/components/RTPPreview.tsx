@@ -7,6 +7,10 @@ import NeonLayout from './layouts/NeonLayout';
 import ElegantLayout from './layouts/ElegantLayout';
 import CyberLayout from './layouts/CyberLayout';
 import MinimalLayout from './layouts/MinimalLayout';
+import GalaxyLayout2 from './layouts/GalaxyLayout2';
+import CasinoLuxuryLayout from './layouts/CasinoLuxuryLayout';
+import CyberpunkLayout2 from './layouts/CyberpunkLayout2';
+import SteampunkLayout from './layouts/SteampunkLayout';
 import { RTPStyle, WebsiteOption, Game, LayoutOption, TextureOption } from '@/types';
 
 interface RTPPreviewProps {
@@ -37,14 +41,25 @@ export default function RTPPreview({
   const getCurrentDate = () => {
     const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
     const months = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
-    
+
     const now = new Date();
     const dayName = days[now.getDay()];
     const date = now.getDate();
     const monthName = months[now.getMonth()];
     const year = now.getFullYear();
-    
+
     return `${dayName}, ${date} ${monthName} ${year}`;
+  };
+
+  const layoutProps = {
+    selectedWebsite,
+    selectedStyle,
+    customTimeLabel,
+    selectedPragmaticGames,
+    selectedPgSoftGames,
+    pragmaticCount,
+    pgSoftCount,
+    getCurrentDate
   };
 
   return (
@@ -84,96 +99,17 @@ export default function RTPPreview({
         )}
 
         {/* Content - Render based on selected layout */}
-        {selectedLayout.id === 'default' && (
-          <DefaultLayout
-            selectedWebsite={selectedWebsite}
-            selectedStyle={selectedStyle}
-            customTimeLabel={customTimeLabel}
-            selectedPragmaticGames={selectedPragmaticGames}
-            selectedPgSoftGames={selectedPgSoftGames}
-            pragmaticCount={pragmaticCount}
-            pgSoftCount={pgSoftCount}
-            getCurrentDate={getCurrentDate}
-          />
-        )}
-
-        {selectedLayout.id === 'classic' && (
-          <ClassicLayout
-            selectedWebsite={selectedWebsite}
-            selectedStyle={selectedStyle}
-            customTimeLabel={customTimeLabel}
-            selectedPragmaticGames={selectedPragmaticGames}
-            selectedPgSoftGames={selectedPgSoftGames}
-            pragmaticCount={pragmaticCount}
-            pgSoftCount={pgSoftCount}
-            getCurrentDate={getCurrentDate}
-          />
-        )}
-
-        {selectedLayout.id === 'futuristic' && (
-          <FuturisticLayout
-            selectedWebsite={selectedWebsite}
-            selectedStyle={selectedStyle}
-            customTimeLabel={customTimeLabel}
-            selectedPragmaticGames={selectedPragmaticGames}
-            selectedPgSoftGames={selectedPgSoftGames}
-            pragmaticCount={pragmaticCount}
-            pgSoftCount={pgSoftCount}
-            getCurrentDate={getCurrentDate}
-          />
-        )}
-
-        {selectedLayout.id === 'neon' && (
-          <NeonLayout
-            selectedWebsite={selectedWebsite}
-            selectedStyle={selectedStyle}
-            customTimeLabel={customTimeLabel}
-            selectedPragmaticGames={selectedPragmaticGames}
-            selectedPgSoftGames={selectedPgSoftGames}
-            pragmaticCount={pragmaticCount}
-            pgSoftCount={pgSoftCount}
-            getCurrentDate={getCurrentDate}
-          />
-        )}
-
-        {selectedLayout.id === 'elegant' && (
-          <ElegantLayout
-            selectedWebsite={selectedWebsite}
-            selectedStyle={selectedStyle}
-            customTimeLabel={customTimeLabel}
-            selectedPragmaticGames={selectedPragmaticGames}
-            selectedPgSoftGames={selectedPgSoftGames}
-            pragmaticCount={pragmaticCount}
-            pgSoftCount={pgSoftCount}
-            getCurrentDate={getCurrentDate}
-          />
-        )}
-
-        {selectedLayout.id === 'cyber' && (
-          <CyberLayout
-            selectedWebsite={selectedWebsite}
-            selectedStyle={selectedStyle}
-            customTimeLabel={customTimeLabel}
-            selectedPragmaticGames={selectedPragmaticGames}
-            selectedPgSoftGames={selectedPgSoftGames}
-            pragmaticCount={pragmaticCount}
-            pgSoftCount={pgSoftCount}
-            getCurrentDate={getCurrentDate}
-          />
-        )}
-
-        {selectedLayout.id === 'minimal' && (
-          <MinimalLayout
-            selectedWebsite={selectedWebsite}
-            selectedStyle={selectedStyle}
-            customTimeLabel={customTimeLabel}
-            selectedPragmaticGames={selectedPragmaticGames}
-            selectedPgSoftGames={selectedPgSoftGames}
-            pragmaticCount={pragmaticCount}
-            pgSoftCount={pgSoftCount}
-            getCurrentDate={getCurrentDate}
-          />
-        )}
+        {selectedLayout.id === 'default' && <DefaultLayout {...layoutProps} />}
+        {selectedLayout.id === 'classic' && <ClassicLayout {...layoutProps} />}
+        {selectedLayout.id === 'futuristic' && <FuturisticLayout {...layoutProps} />}
+        {selectedLayout.id === 'neon' && <NeonLayout {...layoutProps} />}
+        {selectedLayout.id === 'elegant' && <ElegantLayout {...layoutProps} />}
+        {selectedLayout.id === 'cyber' && <CyberLayout {...layoutProps} />}
+        {selectedLayout.id === 'minimal' && <MinimalLayout {...layoutProps} />}
+        {selectedLayout.id === 'galaxy2' && <GalaxyLayout2 {...layoutProps} />}
+        {selectedLayout.id === 'casinoluxury' && <CasinoLuxuryLayout {...layoutProps} />}
+        {selectedLayout.id === 'cyberpunk2' && <CyberpunkLayout2 {...layoutProps} />}
+        {selectedLayout.id === 'steampunk' && <SteampunkLayout {...layoutProps} />}
       </div>
     </div>
   );
