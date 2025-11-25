@@ -93,7 +93,7 @@ export default function GameGrid({
   // Generate random RTP for each game (85-98%)
   const gamesWithRTP = selectedGames.map(game => ({
     ...game,
-    rtp: Math.floor(Math.random() * 14) + 85 // 85-98%
+    rtp: Math.floor(Math.random() * 13) + 86 // 86-98%
   }));
 
   return (

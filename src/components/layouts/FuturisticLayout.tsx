@@ -91,12 +91,12 @@ export default function FuturisticLayout({
 }: FuturisticLayoutProps) {
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
-    rtp: Math.floor(Math.random() * 14) + 85
+    rtp: Math.floor(Math.random() * 13) + 86 // 86-98%
   }));
 
   const pgSoftGamesWithRTP = selectedPgSoftGames.slice(0, pgSoftCount).map(game => ({
     ...game,
-    rtp: Math.floor(Math.random() * 14) + 85
+    rtp: Math.floor(Math.random() * 13) + 86 // 86-98%
   }));
 
   return (
