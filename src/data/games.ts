@@ -855,10 +855,6 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     description: "Layout cyberpunk dengan efek matrix hijau"
   },
   {
-    id: "minimal",
-    name: "Minimal",
-    description: "Layout minimalis clean dengan background putih"
-  },
   {
     id: "galaxy2",
     name: "Galaxy",

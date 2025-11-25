@@ -6,7 +6,6 @@ import FuturisticLayout from './layouts/FuturisticLayout';
 import NeonLayout from './layouts/NeonLayout';
 import ElegantLayout from './layouts/ElegantLayout';
 import CyberLayout from './layouts/CyberLayout';
-import MinimalLayout from './layouts/MinimalLayout';
 import GalaxyLayout2 from './layouts/GalaxyLayout2';
 import CasinoLuxuryLayout from './layouts/CasinoLuxuryLayout';
 import CyberpunkLayout2 from './layouts/CyberpunkLayout2';
@@ -105,7 +104,6 @@ export default function RTPPreview({
         {selectedLayout.id === 'neon' && <NeonLayout {...layoutProps} />}
         {selectedLayout.id === 'elegant' && <ElegantLayout {...layoutProps} />}
         {selectedLayout.id === 'cyber' && <CyberLayout {...layoutProps} />}
-        {selectedLayout.id === 'minimal' && <MinimalLayout {...layoutProps} />}
         {selectedLayout.id === 'galaxy2' && <GalaxyLayout2 {...layoutProps} />}
         {selectedLayout.id === 'casinoluxury' && <CasinoLuxuryLayout {...layoutProps} />}
         {selectedLayout.id === 'cyberpunk2' && <CyberpunkLayout2 {...layoutProps} />}
