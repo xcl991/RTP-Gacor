@@ -129,7 +129,7 @@ export default function ElegantLayout({
               WebkitTextFillColor: 'transparent'
             }}
           >
-            Premium RTP Live
+            GAME GACOR PILIHAN
           </h1>
           <div className="flex items-center justify-center gap-6">
             <span style={{ color: primaryColor }}>{getCurrentDate()}</span>

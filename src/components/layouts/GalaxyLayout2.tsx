@@ -173,7 +173,7 @@ export default function GalaxyLayout2({
             WebkitTextFillColor: 'transparent'
           }}
         >
-          GALAXY RTP LIVE
+          PILIHAN GAME SUPER GACOR
         </h1>
         <div className="flex items-center justify-center gap-6">
           <span style={{ color: primaryColor }}>{getCurrentDate()}</span>

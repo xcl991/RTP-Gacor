@@ -133,7 +133,7 @@ export default function CasinoLuxuryLayout({
         />
 
         <div className="text-lg mb-2" style={{ color: secondaryColor, letterSpacing: '4px' }}>
-          ★ ELITE CASINO RTP ★
+          ★ RTP ELITE ANTI BONCOS ★
         </div>
         <h1
           className="text-4xl font-bold uppercase tracking-widest mb-4"

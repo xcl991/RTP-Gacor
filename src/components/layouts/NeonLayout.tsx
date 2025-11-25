@@ -134,7 +134,7 @@ export default function NeonLayout({
             WebkitTextFillColor: 'transparent'
           }}
         >
-          NEON RTP LIVE
+          LIVE RTP SUPER GACOR
         </h1>
         <div className="flex items-center justify-center gap-4">
           <span className="text-white/80 text-lg">{getCurrentDate()}</span>

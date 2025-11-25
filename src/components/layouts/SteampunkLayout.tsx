@@ -186,7 +186,7 @@ export default function SteampunkLayout({
               textShadow: `2px 2px 4px rgba(0,0,0,0.8)`
             }}
           >
-            ♔ VICTORIAN RTP CHAMBER ♔
+            ♔ SYSTEM LIVE RTP GACOR ♔
           </h1>
           <div className="text-lg mb-2" style={{ color: secondaryColor }}>
             {getCurrentDate()}
