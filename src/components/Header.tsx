@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout, Search } from 'lucide-react';
 import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS, TEXTURE_OPTIONS } from '@/data/games';
 import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption, TextureOption } from '@/types';
 
@@ -46,12 +46,39 @@ export default function Header({
   const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = useState(false);
   const [isStyleDropdownOpen, setIsStyleDropdownOpen] = useState(false);
   const [isTextureDropdownOpen, setIsTextureDropdownOpen] = useState(false);
+  const [websiteSearch, setWebsiteSearch] = useState('');
+  const websiteInputRef = useRef<HTMLInputElement>(null);
+
+  // Filter websites based on search
+  const filteredWebsites = WEBSITES.filter(website =>
+    website.name.toLowerCase().includes(websiteSearch.toLowerCase())
+  );
+
+  // Focus input when dropdown opens
+  useEffect(() => {
+    if (isDropdownOpen && websiteInputRef.current) {
+      websiteInputRef.current.focus();
+    }
+  }, [isDropdownOpen]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.website-dropdown')) {
+        setIsDropdownOpen(false);
+        setWebsiteSearch('');
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="bg-gray-900 border border-gray-700 p-4 rounded-lg shadow-xl">
       <div className="flex flex-wrap items-center gap-4">
-        {/* Website Dropdown */}
-        <div className="relative">
+        {/* Website Searchable Dropdown */}
+        <div className="relative website-dropdown">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
@@ -62,28 +89,55 @@ export default function Header({
               className="w-6 h-6 object-contain"
             />
             <span className="font-semibold">{selectedWebsite.name}</span>
-            <ChevronDown className="w-4 h-4" />
+            <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute top-full left-0 mt-2 w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
-              {WEBSITES.map((website) => (
-                <button
-                  key={website.id}
-                  onClick={() => {
-                    onWebsiteChange(website);
-                    setIsDropdownOpen(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left"
-                >
-                  <img
-                    src={website.logo}
-                    alt={`${website.name} logo`}
-                    className="w-6 h-6 object-contain"
+            <div className="absolute top-full left-0 mt-2 w-72 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
+              {/* Search Input */}
+              <div className="p-2 border-b border-gray-700">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    ref={websiteInputRef}
+                    type="text"
+                    value={websiteSearch}
+                    onChange={(e) => setWebsiteSearch(e.target.value)}
+                    placeholder="Cari website..."
+                    className="w-full pl-9 pr-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none text-sm"
                   />
-                  <span className="text-white">{website.name}</span>
-                </button>
-              ))}
+                </div>
+              </div>
+
+              {/* Website List */}
+              <div className="max-h-64 overflow-y-auto">
+                {filteredWebsites.length > 0 ? (
+                  filteredWebsites.map((website) => (
+                    <button
+                      key={website.id}
+                      onClick={() => {
+                        onWebsiteChange(website);
+                        setIsDropdownOpen(false);
+                        setWebsiteSearch('');
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left ${
+                        selectedWebsite.id === website.id ? 'bg-gray-700' : ''
+                      }`}
+                    >
+                      <img
+                        src={website.logo}
+                        alt={`${website.name} logo`}
+                        className="w-6 h-6 object-contain"
+                      />
+                      <span className="text-white">{website.name}</span>
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-gray-400 text-center text-sm">
+                    Website tidak ditemukan
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
