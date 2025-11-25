@@ -17,7 +17,7 @@ function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
       className="rounded-lg overflow-hidden shadow-lg w-[180px]"
       style={{
         background: 'rgba(0,0,0,0.7)',
-        border: '1px solid #cb9b24'
+        border: `1px solid ${primaryColor}`
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden">
@@ -32,7 +32,7 @@ function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
         <div
           className="absolute top-2 right-2 px-2 py-1 rounded font-bold text-sm"
           style={{
-            background: 'linear-gradient(135deg, #fef08a, #eab308)',
+            background: `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})`,
             color: '#000'
           }}
         >
@@ -80,6 +80,10 @@ export default function ClassicLayout({
   pgSoftCount,
   getCurrentDate
 }: ClassicLayoutProps) {
+  const primaryColor = selectedStyle.primaryColor;
+  const secondaryColor = selectedStyle.secondaryColor;
+  const backgroundColor = selectedStyle.backgroundColor;
+
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
     rtp: Math.floor(Math.random() * 13) + 86 // 86-98%
@@ -110,7 +114,7 @@ export default function ClassicLayout({
           style={{
             fontFamily: "'Anton', sans-serif",
             letterSpacing: '2px',
-            background: 'linear-gradient(to bottom, #fef08a 0%, #eab308 50%, #a16207 100%)',
+            background: `linear-gradient(to bottom, ${secondaryColor} 0%, ${primaryColor} 50%, ${primaryColor}aa 100%)`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.8))'
@@ -120,12 +124,12 @@ export default function ClassicLayout({
         </h1>
 
         <div className="inline-block relative">
-          <div className="absolute inset-0 bg-yellow-500 blur-lg opacity-30"></div>
+          <div className="absolute inset-0 blur-lg opacity-30" style={{ background: primaryColor }}></div>
           <div
             className="relative px-10 py-2 rounded-full shadow-2xl"
             style={{
-              background: 'linear-gradient(90deg, #000 0%, #3a0000 50%, #000 100%)',
-              border: '1px solid rgba(255,215,0,0.5)'
+              background: `linear-gradient(90deg, ${backgroundColor} 0%, ${primaryColor}40 50%, ${backgroundColor} 100%)`,
+              border: `1px solid ${primaryColor}80`
             }}
           >
             <span className="text-3xl font-black text-white tracking-widest">
@@ -141,15 +145,15 @@ export default function ClassicLayout({
         <div
           className="rounded-xl p-4 backdrop-blur-md shadow-xl"
           style={{
-            background: 'linear-gradient(to bottom, rgba(31,41,55,0.8), rgba(0,0,0,0.8))',
-            border: '1px solid rgba(255,255,255,0.1)'
+            background: `linear-gradient(to bottom, ${primaryColor}20, rgba(0,0,0,0.8))`,
+            border: `1px solid ${primaryColor}30`
           }}
         >
-          <div className="flex items-center justify-center mb-4 border-b border-white/10 pb-2">
+          <div className="flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${primaryColor}30` }}>
             <img
               src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
               className="h-24"
-              style={{ filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.5))' }}
+              style={{ filter: `drop-shadow(0 0 5px ${primaryColor}80)` }}
               alt="Pragmatic Play"
             />
           </div>
@@ -169,15 +173,15 @@ export default function ClassicLayout({
         <div
           className="rounded-xl p-4 backdrop-blur-md shadow-xl"
           style={{
-            background: 'linear-gradient(to bottom, rgba(31,41,55,0.8), rgba(0,0,0,0.8))',
-            border: '1px solid rgba(255,255,255,0.1)'
+            background: `linear-gradient(to bottom, ${secondaryColor}20, rgba(0,0,0,0.8))`,
+            border: `1px solid ${secondaryColor}30`
           }}
         >
-          <div className="flex items-center justify-center mb-4 border-b border-white/10 pb-2">
+          <div className="flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${secondaryColor}30` }}>
             <img
               src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
               className="h-24"
-              style={{ filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.5))' }}
+              style={{ filter: `drop-shadow(0 0 5px ${secondaryColor}80)` }}
               alt="PG Soft"
             />
           </div>
@@ -198,25 +202,25 @@ export default function ClassicLayout({
       <div
         className="relative z-10 mt-auto pt-4 pb-4 text-center"
         style={{
-          borderTop: '2px solid #cb9b24',
-          borderBottom: '2px solid #cb9b24',
-          background: 'linear-gradient(90deg, #000 0%, #3a0000 50%, #000 100%)'
+          borderTop: `2px solid ${primaryColor}`,
+          borderBottom: `2px solid ${primaryColor}`,
+          background: `linear-gradient(90deg, ${backgroundColor} 0%, ${primaryColor}40 50%, ${backgroundColor} 100%)`
         }}
       >
         <img
           src={selectedWebsite.logo}
           alt={selectedWebsite.name}
           className="h-12 mx-auto mb-2"
-          style={{ filter: 'drop-shadow(0 0 5px rgba(255, 215, 0, 0.5))' }}
+          style={{ filter: `drop-shadow(0 0 5px ${primaryColor}80)` }}
         />
-        <p className="text-yellow-500 font-bold tracking-widest text-xs mb-4 uppercase">
+        <p className="font-bold tracking-widest text-xs mb-4 uppercase" style={{ color: primaryColor }}>
           Situs Slot Terpercaya
         </p>
         <div
           className="inline-flex items-center gap-2 px-6 py-2 rounded-full text-white font-bold text-sm shadow-lg mx-auto"
           style={{
-            background: 'linear-gradient(to bottom, #2563eb, #1e40af)',
-            border: '1px solid rgba(96,165,250,0.5)'
+            background: `linear-gradient(to bottom, ${primaryColor}, ${secondaryColor})`,
+            border: `1px solid ${secondaryColor}80`
           }}
         >
           <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
