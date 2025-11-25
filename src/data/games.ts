@@ -252,5 +252,25 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     id: "futuristic",
     name: "Futuristic",
     description: "Layout futuristik dengan sidebar provider dan grid 4 kolom"
+  },
+  {
+    id: "neon",
+    name: "Neon",
+    description: "Layout neon dengan efek glow pink dan cyan"
+  },
+  {
+    id: "elegant",
+    name: "Elegant",
+    description: "Layout elegan dengan tema gold/luxury"
+  },
+  {
+    id: "cyber",
+    name: "Cyber",
+    description: "Layout cyberpunk dengan efek matrix hijau"
+  },
+  {
+    id: "minimal",
+    name: "Minimal",
+    description: "Layout minimalis clean dengan background putih"
   }
 ];

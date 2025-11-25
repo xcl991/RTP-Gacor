@@ -6,6 +6,10 @@ import html2canvas from 'html2canvas';
 import DefaultLayout from './layouts/DefaultLayout';
 import ClassicLayout from './layouts/ClassicLayout';
 import FuturisticLayout from './layouts/FuturisticLayout';
+import NeonLayout from './layouts/NeonLayout';
+import ElegantLayout from './layouts/ElegantLayout';
+import CyberLayout from './layouts/CyberLayout';
+import MinimalLayout from './layouts/MinimalLayout';
 import { RTPStyle, TimeSlot, WebsiteOption, Game, LayoutOption } from '@/types';
 
 interface RTPPreviewProps {
@@ -132,6 +136,58 @@ export default function RTPPreview({
 
         {selectedLayout.id === 'futuristic' && (
           <FuturisticLayout
+            selectedWebsite={selectedWebsite}
+            selectedStyle={selectedStyle}
+            selectedTimeSlot={selectedTimeSlot}
+            selectedPragmaticGames={selectedPragmaticGames}
+            selectedPgSoftGames={selectedPgSoftGames}
+            pragmaticCount={pragmaticCount}
+            pgSoftCount={pgSoftCount}
+            getCurrentDate={getCurrentDate}
+          />
+        )}
+
+        {selectedLayout.id === 'neon' && (
+          <NeonLayout
+            selectedWebsite={selectedWebsite}
+            selectedStyle={selectedStyle}
+            selectedTimeSlot={selectedTimeSlot}
+            selectedPragmaticGames={selectedPragmaticGames}
+            selectedPgSoftGames={selectedPgSoftGames}
+            pragmaticCount={pragmaticCount}
+            pgSoftCount={pgSoftCount}
+            getCurrentDate={getCurrentDate}
+          />
+        )}
+
+        {selectedLayout.id === 'elegant' && (
+          <ElegantLayout
+            selectedWebsite={selectedWebsite}
+            selectedStyle={selectedStyle}
+            selectedTimeSlot={selectedTimeSlot}
+            selectedPragmaticGames={selectedPragmaticGames}
+            selectedPgSoftGames={selectedPgSoftGames}
+            pragmaticCount={pragmaticCount}
+            pgSoftCount={pgSoftCount}
+            getCurrentDate={getCurrentDate}
+          />
+        )}
+
+        {selectedLayout.id === 'cyber' && (
+          <CyberLayout
+            selectedWebsite={selectedWebsite}
+            selectedStyle={selectedStyle}
+            selectedTimeSlot={selectedTimeSlot}
+            selectedPragmaticGames={selectedPragmaticGames}
+            selectedPgSoftGames={selectedPgSoftGames}
+            pragmaticCount={pragmaticCount}
+            pgSoftCount={pgSoftCount}
+            getCurrentDate={getCurrentDate}
+          />
+        )}
+
+        {selectedLayout.id === 'minimal' && (
+          <MinimalLayout
             selectedWebsite={selectedWebsite}
             selectedStyle={selectedStyle}
             selectedTimeSlot={selectedTimeSlot}
