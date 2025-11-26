@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
 
 interface ElegantGameCardProps {
   game: Game;
@@ -69,6 +69,7 @@ interface ElegantLayoutProps {
   pragmaticCount: number;
   pgSoftCount: number;
   getCurrentDate: () => string;
+  selectedCardStyle: CardStyleOption;
 }
 
 export default function ElegantLayout({
@@ -79,7 +80,8 @@ export default function ElegantLayout({
   selectedPgSoftGames,
   pragmaticCount,
   pgSoftCount,
-  getCurrentDate
+  getCurrentDate,
+  selectedCardStyle
 }: ElegantLayoutProps) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;

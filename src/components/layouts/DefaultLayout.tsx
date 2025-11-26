@@ -1,7 +1,7 @@
 'use client';
 
 import GameGrid from '../GameGrid';
-import { RTPStyle, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
 
 interface DefaultLayoutProps {
   selectedWebsite: WebsiteOption;
@@ -12,6 +12,7 @@ interface DefaultLayoutProps {
   pragmaticCount: number;
   pgSoftCount: number;
   getCurrentDate: () => string;
+  selectedCardStyle: CardStyleOption;
 }
 
 export default function DefaultLayout({
@@ -22,7 +23,8 @@ export default function DefaultLayout({
   selectedPgSoftGames,
   pragmaticCount,
   pgSoftCount,
-  getCurrentDate
+  getCurrentDate,
+  selectedCardStyle
 }: DefaultLayoutProps) {
   return (
     <div className="relative z-10 flex flex-col p-8" style={{ fontFamily: 'var(--font-orbitron), sans-serif' }}>

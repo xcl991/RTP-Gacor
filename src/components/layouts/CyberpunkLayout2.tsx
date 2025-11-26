@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
 
 interface CyberpunkGameCardProps {
   game: Game;
@@ -108,6 +108,7 @@ interface CyberpunkLayout2Props {
   pragmaticCount: number;
   pgSoftCount: number;
   getCurrentDate: () => string;
+  selectedCardStyle: CardStyleOption;
 }
 
 export default function CyberpunkLayout2({
@@ -118,7 +119,8 @@ export default function CyberpunkLayout2({
   selectedPgSoftGames,
   pragmaticCount,
   pgSoftCount,
-  getCurrentDate
+  getCurrentDate,
+  selectedCardStyle
 }: CyberpunkLayout2Props) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;

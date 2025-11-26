@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
 
 interface ClassicGameCardProps {
   game: Game;
@@ -68,6 +68,7 @@ interface ClassicLayoutProps {
   pragmaticCount: number;
   pgSoftCount: number;
   getCurrentDate: () => string;
+  selectedCardStyle: CardStyleOption;
 }
 
 export default function ClassicLayout({
@@ -78,7 +79,8 @@ export default function ClassicLayout({
   selectedPgSoftGames,
   pragmaticCount,
   pgSoftCount,
-  getCurrentDate
+  getCurrentDate,
+  selectedCardStyle
 }: ClassicLayoutProps) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;

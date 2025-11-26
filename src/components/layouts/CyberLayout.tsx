@@ -1,6 +1,6 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
 
 interface CyberGameCardProps {
   game: Game;
@@ -93,6 +93,7 @@ interface CyberLayoutProps {
   pragmaticCount: number;
   pgSoftCount: number;
   getCurrentDate: () => string;
+  selectedCardStyle: CardStyleOption;
 }
 
 export default function CyberLayout({
@@ -103,7 +104,8 @@ export default function CyberLayout({
   selectedPgSoftGames,
   pragmaticCount,
   pgSoftCount,
-  getCurrentDate
+  getCurrentDate,
+  selectedCardStyle
 }: CyberLayoutProps) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
