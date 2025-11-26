@@ -108,7 +108,7 @@ export default function CasinoLuxuryLayout({
       <div
         className="absolute inset-0 opacity-10"
         style={{
-          backgroundImage: "url("data:image/svg+xml,%3Csvg width=%2780%27 height=%2780%27 viewBox=%270 0 80 80%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cpath d=%27M40 0L80 40L40 80L0 40z%27 fill=%27" + encodeURIComponent(primaryColor) + "%27 fill-opacity=%270.3%27/%3E%3C/svg%3E")",
+          backgroundImage: "url('data:image/svg+xml,%3Csvg width=%2780%27 height=%2780%27 viewBox=%270 0 80 80%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cpath d=%27M40 0L80 40L40 80L0 40z%27 fill=%27" + encodeURIComponent(primaryColor) + "%27 fill-opacity=%270.3%27/%3E%3C/svg%3E')",
           backgroundSize: "80px 80px"
         }}
       />
