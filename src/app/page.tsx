@@ -5,8 +5,8 @@ import html2canvas from 'html2canvas';
 import { Download, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
+import { WEBSITES, RTP_STYLES, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
+import { WebsiteOption, RTPStyle, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
 export default function Home() {
   const [selectedWebsite, setSelectedWebsite] = useState<WebsiteOption>(WEBSITES[0]);
@@ -46,31 +46,63 @@ export default function Home() {
     generateRandomGames();
   };
 
+  // Convert image to base64 via proxy
+  const convertImageToBase64 = async (url: string): Promise<string> => {
+    try {
+      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(url)}`;
+      const response = await fetch(proxyUrl);
+      if (!response.ok) throw new Error('Failed to fetch');
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch {
+      return url;
+    }
+  };
+
   // Download image function
   const handleDownload = async () => {
     if (!previewRef.current || isDownloading) return;
 
     setIsDownloading(true);
     try {
-      // Wait for all images to load
-      const images = previewRef.current.querySelectorAll('img');
+      const clone = previewRef.current.cloneNode(true) as HTMLElement;
+      const images = clone.querySelectorAll('img');
+
       await Promise.all(
-        Array.from(images).map((img) => {
-          if (img.complete) return Promise.resolve();
-          return new Promise((resolve) => {
-            img.onload = resolve;
-            img.onerror = resolve;
-          });
+        Array.from(images).map(async (img) => {
+          const src = img.src;
+          if (src && (src.startsWith('http://') || src.startsWith('https://'))) {
+            try {
+              const base64 = await convertImageToBase64(src);
+              img.src = base64;
+            } catch {
+              // Keep original src
+            }
+          }
         })
       );
 
-      const canvas = await html2canvas(previewRef.current, {
+      clone.style.position = 'absolute';
+      clone.style.left = '-9999px';
+      clone.style.top = '0';
+      document.body.appendChild(clone);
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const canvas = await html2canvas(clone, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: null,
         logging: false,
       });
+
+      document.body.removeChild(clone);
 
       const link = document.createElement('a');
       const timestamp = new Date().toISOString().slice(0, 10);
