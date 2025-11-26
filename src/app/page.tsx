@@ -64,6 +64,12 @@ export default function Home() {
     }
   };
 
+  // Extract URL from CSS background-image
+  const extractBgUrl = (bgImage: string): string | null => {
+    const match = bgImage.match(/url\(["']?([^"')]+)["']?\)/);
+    return match ? match[1] : null;
+  };
+
   // Download image function
   const handleDownload = async () => {
     if (!previewRef.current || isDownloading) return;
@@ -71,8 +77,9 @@ export default function Home() {
     setIsDownloading(true);
     try {
       const clone = previewRef.current.cloneNode(true) as HTMLElement;
-      const images = clone.querySelectorAll('img');
 
+      // Convert img tags
+      const images = clone.querySelectorAll('img');
       await Promise.all(
         Array.from(images).map(async (img) => {
           const src = img.src;
@@ -82,6 +89,26 @@ export default function Home() {
               img.src = base64;
             } catch {
               // Keep original src
+            }
+          }
+        })
+      );
+
+      // Convert CSS background-images
+      const elementsWithBg = clone.querySelectorAll('*');
+      await Promise.all(
+        Array.from(elementsWithBg).map(async (el) => {
+          const element = el as HTMLElement;
+          const bgImage = element.style.backgroundImage;
+          if (bgImage && bgImage !== 'none') {
+            const url = extractBgUrl(bgImage);
+            if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+              try {
+                const base64 = await convertImageToBase64(url);
+                element.style.backgroundImage = `url("${base64}")`;
+              } catch {
+                // Keep original
+              }
             }
           }
         })
