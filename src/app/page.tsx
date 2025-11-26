@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import html2canvas from 'html2canvas';
+import { Download, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
 import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
@@ -21,28 +23,66 @@ export default function Home() {
   const [selectedPragmaticGames, setSelectedPragmaticGames] = useState<Game[]>([]);
   const [selectedPgSoftGames, setSelectedPgSoftGames] = useState<Game[]>([]);
 
+  // Download state
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const previewRef = useRef<HTMLDivElement>(null);
+
   // Generate random games saat pertama kali atau saat count berubah
-  const generateRandomGames = () => {
+  const generateRandomGames = useCallback(() => {
     const shuffledPragmatic = [...GAMES_PRAGMATIC].sort(() => Math.random() - 0.5);
     const shuffledPgSoft = [...GAMES_PGSOFT].sort(() => Math.random() - 0.5);
-    
+
     setSelectedPragmaticGames(shuffledPragmatic.slice(0, pragmaticCount));
     setSelectedPgSoftGames(shuffledPgSoft.slice(0, pgSoftCount));
-  };
+  }, [pragmaticCount, pgSoftCount]);
 
   // Generate games saat pertama kali load
   useEffect(() => {
     generateRandomGames();
-  }, []);
-
-  // Generate games ulang hanya saat count berubah
-  useEffect(() => {
-    generateRandomGames();
-  }, [pragmaticCount, pgSoftCount]);
+  }, [generateRandomGames]);
 
   // Shuffle functions
   const shuffleGames = () => {
     generateRandomGames();
+  };
+
+  // Download image function
+  const handleDownload = async () => {
+    if (!previewRef.current || isDownloading) return;
+
+    setIsDownloading(true);
+    try {
+      // Wait for all images to load
+      const images = previewRef.current.querySelectorAll('img');
+      await Promise.all(
+        Array.from(images).map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        })
+      );
+
+      const canvas = await html2canvas(previewRef.current, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        logging: false,
+      });
+
+      const link = document.createElement('a');
+      const timestamp = new Date().toISOString().slice(0, 10);
+      link.download = `RTP-${selectedWebsite.name}-${selectedLayout.name}-${timestamp}.png`;
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+    } catch (error) {
+      console.error('Error generating image:', error);
+      alert('Gagal mengunduh gambar. Silakan coba lagi.');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -73,19 +113,40 @@ export default function Home() {
 
         {/* Main Content */}
         <div className="bg-gray-900 rounded-lg p-6 shadow-xl">
-          <h1 className="text-3xl font-bold text-center mb-8 text-blue-400">
-            RTP Live Generator
-          </h1>
-          
-          <p className="text-gray-300 text-center mb-8 max-w-3xl mx-auto">
-            Generate gambar RTP Live untuk website Anda. Pilih website, atur jumlah game, 
-            pilih waktu, background, dan style yang sesuai. Klik "Generate & Download Image" 
-            untuk mengunduh gambar RTP.
-          </p>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-blue-400">
+                RTP Live Generator
+              </h1>
+              <p className="text-gray-400 text-sm mt-1">
+                Generate dan download gambar RTP Live untuk website Anda
+              </p>
+            </div>
+
+            {/* Download Button */}
+            <button
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-500 disabled:to-gray-600 text-white px-6 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-green-500/25 disabled:cursor-not-allowed"
+            >
+              {isDownloading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Download className="w-5 h-5" />
+                  Download Image
+                </>
+              )}
+            </button>
+          </div>
 
           {/* RTP Preview */}
           <div className="overflow-x-auto">
             <RTPPreview
+              ref={previewRef}
               selectedWebsite={selectedWebsite}
               selectedStyle={selectedStyle}
               customTimeLabel={customTimeLabel}

@@ -1,5 +1,6 @@
 'use client';
 
+import { forwardRef } from 'react';
 import DefaultLayout from './layouts/DefaultLayout';
 import ClassicLayout from './layouts/ClassicLayout';
 import FuturisticLayout from './layouts/FuturisticLayout';
@@ -31,7 +32,7 @@ interface RTPPreviewProps {
   selectedCardStyle: CardStyleOption;
 }
 
-export default function RTPPreview({
+const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
   selectedWebsite,
   selectedStyle,
   customTimeLabel,
@@ -43,7 +44,7 @@ export default function RTPPreview({
   selectedPgSoftGames,
   selectedLayout,
   selectedCardStyle
-}: RTPPreviewProps) {
+}, ref) => {
   const getCurrentDate = () => {
     const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
     const months = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
@@ -73,6 +74,7 @@ export default function RTPPreview({
     <div className="space-y-4">
       {/* Preview Container */}
       <div
+        ref={ref}
         className="relative overflow-hidden rounded-lg shadow-2xl"
         style={{
           width: '1200px',
@@ -124,4 +126,8 @@ export default function RTPPreview({
       </div>
     </div>
   );
-}
+});
+
+RTPPreview.displayName = 'RTPPreview';
+
+export default RTPPreview;

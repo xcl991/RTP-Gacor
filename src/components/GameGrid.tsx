@@ -1,11 +1,11 @@
 'use client';
 
-import { Game, CardStyleOption } from '@/types';
+import { Game, CardStyleOption, RTPStyle } from '@/types';
 
 interface GameCardProps {
   game: Game;
   rtp: number;
-  style: any;
+  style: RTPStyle;
 }
 
 function GameCard({ game, rtp, style }: GameCardProps) {
@@ -76,7 +76,7 @@ interface GameGridProps {
   gameCount: number;
   providerLogo: string;
   providerColor: string;
-  style: any;
+  style: RTPStyle;
   cardStyle?: CardStyleOption;
 }
 
