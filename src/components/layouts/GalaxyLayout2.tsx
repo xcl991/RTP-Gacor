@@ -171,12 +171,12 @@ export default function GalaxyLayout2({
       </div>
 
       <div className="relative z-10 mb-8">
-        <div className="flex items-start gap-4">
+        <div className="flex items-stretch gap-4">
           <div
-            className="w-32 h-32 rounded-lg flex items-center justify-center shrink-0"
+            className="w-32 rounded-xl flex items-center justify-center shrink-0"
             style={{
-              background: "rgba(10,10,30,0.9)",
-              border: "2px solid " + primaryColor
+              background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
+              border: "2px solid " + primaryColor + "60", boxShadow: "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
             }}
           >
             <img
@@ -213,12 +213,12 @@ export default function GalaxyLayout2({
       </div>
 
       <div className="relative z-10 mb-8">
-        <div className="flex items-start gap-4">
+        <div className="flex items-stretch gap-4">
           <div
-            className="w-32 h-32 rounded-lg flex items-center justify-center shrink-0"
+            className="w-32 rounded-xl flex items-center justify-center shrink-0"
             style={{
-              background: "rgba(10,10,30,0.9)",
-              border: "2px solid " + secondaryColor
+              background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
+              border: "2px solid " + secondaryColor + "60", boxShadow: "0 0 20px " + secondaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
             }}
           >
             <img
