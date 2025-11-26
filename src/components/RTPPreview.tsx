@@ -74,7 +74,7 @@ export default function RTPPreview({
           minHeight: '1600px',
           height: 'auto',
           backgroundColor: selectedStyle.backgroundColor,
-          backgroundImage: `url(${selectedBackground})`,
+          backgroundImage: `url("${selectedBackground}")`,
           backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

@@ -256,7 +256,7 @@ export default function Header({
                         >
                           <div
                             className="w-8 h-8 rounded border border-white/30 bg-cover bg-center"
-                            style={{ backgroundImage: `url(${bg})` }}
+                            style={{ backgroundImage: `url("${bg}")` }}
                           />
                           <span className="text-gray-300 text-sm">{category.name} {index + 1}</span>
                         </button>
