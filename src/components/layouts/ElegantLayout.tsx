@@ -175,7 +175,7 @@ export default function ElegantLayout({
           <img
             src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
             className="h-16"
-            style={{ filter: `drop-shadow(0 0 10px ${primaryColor}80)` }}
+            style={{ filter: `drop-shadow(0 0 10px ${primaryColor}80)`, transform: 'scale(1.3)' }}
             alt="Pragmatic Play"
           />
           <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PRAGMATIC PLAY</span>
@@ -216,7 +216,7 @@ export default function ElegantLayout({
           <img
             src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
             className="h-16"
-            style={{ filter: `drop-shadow(0 0 10px ${secondaryColor}80)` }}
+            style={{ filter: `drop-shadow(0 0 10px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
             alt="PG Soft"
           />
           <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PG SOFT</span>
