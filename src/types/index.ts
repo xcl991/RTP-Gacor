@@ -57,3 +57,9 @@ export interface CardStyleOption {
   blur: string;
   shadow: string;
 }
+
+export interface BackgroundCategory {
+  id: string;
+  name: string;
+  backgrounds: string[];
+}

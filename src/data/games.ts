@@ -1,4 +1,4 @@
-import { Game, RTPStyle, WebsiteOption, TimeSlot, LayoutOption, TextureOption, CardStyleOption } from '@/types';
+import { Game, RTPStyle, WebsiteOption, TimeSlot, LayoutOption, TextureOption, CardStyleOption, BackgroundCategory } from '@/types';
 
 export const GAMES_PRAGMATIC: Game[] = [
   {name: "Santa's Slay", src: "https://img.viva88athenae.com/pp/images/vs10santasl.png"},
@@ -691,14 +691,66 @@ export const TIME_SLOTS: TimeSlot[] = [
   { id: "evening", label: "18:00 - 00:00 WIB", startHour: 18, endHour: 24 }
 ];
 
-export const BACKGROUNDS = [
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgFI15qVytb5VYTdK2yr2esrHh1fYk3fwhVgXNwC4EXlScyGUmseS862fX5xzNnjtFzVXbXj-r7RloYS5OxvpJXFOrXweqTjFfEk6Om3DWnL_rq4QubGxZbXJG4guJxgI8z0cUlPtRur3_2RaKstpZFI32a-eMyw9UR5a1mvxwae44UaRA_Jz28i0JXtwYh/w1141-h1141/gx1.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh9zK3OCkok8n-lvXlmrvZ2JV_t6wPBkDzuVmlKoqaKjepd92i4prTxgWJ-CmWiuPaG-7k0nn77E7jiqIRrukAZVR7_7Ckltq1TgOYw2368omSyI5_DkmsiGtUHYH2ywKRirdngw4wuiZrBHgEWRkoVQztwfNjTaSNJ6UYFwCHle8FAAEZQaH4WnD64WZR6/w1259-h1259/gx2.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjcjLCzn_eXr9QV9JfL5fz6U9oneTT-wqQFDCYKKFpD42Zl0K9A00y_bOsvAYRnclCtr6Qu40A5hGfDffOhdu7e_E-q8M1GIgWP0TEUMtwPZ-7RGC4W2R1WItJzRlmTZvoSauhBYr4oG9YsF0gNkRtlQrzNKuhRgcdCI9Kr1hRg7_-22_cLVD4RpOPMKhAE/w1164-h1164/gx3.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMH-clzh1ACQsaNkv4jHcI7Ks4nWUjArWjpS844euU9bTUeUJw-h8nJhSjW2bJFSpfPwAgwjmEg2I08Za5Qmwepg0RGI7dfTH9zn5cwT3MEmNYkiUDkcJ2NfPRemRDDtH9dPwwPXkjB_KkoYHi5nATPdSkz4YnECm1I7PvJerzKGxWFxOvwzCpbM2oaLvk/w1183-h1183/gx4.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyvofpweOD8ib4fMzuJJEw5moS8hZ3q_vsXa3DUbw-RBGd3IMh8sZBJTy75LD1049ySZBcnuDUaT1MX4g-c1WjliHnAmcuwxRw4_tWUWnqx-cGtdSeSbNZaseeHYEuXXxWQYkSPIjzm_fPXbdiPlnfYdW3jbaYvKeSMsUoUbtCiwxRWs1HjRBP-ElCKDVg/w1030-h1030/gx5.jpg",
-  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiO25Tof9oHjYB0IYw_Tuc1C4S1n4h-E-qjcXZ08sKGoGKTwHZDMIaFyTOxMbE8V9i0eS1oEWqntmtKBEhjbUzxYEVv_GmbWAth9Ie7auCc_OdwyKFjdRWmuN5GW7-XJTMnc_x3C5fscAA1nItFeVJOmh1vLSK9WJ_JNNAUEtmyvavt2WYh9UK0M6JWHy_h/w1312-h1312/gx6.jpg"
+export const BACKGROUND_CATEGORIES: BackgroundCategory[] = [
+  {
+    id: "casino",
+    name: "Casino",
+    backgrounds: [
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/casino%20(1).png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/casino%20(2).png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/casino%20(3).png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/casino%20(4).png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/casino%20(5).png"
+    ]
+  },
+  {
+    id: "cyber",
+    name: "Cyber",
+    backgrounds: [
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyber%20(1).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyber%20(2).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyber%20(3).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyber%20(4).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyber%20(5).jpg"
+    ]
+  },
+  {
+    id: "cyberpunk",
+    name: "Cyberpunk",
+    backgrounds: [
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyberpunk%20(1).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyberpunk%20(2).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyberpunk%20(3).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyberpunk%20(4).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/cyberpunk%20(5).jpg"
+    ]
+  },
+  {
+    id: "fantasy",
+    name: "Fantasy",
+    backgrounds: [
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/fantasy%20(1).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/fantasy%20(2).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/fantasy%20(3).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/fantasy%20(4).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/fantasy%20(5).jpg"
+    ]
+  },
+  {
+    id: "galaxy",
+    name: "Galaxy",
+    backgrounds: [
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/galaxy%20(1).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/galaxy%20(2).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/galaxy%20(3).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/galaxy%20(4).jpg",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/background/galaxy%20(5).jpg"
+    ]
+  }
 ];
+
+// Keep BACKGROUNDS for backwards compatibility
+export const BACKGROUNDS = BACKGROUND_CATEGORIES.flatMap(cat => cat.backgrounds);
 
 export const RTP_STYLES: RTPStyle[] = [
   {

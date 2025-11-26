@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUNDS, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
 import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
 export default function Home() {
   const [selectedWebsite, setSelectedWebsite] = useState<WebsiteOption>(WEBSITES[0]);
   const [selectedStyle, setSelectedStyle] = useState<RTPStyle>(RTP_STYLES[0]);
   const [customTimeLabel, setCustomTimeLabel] = useState<string>('18:00 - 00:00 WIB');
-  const [selectedBackground, setSelectedBackground] = useState<string>(BACKGROUNDS[0]);
+  const [selectedBackground, setSelectedBackground] = useState<string>(BACKGROUND_CATEGORIES[0].backgrounds[0]);
   const [selectedTexture, setSelectedTexture] = useState<TextureOption>(TEXTURE_OPTIONS[0]);
   const [pragmaticCount, setPragmaticCount] = useState<number>(8);
   const [pgSoftCount, setPgSoftCount] = useState<number>(8);
@@ -45,11 +45,6 @@ export default function Home() {
     generateRandomGames();
   };
 
-  const shuffleBackground = () => {
-    const randomIndex = Math.floor(Math.random() * BACKGROUNDS.length);
-    setSelectedBackground(BACKGROUNDS[randomIndex]);
-  };
-
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -58,7 +53,8 @@ export default function Home() {
           selectedWebsite={selectedWebsite}
           onWebsiteChange={setSelectedWebsite}
           onShuffleGames={shuffleGames}
-          onShuffleBackground={shuffleBackground}
+          selectedBackground={selectedBackground}
+          onBackgroundChange={setSelectedBackground}
           selectedStyle={selectedStyle}
           onStyleChange={setSelectedStyle}
           selectedTexture={selectedTexture}

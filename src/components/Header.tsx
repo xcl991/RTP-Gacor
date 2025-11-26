@@ -1,15 +1,16 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout, Search, Layers } from 'lucide-react';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption, TextureOption, CardStyleOption } from '@/types';
+import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout, Search, Layers, ChevronRight } from 'lucide-react';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS, BACKGROUND_CATEGORIES } from '@/data/games';
+import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption, TextureOption, CardStyleOption, BackgroundCategory } from '@/types';
 
 interface HeaderProps {
   selectedWebsite: WebsiteOption;
   onWebsiteChange: (website: WebsiteOption) => void;
   onShuffleGames: () => void;
-  onShuffleBackground: () => void;
+  selectedBackground: string;
+  onBackgroundChange: (background: string) => void;
   selectedStyle: RTPStyle;
   onStyleChange: (style: RTPStyle) => void;
   selectedTexture: TextureOption;
@@ -30,7 +31,8 @@ export default function Header({
   selectedWebsite,
   onWebsiteChange,
   onShuffleGames,
-  onShuffleBackground,
+  selectedBackground,
+  onBackgroundChange,
   selectedStyle,
   onStyleChange,
   selectedTexture,
@@ -51,8 +53,21 @@ export default function Header({
   const [isStyleDropdownOpen, setIsStyleDropdownOpen] = useState(false);
   const [isTextureDropdownOpen, setIsTextureDropdownOpen] = useState(false);
   const [isCardStyleDropdownOpen, setIsCardStyleDropdownOpen] = useState(false);
+  const [isBackgroundDropdownOpen, setIsBackgroundDropdownOpen] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [websiteSearch, setWebsiteSearch] = useState('');
   const websiteInputRef = useRef<HTMLInputElement>(null);
+
+  // Get current category name from selected background
+  const getCurrentCategoryName = () => {
+    for (const category of BACKGROUND_CATEGORIES) {
+      if (category.backgrounds.includes(selectedBackground)) {
+        const index = category.backgrounds.indexOf(selectedBackground) + 1;
+        return `${category.name} ${index}`;
+      }
+    }
+    return 'Background';
+  };
 
   // Filter websites based on search
   const filteredWebsites = WEBSITES.filter(website =>
@@ -200,13 +215,59 @@ export default function Header({
           />
         </div>
 
-        <button
-          onClick={onShuffleBackground}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
-        >
-          <Image className="w-4 h-4" />
-          Acak Background
-        </button>
+        {/* Background Category Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsBackgroundDropdownOpen(!isBackgroundDropdownOpen)}
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <Image className="w-4 h-4" />
+            <span className="font-semibold">{getCurrentCategoryName()}</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${isBackgroundDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {isBackgroundDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
+              {BACKGROUND_CATEGORIES.map((category) => (
+                <div key={category.id}>
+                  {/* Category Header */}
+                  <button
+                    onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-700 transition-colors text-left border-b border-gray-700"
+                  >
+                    <span className="text-white font-semibold">{category.name}</span>
+                    <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expandedCategory === category.id ? 'rotate-90' : ''}`} />
+                  </button>
+
+                  {/* Category Items */}
+                  {expandedCategory === category.id && (
+                    <div className="bg-gray-900">
+                      {category.backgrounds.map((bg, index) => (
+                        <button
+                          key={bg}
+                          onClick={() => {
+                            onBackgroundChange(bg);
+                            setIsBackgroundDropdownOpen(false);
+                            setExpandedCategory(null);
+                          }}
+                          className={`w-full flex items-center gap-3 px-6 py-2 hover:bg-gray-700 transition-colors text-left ${
+                            selectedBackground === bg ? 'bg-indigo-600/30' : ''
+                          }`}
+                        >
+                          <div
+                            className="w-8 h-8 rounded border border-white/30 bg-cover bg-center"
+                            style={{ backgroundImage: `url(${bg})` }}
+                          />
+                          <span className="text-gray-300 text-sm">{category.name} {index + 1}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Base Color Dropdown */}
         <div className="relative">
