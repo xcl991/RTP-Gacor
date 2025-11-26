@@ -925,6 +925,31 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     id: "steampunk",
     name: "Steampunk",
     description: "Layout Victorian steampunk dengan efek gear"
+  },
+  {
+    id: "casinocyberpunk",
+    name: "Casino Cyberpunk",
+    description: "Layout cyberpunk dengan efek scanning lines dan corner decorations"
+  },
+  {
+    id: "casinoholographic",
+    name: "Casino Holographic",
+    description: "Layout holographic dengan efek glass dan module IDs"
+  },
+  {
+    id: "casinomatrix",
+    name: "Casino Matrix",
+    description: "Layout matrix dengan efek rain dan grid 3 kolom"
+  },
+  {
+    id: "casinoquantum",
+    name: "Casino Quantum",
+    description: "Layout quantum dengan circuit board pattern dan quantum IDs"
+  },
+  {
+    id: "casinospacestation",
+    name: "Casino Space Station",
+    description: "Layout space station dengan nebula effect dan bay numbers"
   }
 ];
 

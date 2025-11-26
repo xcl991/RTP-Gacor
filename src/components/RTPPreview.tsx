@@ -10,6 +10,11 @@ import GalaxyLayout2 from './layouts/GalaxyLayout2';
 import CasinoLuxuryLayout from './layouts/CasinoLuxuryLayout';
 import CyberpunkLayout2 from './layouts/CyberpunkLayout2';
 import SteampunkLayout from './layouts/SteampunkLayout';
+import CasinoCyberpunkLayout from './layouts/CasinoCyberpunkLayout';
+import CasinoHolographicLayout from './layouts/CasinoHolographicLayout';
+import CasinoMatrixLayout from './layouts/CasinoMatrixLayout';
+import CasinoQuantumLayout from './layouts/CasinoQuantumLayout';
+import CasinoSpaceStationLayout from './layouts/CasinoSpaceStationLayout';
 import { RTPStyle, WebsiteOption, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
 interface RTPPreviewProps {
@@ -111,6 +116,11 @@ export default function RTPPreview({
         {selectedLayout.id === 'casinoluxury' && <CasinoLuxuryLayout {...layoutProps} />}
         {selectedLayout.id === 'cyberpunk2' && <CyberpunkLayout2 {...layoutProps} />}
         {selectedLayout.id === 'steampunk' && <SteampunkLayout {...layoutProps} />}
+        {selectedLayout.id === 'casinocyberpunk' && <CasinoCyberpunkLayout {...layoutProps} />}
+        {selectedLayout.id === 'casinoholographic' && <CasinoHolographicLayout {...layoutProps} />}
+        {selectedLayout.id === 'casinomatrix' && <CasinoMatrixLayout {...layoutProps} />}
+        {selectedLayout.id === 'casinoquantum' && <CasinoQuantumLayout {...layoutProps} />}
+        {selectedLayout.id === 'casinospacestation' && <CasinoSpaceStationLayout {...layoutProps} />}
       </div>
     </div>
   );
