@@ -1,4 +1,4 @@
-import { Game, RTPStyle, WebsiteOption, TimeSlot, LayoutOption, TextureOption } from '@/types';
+import { Game, RTPStyle, WebsiteOption, TimeSlot, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
 export const GAMES_PRAGMATIC: Game[] = [
   {name: "Santa's Slay", src: "https://img.viva88athenae.com/pp/images/vs10santasl.png"},
@@ -911,5 +911,109 @@ export const TEXTURE_OPTIONS: TextureOption[] = [
     id: "circuit",
     name: "Circuit",
     pattern: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
+  }
+];
+
+
+export const CARD_STYLE_OPTIONS: CardStyleOption[] = [
+  {
+    id: 'solid',
+    name: 'Solid',
+    background: 'rgba(0,0,0,0.85)',
+    border: '1px solid',
+    opacity: 1,
+    pattern: 'none',
+    blur: 'none',
+    shadow: '0 4px 6px rgba(0,0,0,0.3)'
+  },
+  {
+    id: 'transparent',
+    name: 'Transparent',
+    background: 'rgba(0,0,0,0.3)',
+    border: '1px solid',
+    opacity: 0.9,
+    pattern: 'none',
+    blur: 'backdrop-blur-sm',
+    shadow: 'none'
+  },
+  {
+    id: 'glass',
+    name: 'Glassmorphism',
+    background: 'rgba(255,255,255,0.1)',
+    border: '1px solid rgba(255,255,255,0.2)',
+    opacity: 1,
+    pattern: 'none',
+    blur: 'backdrop-blur-md',
+    shadow: '0 8px 32px rgba(0,0,0,0.3)'
+  },
+  {
+    id: 'gradient',
+    name: 'Gradient',
+    background: 'linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(30,30,50,0.9) 100%)',
+    border: '1px solid',
+    opacity: 1,
+    pattern: 'none',
+    blur: 'none',
+    shadow: '0 4px 15px rgba(0,0,0,0.4)'
+  },
+  {
+    id: 'glow',
+    name: 'Neon Glow',
+    background: 'rgba(0,0,0,0.9)',
+    border: '2px solid',
+    opacity: 1,
+    pattern: 'none',
+    blur: 'none',
+    shadow: '0 0 20px'
+  },
+  {
+    id: 'grid-pattern',
+    name: 'Grid Pattern',
+    background: 'rgba(0,0,0,0.85)',
+    border: '1px solid',
+    opacity: 1,
+    pattern: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2720%27 height=%2720%27 viewBox=%270 0 20 20%27%3E%3Cpath d=%27M0 0h20v20H0V0zm1 1h18v18H1V1z%27 fill=%27%23ffffff%27 fill-opacity=%270.05%27/%3E%3C/svg%3E")',
+    blur: 'none',
+    shadow: '0 4px 6px rgba(0,0,0,0.3)'
+  },
+  {
+    id: 'dots-pattern',
+    name: 'Dots Pattern',
+    background: 'rgba(0,0,0,0.85)',
+    border: '1px solid',
+    opacity: 1,
+    pattern: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%2710%27%3E%3Ccircle cx=%275%27 cy=%275%27 r=%271%27 fill=%27%23ffffff%27 fill-opacity=%270.1%27/%3E%3C/svg%3E")',
+    blur: 'none',
+    shadow: '0 4px 6px rgba(0,0,0,0.3)'
+  },
+  {
+    id: 'diagonal-pattern',
+    name: 'Diagonal Lines',
+    background: 'rgba(0,0,0,0.85)',
+    border: '1px solid',
+    opacity: 1,
+    pattern: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%278%27 height=%278%27%3E%3Cpath d=%27M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2%27 stroke=%27%23ffffff%27 stroke-opacity=%270.08%27/%3E%3C/svg%3E")',
+    blur: 'none',
+    shadow: '0 4px 6px rgba(0,0,0,0.3)'
+  },
+  {
+    id: 'double-border',
+    name: 'Double Border',
+    background: 'rgba(0,0,0,0.85)',
+    border: '3px double',
+    opacity: 1,
+    pattern: 'none',
+    blur: 'none',
+    shadow: '0 4px 6px rgba(0,0,0,0.3)'
+  },
+  {
+    id: 'outline',
+    name: 'Outline Only',
+    background: 'transparent',
+    border: '2px solid',
+    opacity: 1,
+    pattern: 'none',
+    blur: 'none',
+    shadow: 'none'
   }
 ];

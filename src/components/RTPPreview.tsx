@@ -10,7 +10,7 @@ import GalaxyLayout2 from './layouts/GalaxyLayout2';
 import CasinoLuxuryLayout from './layouts/CasinoLuxuryLayout';
 import CyberpunkLayout2 from './layouts/CyberpunkLayout2';
 import SteampunkLayout from './layouts/SteampunkLayout';
-import { RTPStyle, WebsiteOption, Game, LayoutOption, TextureOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
 interface RTPPreviewProps {
   selectedWebsite: WebsiteOption;
@@ -23,6 +23,7 @@ interface RTPPreviewProps {
   selectedPragmaticGames: Game[];
   selectedPgSoftGames: Game[];
   selectedLayout: LayoutOption;
+  selectedCardStyle: CardStyleOption;
 }
 
 export default function RTPPreview({
@@ -35,7 +36,8 @@ export default function RTPPreview({
   pgSoftCount,
   selectedPragmaticGames,
   selectedPgSoftGames,
-  selectedLayout
+  selectedLayout,
+  selectedCardStyle
 }: RTPPreviewProps) {
   const getCurrentDate = () => {
     const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
@@ -58,7 +60,8 @@ export default function RTPPreview({
     selectedPgSoftGames,
     pragmaticCount,
     pgSoftCount,
-    getCurrentDate
+    getCurrentDate,
+    selectedCardStyle
   };
 
   return (

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout, Search } from 'lucide-react';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS, TEXTURE_OPTIONS } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption, TextureOption } from '@/types';
+import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout, Search, Layers } from 'lucide-react';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
+import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
 interface HeaderProps {
   selectedWebsite: WebsiteOption;
@@ -22,6 +22,8 @@ interface HeaderProps {
   onLayoutChange: (layout: LayoutOption) => void;
   customTimeLabel: string;
   onCustomTimeLabelChange: (label: string) => void;
+  selectedCardStyle: CardStyleOption;
+  onCardStyleChange: (cardStyle: CardStyleOption) => void;
 }
 
 export default function Header({
@@ -40,12 +42,15 @@ export default function Header({
   selectedLayout,
   onLayoutChange,
   customTimeLabel,
-  onCustomTimeLabelChange
+  onCustomTimeLabelChange,
+  selectedCardStyle,
+  onCardStyleChange
 }: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLayoutDropdownOpen, setIsLayoutDropdownOpen] = useState(false);
   const [isStyleDropdownOpen, setIsStyleDropdownOpen] = useState(false);
   const [isTextureDropdownOpen, setIsTextureDropdownOpen] = useState(false);
+  const [isCardStyleDropdownOpen, setIsCardStyleDropdownOpen] = useState(false);
   const [websiteSearch, setWebsiteSearch] = useState('');
   const websiteInputRef = useRef<HTMLInputElement>(null);
 
@@ -274,6 +279,44 @@ export default function Header({
                     }}
                   />
                   <span className="text-white">{texture.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {/* Card Style Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsCardStyleDropdownOpen(!isCardStyleDropdownOpen)}
+            className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <Layers className="w-4 h-4" />
+            <span className="font-semibold">{selectedCardStyle.name}</span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+
+          {isCardStyleDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto">
+              {CARD_STYLE_OPTIONS.map((cardStyle) => (
+                <button
+                  key={cardStyle.id}
+                  onClick={() => {
+                    onCardStyleChange(cardStyle);
+                    setIsCardStyleDropdownOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left ${
+                    selectedCardStyle.id === cardStyle.id ? 'bg-gray-700' : ''
+                  }`}
+                >
+                  <div
+                    className="w-6 h-6 rounded border border-white/30"
+                    style={{
+                      background: cardStyle.background,
+                      opacity: cardStyle.opacity,
+                      backgroundImage: cardStyle.pattern !== 'none' ? cardStyle.pattern : 'none'
+                    }}
+                  />
+                  <span className="text-white">{cardStyle.name}</span>
                 </button>
               ))}
             </div>

@@ -46,3 +46,14 @@ export interface TextureOption {
   name: string;
   pattern: string;
 }
+
+export interface CardStyleOption {
+  id: string;
+  name: string;
+  background: string;
+  border: string;
+  opacity: number;
+  pattern: string;
+  blur: string;
+  shadow: string;
+}

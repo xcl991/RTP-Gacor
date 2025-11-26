@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
-import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUNDS, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS } from '@/data/games';
-import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption, TextureOption } from '@/types';
+import { WEBSITES, RTP_STYLES, TIME_SLOTS, BACKGROUNDS, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
+import { WebsiteOption, RTPStyle, TimeSlot, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
 export default function Home() {
   const [selectedWebsite, setSelectedWebsite] = useState<WebsiteOption>(WEBSITES[0]);
@@ -15,6 +15,7 @@ export default function Home() {
   const [pragmaticCount, setPragmaticCount] = useState<number>(8);
   const [pgSoftCount, setPgSoftCount] = useState<number>(8);
   const [selectedLayout, setSelectedLayout] = useState<LayoutOption>(LAYOUT_OPTIONS[0]);
+  const [selectedCardStyle, setSelectedCardStyle] = useState<CardStyleOption>(CARD_STYLE_OPTIONS[0]);
 
   // States untuk menyimpan game yang sudah terpilih
   const [selectedPragmaticGames, setSelectedPragmaticGames] = useState<Game[]>([]);
@@ -70,6 +71,8 @@ export default function Home() {
           onLayoutChange={setSelectedLayout}
           customTimeLabel={customTimeLabel}
           onCustomTimeLabelChange={setCustomTimeLabel}
+          selectedCardStyle={selectedCardStyle}
+          onCardStyleChange={setSelectedCardStyle}
         />
 
         {/* Main Content */}
@@ -97,6 +100,7 @@ export default function Home() {
               selectedPragmaticGames={selectedPragmaticGames}
               selectedPgSoftGames={selectedPgSoftGames}
               selectedLayout={selectedLayout}
+              selectedCardStyle={selectedCardStyle}
             />
           </div>
         </div>
