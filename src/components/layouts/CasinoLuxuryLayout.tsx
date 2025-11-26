@@ -8,24 +8,17 @@ interface CasinoGameCardProps {
   primaryColor: string;
   secondaryColor: string;
   isShowcase?: boolean;
-  cardStyle: CardStyleOption;
 }
 
-function CasinoGameCard({ game, rtp, primaryColor, secondaryColor, isShowcase = false, cardStyle }: CasinoGameCardProps) {
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
-
+function CasinoGameCard({ game, rtp, primaryColor, secondaryColor, isShowcase = false }: CasinoGameCardProps) {
   return (
     <div
-      className={"relative overflow-hidden w-full " + getBlurClass()}
+      className="relative overflow-hidden w-full"
       style={{
-        background: cardStyle?.background || "linear-gradient(145deg, rgba(30,20,10,0.95), rgba(15,10,5,0.98))",
-        border: cardStyle?.border ? cardStyle.border + " " + primaryColor : "2px solid " + primaryColor,
+        background: "linear-gradient(145deg, rgba(30,20,10,0.95), rgba(15,10,5,0.98))",
+        border: "2px solid " + primaryColor,
         borderRadius: "12px",
-        opacity: cardStyle?.opacity || 1,
-        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? cardStyle.shadow + " " + primaryColor : cardStyle.shadow) : "0 0 20px " + primaryColor + "40, inset 0 0 30px rgba(0,0,0,0.5)"
+        boxShadow: "0 0 20px " + primaryColor + "40, inset 0 0 30px rgba(0,0,0,0.5)"
       }}
     >
       <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 rounded-tl-lg" style={{ borderColor: secondaryColor }} />
@@ -99,6 +92,18 @@ export default function CasinoLuxuryLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const getBlurClass = () => {
+    if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
+    return selectedCardStyle.blur;
+  };
+
+  const getSectionStyle = (color: string) => ({
+    background: selectedCardStyle?.background || undefined,
+    border: selectedCardStyle?.border ? selectedCardStyle.border + " " + color : undefined,
+    opacity: selectedCardStyle?.opacity || 1,
+    boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? selectedCardStyle.shadow + " " + color : selectedCardStyle.shadow) : undefined
+  });
+
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
     rtp: Math.floor(Math.random() * 13) + 86
@@ -156,7 +161,10 @@ export default function CasinoLuxuryLayout({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 relative z-10">
-        <div className="lg:col-span-1">
+        <div
+          className={"lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
+          style={getSectionStyle(primaryColor)}
+        >
           <div
             className="flex items-center justify-center gap-3 mb-4 p-3 rounded-xl"
             style={{
@@ -180,13 +188,15 @@ export default function CasinoLuxuryLayout({
                 rtp={game.rtp}
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
-                cardStyle={selectedCardStyle}
               />
             ))}
           </div>
         </div>
 
-        <div className="lg:col-span-1">
+        <div
+          className={"lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
+          style={getSectionStyle(primaryColor)}
+        >
           <div
             className="text-center mb-4 p-3 rounded-xl"
             style={{
@@ -214,7 +224,6 @@ export default function CasinoLuxuryLayout({
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
                 isShowcase={true}
-                cardStyle={selectedCardStyle}
               />
             </div>
           )}
@@ -233,13 +242,15 @@ export default function CasinoLuxuryLayout({
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
                 isShowcase={true}
-                cardStyle={selectedCardStyle}
               />
             </div>
           )}
         </div>
 
-        <div className="lg:col-span-1">
+        <div
+          className={"lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
+          style={getSectionStyle(secondaryColor)}
+        >
           <div
             className="flex items-center justify-center gap-3 mb-4 p-3 rounded-xl"
             style={{
@@ -263,7 +274,6 @@ export default function CasinoLuxuryLayout({
                 rtp={game.rtp}
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
-                cardStyle={selectedCardStyle}
               />
             ))}
           </div>

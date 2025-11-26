@@ -6,23 +6,15 @@ interface GameCardProps {
   game: Game;
   rtp: number;
   style: any;
-  cardStyle?: CardStyleOption;
 }
 
-function GameCard({ game, rtp, style, cardStyle }: GameCardProps) {
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
-
+function GameCard({ game, rtp, style }: GameCardProps) {
   return (
     <div
-      className={`relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 w-[180px] ${getBlurClass()}`}
+      className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 w-[180px]"
       style={{
-        background: cardStyle?.background || style.backgroundColor,
-        border: cardStyle?.border ? `${cardStyle.border} ${style.primaryColor}` : `2px solid ${style.primaryColor}`,
-        opacity: cardStyle?.opacity || 1,
-        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${style.primaryColor}` : cardStyle.shadow) : '0 4px 6px rgba(0,0,0,0.3)'
+        backgroundColor: style.backgroundColor,
+        border: `2px solid ${style.primaryColor}`
       }}
     >
       {/* Game Image */}
@@ -104,14 +96,22 @@ export default function GameGrid({
     rtp: Math.floor(Math.random() * 13) + 86
   }));
 
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
+  const getSectionStyle = () => ({
+    background: cardStyle?.background || `${style.backgroundColor}dd`,
+    border: cardStyle?.border ? `${cardStyle.border} ${style.primaryColor}` : `1px solid ${style.primaryColor}`,
+    opacity: cardStyle?.opacity || 1,
+    boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${style.primaryColor}` : cardStyle.shadow) : undefined
+  });
+
   return (
-    <div className="mb-8">
+    <div className={`mb-8 p-4 rounded-lg ${getBlurClass()}`} style={getSectionStyle()}>
       {/* Provider Header */}
       <div className="flex flex-col items-center mb-4 p-4 rounded-lg"
-        style={{
-          backgroundColor: `${style.backgroundColor}dd`,
-          border: `1px solid ${style.primaryColor}`
-        }}
       >
         <div className="flex items-center gap-4 mb-2">
           <img
@@ -148,7 +148,6 @@ export default function GameGrid({
             game={game}
             rtp={game.rtp}
             style={style}
-            cardStyle={cardStyle}
           />
         ))}
       </div>

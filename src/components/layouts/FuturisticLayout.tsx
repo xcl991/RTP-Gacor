@@ -6,23 +6,15 @@ interface FuturisticGameCardProps {
   game: Game;
   rtp: number;
   style: RTPStyle;
-  cardStyle: CardStyleOption;
 }
 
-function FuturisticGameCard({ game, rtp, style, cardStyle }: FuturisticGameCardProps) {
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
-
+function FuturisticGameCard({ game, rtp, style }: FuturisticGameCardProps) {
   return (
     <div
-      className={`rounded-lg overflow-hidden shadow-lg w-[180px] ${getBlurClass()}`}
+      className="rounded-lg overflow-hidden shadow-lg w-[180px]"
       style={{
-        background: cardStyle?.background || '#0f172a',
-        border: cardStyle?.border ? `${cardStyle.border} ${style.primaryColor}` : '1px solid #334155',
-        opacity: cardStyle?.opacity || 1,
-        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${style.primaryColor}` : cardStyle.shadow) : '0 4px 6px rgba(0,0,0,0.3)'
+        background: '#0f172a',
+        border: '1px solid #334155'
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden">
@@ -99,6 +91,18 @@ export default function FuturisticLayout({
   getCurrentDate,
   selectedCardStyle
 }: FuturisticLayoutProps) {
+  const getBlurClass = () => {
+    if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
+    return selectedCardStyle.blur;
+  };
+
+  const getSectionStyle = () => ({
+    background: selectedCardStyle?.background || 'rgba(0, 0, 0, 0.4)',
+    border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${selectedStyle.primaryColor}` : '3px solid rgba(255,255,255,0.05)',
+    opacity: selectedCardStyle?.opacity || 1,
+    boxShadow: selectedCardStyle?.shadow || undefined
+  });
+
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
     rtp: Math.floor(Math.random() * 13) + 86 // 86-98%
@@ -167,11 +171,8 @@ export default function FuturisticLayout({
 
       {/* Pragmatic Section */}
       <div
-        className="relative z-10 flex items-stretch gap-2 mb-4 p-3 rounded-2xl"
-        style={{
-          background: 'rgba(0, 0, 0, 0.4)',
-          border: '3px solid rgba(255,255,255,0.05)'
-        }}
+        className={`relative z-10 flex items-stretch gap-2 mb-4 p-3 rounded-2xl ${getBlurClass()}`}
+        style={getSectionStyle()}
       >
         <div className="flex-1 flex flex-wrap justify-center gap-2">
           {pragmaticGamesWithRTP.map((game, index) => (
@@ -180,7 +181,6 @@ export default function FuturisticLayout({
               game={game}
               rtp={game.rtp}
               style={selectedStyle}
-              cardStyle={selectedCardStyle}
             />
           ))}
         </div>
@@ -216,11 +216,8 @@ export default function FuturisticLayout({
 
       {/* PG Soft Section */}
       <div
-        className="relative z-10 flex items-stretch gap-2 mb-4 p-3 rounded-2xl"
-        style={{
-          background: 'rgba(0, 0, 0, 0.4)',
-          border: '3px solid rgba(255,255,255,0.05)'
-        }}
+        className={`relative z-10 flex items-stretch gap-2 mb-4 p-3 rounded-2xl ${getBlurClass()}`}
+        style={getSectionStyle()}
       >
         <div className="flex-1 flex flex-wrap justify-center gap-2">
           {pgSoftGamesWithRTP.map((game, index) => (
@@ -229,7 +226,6 @@ export default function FuturisticLayout({
               game={game}
               rtp={game.rtp}
               style={selectedStyle}
-              cardStyle={selectedCardStyle}
             />
           ))}
         </div>

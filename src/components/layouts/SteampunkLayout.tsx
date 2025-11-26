@@ -8,17 +8,11 @@ interface SteampunkGameCardProps {
   primaryColor: string;
   secondaryColor: string;
   rotation?: number;
-  cardStyle: CardStyleOption;
 }
 
-function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation = 0, cardStyle }: SteampunkGameCardProps) {
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
-
+function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation = 0 }: SteampunkGameCardProps) {
   return (
-    <div className={`relative w-[180px] ${getBlurClass()}`}>
+    <div className="relative w-[180px]">
       {/* Shadow layer with rotation */}
       <div
         className="absolute inset-0"
@@ -35,11 +29,10 @@ function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation =
         className="relative p-3"
         style={{
           transform: `rotate(${-rotation / 2}deg)`,
-          background: cardStyle?.background || `linear-gradient(145deg, rgba(45,35,25,0.95), rgba(25,18,12,0.98))`,
-          border: cardStyle?.border ? `${cardStyle.border} ${primaryColor}` : `2px solid ${primaryColor}`,
+          background: `linear-gradient(145deg, rgba(45,35,25,0.95), rgba(25,18,12,0.98))`,
+          border: `2px solid ${primaryColor}`,
           borderRadius: '10px',
-          opacity: cardStyle?.opacity || 1,
-          boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${primaryColor}` : cardStyle.shadow) : `0 5px 20px rgba(0,0,0,0.3), inset 0 0 20px ${secondaryColor}20`
+          boxShadow: `0 5px 20px rgba(0,0,0,0.3), inset 0 0 20px ${secondaryColor}20`
         }}
       >
         <div className="relative w-full aspect-square overflow-hidden rounded-lg mb-3" style={{ border: `1px solid ${primaryColor}50` }}>
@@ -120,6 +113,18 @@ export default function SteampunkLayout({
 }: SteampunkLayoutProps) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+
+  const getBlurClass = () => {
+    if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
+    return selectedCardStyle.blur;
+  };
+
+  const getSectionStyle = (color: string) => ({
+    background: selectedCardStyle?.background || `linear-gradient(45deg, ${color}30, rgba(45,35,25,0.9))`,
+    border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${color}` : `3px solid ${color}`,
+    opacity: selectedCardStyle?.opacity || 1,
+    boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? `${selectedCardStyle.shadow} ${color}` : selectedCardStyle.shadow) : `inset 0 0 20px ${color}30`
+  });
 
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
@@ -216,14 +221,12 @@ export default function SteampunkLayout({
       </div>
 
       {/* Pragmatic Section */}
-      <div className="relative z-10 mb-8">
+      <div
+        className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
+        style={getSectionStyle(primaryColor)}
+      >
         <div
           className="text-center p-4 mb-6 rounded-xl"
-          style={{
-            background: `linear-gradient(45deg, ${primaryColor}30, rgba(45,35,25,0.9))`,
-            border: `3px solid ${primaryColor}`,
-            boxShadow: `inset 0 0 20px ${secondaryColor}30`
-          }}
         >
           <div className="flex items-center justify-center gap-4">
             <img
@@ -249,7 +252,6 @@ export default function SteampunkLayout({
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
               rotation={index % 2 === 0 ? 2 : -2}
-              cardStyle={selectedCardStyle}
             />
           ))}
         </div>
@@ -263,14 +265,12 @@ export default function SteampunkLayout({
       </div>
 
       {/* PG Soft Section */}
-      <div className="relative z-10 mb-8">
+      <div
+        className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
+        style={getSectionStyle(secondaryColor)}
+      >
         <div
           className="text-center p-4 mb-6 rounded-xl"
-          style={{
-            background: `linear-gradient(45deg, ${secondaryColor}30, rgba(45,35,25,0.9))`,
-            border: `3px solid ${secondaryColor}`,
-            boxShadow: `inset 0 0 20px ${primaryColor}30`
-          }}
         >
           <div className="flex items-center justify-center gap-4">
             <img
@@ -296,7 +296,6 @@ export default function SteampunkLayout({
               primaryColor={secondaryColor}
               secondaryColor={primaryColor}
               rotation={index % 2 === 0 ? -2 : 2}
-              cardStyle={selectedCardStyle}
             />
           ))}
         </div>

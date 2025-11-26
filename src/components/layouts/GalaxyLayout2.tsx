@@ -7,25 +7,18 @@ interface GalaxyGameCardProps {
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
-  cardStyle: CardStyleOption;
 }
 
-function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor, cardStyle }: GalaxyGameCardProps) {
+function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameCardProps) {
   const isHot = rtp >= 95;
-
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
 
   return (
     <div
-      className={"relative overflow-hidden w-full rounded-xl " + getBlurClass()}
+      className="relative overflow-hidden w-full rounded-xl"
       style={{
-        background: cardStyle?.background || "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-        border: cardStyle?.border ? cardStyle.border + " " + primaryColor : "2px solid " + primaryColor + "60",
-        opacity: cardStyle?.opacity || 1,
-        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? cardStyle.shadow + " " + primaryColor : cardStyle.shadow) : "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
+        background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
+        border: "2px solid " + primaryColor + "60",
+        boxShadow: "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
       }}
     >
       {isHot && (
@@ -113,6 +106,18 @@ export default function GalaxyLayout2({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const getBlurClass = () => {
+    if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
+    return selectedCardStyle.blur;
+  };
+
+  const getSectionStyle = (color: string) => ({
+    background: selectedCardStyle?.background || "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
+    border: selectedCardStyle?.border ? selectedCardStyle.border + " " + color : "2px solid " + color + "60",
+    opacity: selectedCardStyle?.opacity || 1,
+    boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? selectedCardStyle.shadow + " " + color : selectedCardStyle.shadow) : "0 0 20px " + color + "30, inset 0 0 30px rgba(0,0,0,0.5)"
+  });
+
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
     rtp: Math.floor(Math.random() * 13) + 86
@@ -179,7 +184,10 @@ export default function GalaxyLayout2({
         </div>
       </div>
 
-      <div className="relative z-10 mb-8">
+      <div
+        className={"relative z-10 mb-8 p-4 rounded-xl " + getBlurClass()}
+        style={getSectionStyle(primaryColor)}
+      >
         <div className="flex items-stretch gap-4">
           <div
             className="w-32 rounded-xl flex items-center justify-center shrink-0"
@@ -204,7 +212,6 @@ export default function GalaxyLayout2({
                   rtp={game.rtp}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
-                  cardStyle={selectedCardStyle}
                 />
               ))}
             </div>
@@ -222,7 +229,10 @@ export default function GalaxyLayout2({
         <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, " + primaryColor + ", transparent)" }} />
       </div>
 
-      <div className="relative z-10 mb-8">
+      <div
+        className={"relative z-10 mb-8 p-4 rounded-xl " + getBlurClass()}
+        style={getSectionStyle(secondaryColor)}
+      >
         <div className="flex items-stretch gap-4">
           <div
             className="w-32 rounded-xl flex items-center justify-center shrink-0"
@@ -247,7 +257,6 @@ export default function GalaxyLayout2({
                   rtp={game.rtp}
                   primaryColor={secondaryColor}
                   secondaryColor={primaryColor}
-                  cardStyle={selectedCardStyle}
                 />
               ))}
             </div>

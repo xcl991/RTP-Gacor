@@ -6,23 +6,16 @@ interface NeonGameCardProps {
   game: Game;
   rtp: number;
   glowColor: string;
-  cardStyle: CardStyleOption;
 }
 
-function NeonGameCard({ game, rtp, glowColor, cardStyle }: NeonGameCardProps) {
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
-
+function NeonGameCard({ game, rtp, glowColor }: NeonGameCardProps) {
   return (
     <div
-      className={`rounded-xl overflow-hidden relative group w-[180px] ${getBlurClass()}`}
+      className="rounded-xl overflow-hidden relative group w-[180px]"
       style={{
-        background: cardStyle?.background || 'linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%)',
-        border: cardStyle?.border ? `${cardStyle.border} ${glowColor}` : `2px solid ${glowColor}`,
-        opacity: cardStyle?.opacity || 1,
-        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${glowColor}` : cardStyle.shadow) : `0 0 20px ${glowColor}40, inset 0 0 20px ${glowColor}10`
+        background: 'linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%)',
+        border: `2px solid ${glowColor}`,
+        boxShadow: `0 0 20px ${glowColor}40, inset 0 0 20px ${glowColor}10`
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden">
@@ -95,6 +88,18 @@ export default function NeonLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const getBlurClass = () => {
+    if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
+    return selectedCardStyle.blur;
+  };
+
+  const getSectionStyle = (color: string) => ({
+    background: selectedCardStyle?.background || undefined,
+    border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${color}` : undefined,
+    opacity: selectedCardStyle?.opacity || 1,
+    boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? `${selectedCardStyle.shadow} ${color}` : selectedCardStyle.shadow) : undefined
+  });
+
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
     rtp: Math.floor(Math.random() * 13) + 86
@@ -162,7 +167,10 @@ export default function NeonLayout({
       </div>
 
       {/* Pragmatic Section */}
-      <div className="relative z-10 mb-6">
+      <div
+        className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
+        style={getSectionStyle(primaryColor)}
+      >
         <div className="flex items-center gap-4 mb-4">
           <img
             src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
@@ -174,13 +182,16 @@ export default function NeonLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           {pragmaticGamesWithRTP.map((game, index) => (
-            <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} cardStyle={selectedCardStyle} />
+            <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} />
           ))}
         </div>
       </div>
 
       {/* PG Soft Section */}
-      <div className="relative z-10 mb-6">
+      <div
+        className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
+        style={getSectionStyle(secondaryColor)}
+      >
         <div className="flex items-center gap-4 mb-4">
           <img
             src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
@@ -192,7 +203,7 @@ export default function NeonLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           {pgSoftGamesWithRTP.map((game, index) => (
-            <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} cardStyle={selectedCardStyle} />
+            <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} />
           ))}
         </div>
       </div>

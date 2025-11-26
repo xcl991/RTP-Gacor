@@ -6,26 +6,18 @@ interface ClassicGameCardProps {
   game: Game;
   rtp: number;
   style: RTPStyle;
-  cardStyle: CardStyleOption;
 }
 
-function ClassicGameCard({ game, rtp, style, cardStyle }: ClassicGameCardProps) {
+function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
   const primaryColor = style.primaryColor;
   const secondaryColor = style.secondaryColor;
 
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
-
   return (
     <div
-      className={`rounded-lg overflow-hidden shadow-lg w-[180px] ${getBlurClass()}`}
+      className="rounded-lg overflow-hidden shadow-lg w-[180px]"
       style={{
-        background: cardStyle?.background || 'rgba(0,0,0,0.7)',
-        border: cardStyle?.border ? `${cardStyle.border} ${primaryColor}` : `1px solid ${primaryColor}`,
-        opacity: cardStyle?.opacity || 1,
-        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${primaryColor}` : cardStyle.shadow) : '0 4px 6px rgba(0,0,0,0.3)'
+        background: 'rgba(0,0,0,0.7)',
+        border: `1px solid ${primaryColor}`
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden">
@@ -94,6 +86,18 @@ export default function ClassicLayout({
   const secondaryColor = selectedStyle.secondaryColor;
   const backgroundColor = selectedStyle.backgroundColor;
 
+  const getBlurClass = () => {
+    if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
+    return selectedCardStyle.blur;
+  };
+
+  const getSectionStyle = (color: string) => ({
+    background: selectedCardStyle?.background || `linear-gradient(to bottom, ${color}20, rgba(0,0,0,0.8))`,
+    border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${color}` : `1px solid ${color}30`,
+    opacity: selectedCardStyle?.opacity || 1,
+    boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? `${selectedCardStyle.shadow} ${color}` : selectedCardStyle.shadow) : undefined
+  });
+
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
     rtp: Math.floor(Math.random() * 13) + 86 // 86-98%
@@ -153,11 +157,8 @@ export default function ClassicLayout({
       <div className="relative z-10 flex-1 px-8 py-4 flex flex-col justify-center gap-6">
         {/* Pragmatic Section */}
         <div
-          className="rounded-xl p-4 backdrop-blur-md shadow-xl"
-          style={{
-            background: `linear-gradient(to bottom, ${primaryColor}20, rgba(0,0,0,0.8))`,
-            border: `1px solid ${primaryColor}30`
-          }}
+          className={`rounded-xl p-4 shadow-xl ${getBlurClass()}`}
+          style={getSectionStyle(primaryColor)}
         >
           <div className="flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${primaryColor}30` }}>
             <img
@@ -174,7 +175,6 @@ export default function ClassicLayout({
                 game={game}
                 rtp={game.rtp}
                 style={selectedStyle}
-                cardStyle={selectedCardStyle}
               />
             ))}
           </div>
@@ -182,11 +182,8 @@ export default function ClassicLayout({
 
         {/* PG Soft Section */}
         <div
-          className="rounded-xl p-4 backdrop-blur-md shadow-xl"
-          style={{
-            background: `linear-gradient(to bottom, ${secondaryColor}20, rgba(0,0,0,0.8))`,
-            border: `1px solid ${secondaryColor}30`
-          }}
+          className={`rounded-xl p-4 shadow-xl ${getBlurClass()}`}
+          style={getSectionStyle(secondaryColor)}
         >
           <div className="flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${secondaryColor}30` }}>
             <img
@@ -203,7 +200,6 @@ export default function ClassicLayout({
                 game={game}
                 rtp={game.rtp}
                 style={selectedStyle}
-                cardStyle={selectedCardStyle}
               />
             ))}
           </div>

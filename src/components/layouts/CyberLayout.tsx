@@ -8,26 +8,18 @@ interface CyberGameCardProps {
   index: number;
   primaryColor: string;
   secondaryColor: string;
-  cardStyle: CardStyleOption;
 }
 
-function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor, cardStyle }: CyberGameCardProps) {
+function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor }: CyberGameCardProps) {
   const isHot = rtp >= 95;
-
-  const getBlurClass = () => {
-    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
-    return cardStyle.blur;
-  };
 
   return (
     <div
-      className={`relative overflow-hidden w-[180px] ${getBlurClass()}`}
+      className="relative overflow-hidden w-[180px]"
       style={{
-        background: cardStyle?.background || '#0a0a0a',
+        background: '#0a0a0a',
         clipPath: 'polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%)',
-        border: cardStyle?.border ? `${cardStyle.border} ${primaryColor}` : `1px solid ${primaryColor}`,
-        opacity: cardStyle?.opacity || 1,
-        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${primaryColor}` : cardStyle.shadow) : 'none'
+        border: `1px solid ${primaryColor}`
       }}
     >
       {/* Corner Accents */}
@@ -118,6 +110,18 @@ export default function CyberLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const getBlurClass = () => {
+    if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
+    return selectedCardStyle.blur;
+  };
+
+  const getSectionStyle = (color: string) => ({
+    background: selectedCardStyle?.background || undefined,
+    border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${color}` : undefined,
+    opacity: selectedCardStyle?.opacity || 1,
+    boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? `${selectedCardStyle.shadow} ${color}` : selectedCardStyle.shadow) : undefined
+  });
+
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
     rtp: Math.floor(Math.random() * 13) + 86
@@ -181,7 +185,10 @@ export default function CyberLayout({
       </div>
 
       {/* Pragmatic Section */}
-      <div className="relative z-10 mb-6">
+      <div
+        className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
+        style={getSectionStyle(primaryColor)}
+      >
         <div className="flex items-center gap-3 mb-3">
           <div className="px-3 py-1" style={{ background: primaryColor, color: '#000' }}>
             <span className="font-mono font-bold text-sm">PRAGMATIC_PLAY</span>
@@ -195,7 +202,7 @@ export default function CyberLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-2">
           {pragmaticGamesWithRTP.map((game, index) => (
-            <CyberGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} cardStyle={selectedCardStyle} />
+            <CyberGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}
         </div>
       </div>
@@ -208,7 +215,10 @@ export default function CyberLayout({
       </div>
 
       {/* PG Soft Section */}
-      <div className="relative z-10 mb-6">
+      <div
+        className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
+        style={getSectionStyle(secondaryColor)}
+      >
         <div className="flex items-center gap-3 mb-3">
           <div className="px-3 py-1" style={{ background: secondaryColor, color: '#fff' }}>
             <span className="font-mono font-bold text-sm">PG_SOFT</span>
@@ -222,7 +232,7 @@ export default function CyberLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-2">
           {pgSoftGamesWithRTP.map((game, index) => (
-            <CyberGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} cardStyle={selectedCardStyle} />
+            <CyberGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}
         </div>
       </div>
