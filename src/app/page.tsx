@@ -66,8 +66,18 @@ export default function Home() {
 
   // Extract URL from CSS background-image
   const extractBgUrl = (bgImage: string): string | null => {
-    const match = bgImage.match(/url\(["']?([^"')]+)["']?\)/);
-    return match ? match[1] : null;
+    // Handle url("..."), url('...'), and url(...)
+    // Match everything between url( and the closing )
+    const match = bgImage.match(/url\(["']?(.+?)["']?\)$/);
+    if (match) {
+      // Decode any URL-encoded characters
+      try {
+        return decodeURIComponent(match[1]);
+      } catch {
+        return match[1];
+      }
+    }
+    return null;
   };
 
   // Convert oklab/oklch color to hex (approximate conversion)
