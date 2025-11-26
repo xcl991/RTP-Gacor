@@ -1,20 +1,28 @@
 'use client';
 
-import { Game } from '@/types';
+import { Game, CardStyleOption } from '@/types';
 
 interface GameCardProps {
   game: Game;
   rtp: number;
   style: any;
+  cardStyle?: CardStyleOption;
 }
 
-function GameCard({ game, rtp, style }: GameCardProps) {
+function GameCard({ game, rtp, style, cardStyle }: GameCardProps) {
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
     <div
-      className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 w-[180px]"
+      className={`relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 w-[180px] ${getBlurClass()}`}
       style={{
-        backgroundColor: style.backgroundColor,
-        border: `2px solid ${style.primaryColor}`
+        background: cardStyle?.background || style.backgroundColor,
+        border: cardStyle?.border ? `${cardStyle.border} ${style.primaryColor}` : `2px solid ${style.primaryColor}`,
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${style.primaryColor}` : cardStyle.shadow) : '0 4px 6px rgba(0,0,0,0.3)'
       }}
     >
       {/* Game Image */}
@@ -77,6 +85,7 @@ interface GameGridProps {
   providerLogo: string;
   providerColor: string;
   style: any;
+  cardStyle?: CardStyleOption;
 }
 
 export default function GameGrid({
@@ -85,7 +94,8 @@ export default function GameGrid({
   gameCount,
   providerLogo,
   providerColor,
-  style
+  style,
+  cardStyle
 }: GameGridProps) {
   const selectedGames = games.slice(0, gameCount);
 
@@ -138,6 +148,7 @@ export default function GameGrid({
             game={game}
             rtp={game.rtp}
             style={style}
+            cardStyle={cardStyle}
           />
         ))}
       </div>

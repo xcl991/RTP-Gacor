@@ -6,18 +6,26 @@ interface ClassicGameCardProps {
   game: Game;
   rtp: number;
   style: RTPStyle;
+  cardStyle: CardStyleOption;
 }
 
-function ClassicGameCard({ game, rtp, style }: ClassicGameCardProps) {
+function ClassicGameCard({ game, rtp, style, cardStyle }: ClassicGameCardProps) {
   const primaryColor = style.primaryColor;
   const secondaryColor = style.secondaryColor;
 
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
     <div
-      className="rounded-lg overflow-hidden shadow-lg w-[180px]"
+      className={`rounded-lg overflow-hidden shadow-lg w-[180px] ${getBlurClass()}`}
       style={{
-        background: 'rgba(0,0,0,0.7)',
-        border: `1px solid ${primaryColor}`
+        background: cardStyle?.background || 'rgba(0,0,0,0.7)',
+        border: cardStyle?.border ? `${cardStyle.border} ${primaryColor}` : `1px solid ${primaryColor}`,
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${primaryColor}` : cardStyle.shadow) : '0 4px 6px rgba(0,0,0,0.3)'
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden">
@@ -166,6 +174,7 @@ export default function ClassicLayout({
                 game={game}
                 rtp={game.rtp}
                 style={selectedStyle}
+                cardStyle={selectedCardStyle}
               />
             ))}
           </div>
@@ -194,6 +203,7 @@ export default function ClassicLayout({
                 game={game}
                 rtp={game.rtp}
                 style={selectedStyle}
+                cardStyle={selectedCardStyle}
               />
             ))}
           </div>

@@ -7,16 +7,23 @@ interface ElegantGameCardProps {
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
+  cardStyle: CardStyleOption;
 }
 
-function ElegantGameCard({ game, rtp, primaryColor, secondaryColor }: ElegantGameCardProps) {
+function ElegantGameCard({ game, rtp, primaryColor, secondaryColor, cardStyle }: ElegantGameCardProps) {
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
     <div
-      className="rounded-lg overflow-hidden w-[180px]"
+      className={`rounded-lg overflow-hidden w-[180px] ${getBlurClass()}`}
       style={{
-        background: 'linear-gradient(145deg, #2a2215 0%, #1a1508 100%)',
-        border: `1px solid ${primaryColor}`,
-        boxShadow: `0 4px 20px ${primaryColor}30`
+        background: cardStyle?.background || 'linear-gradient(145deg, #2a2215 0%, #1a1508 100%)',
+        border: cardStyle?.border ? `${cardStyle.border} ${primaryColor}` : `1px solid ${primaryColor}`,
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${primaryColor}` : cardStyle.shadow) : `0 4px 20px ${primaryColor}30`
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden" style={{ borderBottom: `1px solid ${primaryColor}` }}>
@@ -157,7 +164,7 @@ export default function ElegantLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-4">
           {pragmaticGamesWithRTP.map((game, index) => (
-            <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
+            <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} cardStyle={selectedCardStyle} />
           ))}
         </div>
       </div>
@@ -185,7 +192,7 @@ export default function ElegantLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-4">
           {pgSoftGamesWithRTP.map((game, index) => (
-            <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
+            <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} cardStyle={selectedCardStyle} />
           ))}
         </div>
       </div>

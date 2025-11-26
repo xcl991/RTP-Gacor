@@ -7,18 +7,25 @@ interface GalaxyGameCardProps {
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
+  cardStyle: CardStyleOption;
 }
 
-function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameCardProps) {
+function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor, cardStyle }: GalaxyGameCardProps) {
   const isHot = rtp >= 95;
+
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
 
   return (
     <div
-      className="relative overflow-hidden w-full rounded-xl"
+      className={"relative overflow-hidden w-full rounded-xl " + getBlurClass()}
       style={{
-        background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-        border: "2px solid " + primaryColor + "60",
-        boxShadow: "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
+        background: cardStyle?.background || "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
+        border: cardStyle?.border ? cardStyle.border + " " + primaryColor : "2px solid " + primaryColor + "60",
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? cardStyle.shadow + " " + primaryColor : cardStyle.shadow) : "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
       }}
     >
       {isHot && (
@@ -197,6 +204,7 @@ export default function GalaxyLayout2({
                   rtp={game.rtp}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
+                  cardStyle={selectedCardStyle}
                 />
               ))}
             </div>
@@ -239,6 +247,7 @@ export default function GalaxyLayout2({
                   rtp={game.rtp}
                   primaryColor={secondaryColor}
                   secondaryColor={primaryColor}
+                  cardStyle={selectedCardStyle}
                 />
               ))}
             </div>

@@ -8,11 +8,17 @@ interface SteampunkGameCardProps {
   primaryColor: string;
   secondaryColor: string;
   rotation?: number;
+  cardStyle: CardStyleOption;
 }
 
-function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation = 0 }: SteampunkGameCardProps) {
+function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation = 0, cardStyle }: SteampunkGameCardProps) {
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
-    <div className="relative w-[180px]">
+    <div className={`relative w-[180px] ${getBlurClass()}`}>
       {/* Shadow layer with rotation */}
       <div
         className="absolute inset-0"
@@ -29,10 +35,11 @@ function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation =
         className="relative p-3"
         style={{
           transform: `rotate(${-rotation / 2}deg)`,
-          background: `linear-gradient(145deg, rgba(45,35,25,0.95), rgba(25,18,12,0.98))`,
-          border: `2px solid ${primaryColor}`,
+          background: cardStyle?.background || `linear-gradient(145deg, rgba(45,35,25,0.95), rgba(25,18,12,0.98))`,
+          border: cardStyle?.border ? `${cardStyle.border} ${primaryColor}` : `2px solid ${primaryColor}`,
           borderRadius: '10px',
-          boxShadow: `0 5px 20px rgba(0,0,0,0.3), inset 0 0 20px ${secondaryColor}20`
+          opacity: cardStyle?.opacity || 1,
+          boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${primaryColor}` : cardStyle.shadow) : `0 5px 20px rgba(0,0,0,0.3), inset 0 0 20px ${secondaryColor}20`
         }}
       >
         <div className="relative w-full aspect-square overflow-hidden rounded-lg mb-3" style={{ border: `1px solid ${primaryColor}50` }}>
@@ -242,6 +249,7 @@ export default function SteampunkLayout({
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
               rotation={index % 2 === 0 ? 2 : -2}
+              cardStyle={selectedCardStyle}
             />
           ))}
         </div>
@@ -288,6 +296,7 @@ export default function SteampunkLayout({
               primaryColor={secondaryColor}
               secondaryColor={primaryColor}
               rotation={index % 2 === 0 ? -2 : 2}
+              cardStyle={selectedCardStyle}
             />
           ))}
         </div>

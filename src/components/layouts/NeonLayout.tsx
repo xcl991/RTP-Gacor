@@ -6,16 +6,23 @@ interface NeonGameCardProps {
   game: Game;
   rtp: number;
   glowColor: string;
+  cardStyle: CardStyleOption;
 }
 
-function NeonGameCard({ game, rtp, glowColor }: NeonGameCardProps) {
+function NeonGameCard({ game, rtp, glowColor, cardStyle }: NeonGameCardProps) {
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
     <div
-      className="rounded-xl overflow-hidden relative group w-[180px]"
+      className={`rounded-xl overflow-hidden relative group w-[180px] ${getBlurClass()}`}
       style={{
-        background: 'linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%)',
-        border: `2px solid ${glowColor}`,
-        boxShadow: `0 0 20px ${glowColor}40, inset 0 0 20px ${glowColor}10`
+        background: cardStyle?.background || 'linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%)',
+        border: cardStyle?.border ? `${cardStyle.border} ${glowColor}` : `2px solid ${glowColor}`,
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${glowColor}` : cardStyle.shadow) : `0 0 20px ${glowColor}40, inset 0 0 20px ${glowColor}10`
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden">
@@ -167,7 +174,7 @@ export default function NeonLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           {pragmaticGamesWithRTP.map((game, index) => (
-            <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} />
+            <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} cardStyle={selectedCardStyle} />
           ))}
         </div>
       </div>
@@ -185,7 +192,7 @@ export default function NeonLayout({
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           {pgSoftGamesWithRTP.map((game, index) => (
-            <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} />
+            <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} cardStyle={selectedCardStyle} />
           ))}
         </div>
       </div>

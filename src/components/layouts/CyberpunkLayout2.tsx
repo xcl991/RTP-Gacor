@@ -8,19 +8,27 @@ interface CyberpunkGameCardProps {
   index: number;
   primaryColor: string;
   secondaryColor: string;
+  cardStyle: CardStyleOption;
 }
 
-function CyberpunkGameCard({ game, rtp, index, primaryColor, secondaryColor }: CyberpunkGameCardProps) {
+function CyberpunkGameCard({ game, rtp, index, primaryColor, secondaryColor, cardStyle }: CyberpunkGameCardProps) {
   const status = rtp >= 95 ? 'OPTIMAL' : rtp >= 90 ? 'STABLE' : 'ACTIVE';
   const statusColor = rtp >= 95 ? secondaryColor : rtp >= 90 ? primaryColor : '#888';
 
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
     <div
-      className="relative overflow-hidden w-full"
+      className={`relative overflow-hidden w-full ${getBlurClass()}`}
       style={{
-        background: 'linear-gradient(90deg, rgba(0,0,0,0.9), rgba(20,20,30,0.95))',
+        background: cardStyle?.background || 'linear-gradient(90deg, rgba(0,0,0,0.9), rgba(20,20,30,0.95))',
         borderLeft: `3px solid ${primaryColor}`,
-        borderBottom: `1px solid ${primaryColor}30`
+        borderBottom: `1px solid ${primaryColor}30`,
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${primaryColor}` : cardStyle.shadow) : 'none'
       }}
     >
       <div className="flex items-center gap-4 p-3">
@@ -239,6 +247,7 @@ export default function CyberpunkLayout2({
               index={index}
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
+              cardStyle={selectedCardStyle}
             />
           ))}
         </div>
@@ -285,6 +294,7 @@ export default function CyberpunkLayout2({
               index={index}
               primaryColor={secondaryColor}
               secondaryColor={primaryColor}
+              cardStyle={selectedCardStyle}
             />
           ))}
         </div>

@@ -8,17 +8,24 @@ interface CasinoGameCardProps {
   primaryColor: string;
   secondaryColor: string;
   isShowcase?: boolean;
+  cardStyle: CardStyleOption;
 }
 
-function CasinoGameCard({ game, rtp, primaryColor, secondaryColor, isShowcase = false }: CasinoGameCardProps) {
+function CasinoGameCard({ game, rtp, primaryColor, secondaryColor, isShowcase = false, cardStyle }: CasinoGameCardProps) {
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
     <div
-      className="relative overflow-hidden w-full"
+      className={"relative overflow-hidden w-full " + getBlurClass()}
       style={{
-        background: "linear-gradient(145deg, rgba(30,20,10,0.95), rgba(15,10,5,0.98))",
-        border: "2px solid " + primaryColor,
+        background: cardStyle?.background || "linear-gradient(145deg, rgba(30,20,10,0.95), rgba(15,10,5,0.98))",
+        border: cardStyle?.border ? cardStyle.border + " " + primaryColor : "2px solid " + primaryColor,
         borderRadius: "12px",
-        boxShadow: "0 0 20px " + primaryColor + "40, inset 0 0 30px rgba(0,0,0,0.5)"
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? cardStyle.shadow + " " + primaryColor : cardStyle.shadow) : "0 0 20px " + primaryColor + "40, inset 0 0 30px rgba(0,0,0,0.5)"
       }}
     >
       <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 rounded-tl-lg" style={{ borderColor: secondaryColor }} />
@@ -173,6 +180,7 @@ export default function CasinoLuxuryLayout({
                 rtp={game.rtp}
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
+                cardStyle={selectedCardStyle}
               />
             ))}
           </div>
@@ -206,6 +214,7 @@ export default function CasinoLuxuryLayout({
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
                 isShowcase={true}
+                cardStyle={selectedCardStyle}
               />
             </div>
           )}
@@ -224,6 +233,7 @@ export default function CasinoLuxuryLayout({
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
                 isShowcase={true}
+                cardStyle={selectedCardStyle}
               />
             </div>
           )}
@@ -253,6 +263,7 @@ export default function CasinoLuxuryLayout({
                 rtp={game.rtp}
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
+                cardStyle={selectedCardStyle}
               />
             ))}
           </div>

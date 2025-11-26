@@ -6,15 +6,23 @@ interface FuturisticGameCardProps {
   game: Game;
   rtp: number;
   style: RTPStyle;
+  cardStyle: CardStyleOption;
 }
 
-function FuturisticGameCard({ game, rtp, style }: FuturisticGameCardProps) {
+function FuturisticGameCard({ game, rtp, style, cardStyle }: FuturisticGameCardProps) {
+  const getBlurClass = () => {
+    if (!cardStyle?.blur || cardStyle.blur === 'none') return '';
+    return cardStyle.blur;
+  };
+
   return (
     <div
-      className="rounded-lg overflow-hidden shadow-lg w-[180px]"
+      className={`rounded-lg overflow-hidden shadow-lg w-[180px] ${getBlurClass()}`}
       style={{
-        background: '#0f172a',
-        border: '1px solid #334155'
+        background: cardStyle?.background || '#0f172a',
+        border: cardStyle?.border ? `${cardStyle.border} ${style.primaryColor}` : '1px solid #334155',
+        opacity: cardStyle?.opacity || 1,
+        boxShadow: cardStyle?.shadow ? (cardStyle.shadow.includes('0 0 20px') ? `${cardStyle.shadow} ${style.primaryColor}` : cardStyle.shadow) : '0 4px 6px rgba(0,0,0,0.3)'
       }}
     >
       <div className="relative w-full aspect-square overflow-hidden">
@@ -172,6 +180,7 @@ export default function FuturisticLayout({
               game={game}
               rtp={game.rtp}
               style={selectedStyle}
+              cardStyle={selectedCardStyle}
             />
           ))}
         </div>
@@ -220,6 +229,7 @@ export default function FuturisticLayout({
               game={game}
               rtp={game.rtp}
               style={selectedStyle}
+              cardStyle={selectedCardStyle}
             />
           ))}
         </div>
