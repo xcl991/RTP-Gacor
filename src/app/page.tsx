@@ -70,6 +70,57 @@ export default function Home() {
     return match ? match[1] : null;
   };
 
+  // Convert oklab/oklch color to hex (approximate conversion)
+  const convertModernColorToHex = (color: string): string => {
+    // If it contains oklab or oklch, convert to a fallback hex
+    if (color.includes('oklab') || color.includes('oklch')) {
+      // Create a temporary element to compute the color
+      const temp = document.createElement('div');
+      temp.style.color = color;
+      document.body.appendChild(temp);
+      const computed = getComputedStyle(temp).color;
+      document.body.removeChild(temp);
+
+      // Parse rgb(r, g, b) to hex
+      const match = computed.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      if (match) {
+        const r = parseInt(match[1]).toString(16).padStart(2, '0');
+        const g = parseInt(match[2]).toString(16).padStart(2, '0');
+        const b = parseInt(match[3]).toString(16).padStart(2, '0');
+        return `#${r}${g}${b}`;
+      }
+      return '#000000'; // fallback
+    }
+    return color;
+  };
+
+  // Inline all computed styles to element (prevents CSS parsing issues)
+  const inlineAllStyles = (element: HTMLElement, computedStyle: CSSStyleDeclaration) => {
+    const importantProps = [
+      'color', 'background-color', 'background-image', 'background',
+      'border', 'border-color', 'border-radius', 'box-shadow',
+      'font-family', 'font-size', 'font-weight', 'line-height',
+      'text-align', 'padding', 'margin', 'width', 'height',
+      'min-width', 'min-height', 'max-width', 'max-height',
+      'display', 'flex-direction', 'justify-content', 'align-items',
+      'gap', 'position', 'top', 'right', 'bottom', 'left',
+      'overflow', 'opacity', 'transform', 'z-index'
+    ];
+
+    importantProps.forEach(prop => {
+      const value = computedStyle.getPropertyValue(prop);
+      if (value && value !== 'none' && value !== 'auto' && value !== 'normal') {
+        // Convert any modern color functions to computed rgb
+        if (value.includes('oklab') || value.includes('oklch')) {
+          const converted = convertModernColorToHex(value);
+          element.style.setProperty(prop, converted, 'important');
+        } else {
+          element.style.setProperty(prop, value);
+        }
+      }
+    });
+  };
+
   // Download image function
   const handleDownload = async () => {
     if (!previewRef.current || isDownloading) return;
@@ -94,14 +145,30 @@ export default function Home() {
         })
       );
 
+      // Append clone first to get computed styles
+      clone.style.position = 'absolute';
+      clone.style.left = '-9999px';
+      clone.style.top = '0';
+      document.body.appendChild(clone);
+
+      // Inline all computed styles on every element to avoid CSS parsing issues
+      const allElements = clone.querySelectorAll('*');
+      allElements.forEach(el => {
+        const element = el as HTMLElement;
+        const originalElement = previewRef.current?.querySelector(
+          `[class="${element.className}"]`
+        ) || el;
+        inlineAllStyles(element, getComputedStyle(originalElement));
+      });
+      inlineAllStyles(clone, getComputedStyle(previewRef.current));
+
       // Convert CSS background-images
-      const elementsWithBg = clone.querySelectorAll('*');
       await Promise.all(
-        Array.from(elementsWithBg).map(async (el) => {
+        Array.from(allElements).map(async (el) => {
           const element = el as HTMLElement;
-          const bgImage = element.style.backgroundImage;
-          if (bgImage && bgImage !== 'none') {
-            const url = extractBgUrl(bgImage);
+          const computedBg = getComputedStyle(element).backgroundImage;
+          if (computedBg && computedBg !== 'none') {
+            const url = extractBgUrl(computedBg);
             if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
               try {
                 const base64 = await convertImageToBase64(url);
@@ -114,10 +181,19 @@ export default function Home() {
         })
       );
 
-      clone.style.position = 'absolute';
-      clone.style.left = '-9999px';
-      clone.style.top = '0';
-      document.body.appendChild(clone);
+      // Also handle the clone element's background
+      const cloneBg = getComputedStyle(clone).backgroundImage;
+      if (cloneBg && cloneBg !== 'none') {
+        const url = extractBgUrl(cloneBg);
+        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+          try {
+            const base64 = await convertImageToBase64(url);
+            clone.style.backgroundImage = `url("${base64}")`;
+          } catch {
+            // Keep original
+          }
+        }
+      }
 
       await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -125,8 +201,17 @@ export default function Home() {
         scale: 2,
         useCORS: true,
         allowTaint: false,
-        backgroundColor: null,
+        backgroundColor: '#0a0a0a',
         logging: false,
+        onclone: (clonedDoc) => {
+          // Remove all stylesheets to prevent oklab/oklch parsing errors
+          const stylesheets = clonedDoc.querySelectorAll('link[rel="stylesheet"], style');
+          stylesheets.forEach(sheet => {
+            if (sheet.textContent?.includes('oklab') || sheet.textContent?.includes('oklch')) {
+              sheet.remove();
+            }
+          });
+        }
       });
 
       document.body.removeChild(clone);
