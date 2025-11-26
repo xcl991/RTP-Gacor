@@ -64,168 +64,71 @@ export default function Home() {
     }
   };
 
-  // Extract URL from CSS background-image
-  const extractBgUrl = (bgImage: string): string | null => {
-    // Handle url("..."), url('...'), and url(...)
-    // Match everything between url( and the closing )
-    const match = bgImage.match(/url\(["']?(.+?)["']?\)$/);
-    if (match) {
-      // Decode any URL-encoded characters
-      try {
-        return decodeURIComponent(match[1]);
-      } catch {
-        return match[1];
-      }
-    }
-    return null;
-  };
-
-  // Convert oklab/oklch color to hex (approximate conversion)
-  const convertModernColorToHex = (color: string): string => {
-    // If it contains oklab or oklch, convert to a fallback hex
-    if (color.includes('oklab') || color.includes('oklch')) {
-      // Create a temporary element to compute the color
-      const temp = document.createElement('div');
-      temp.style.color = color;
-      document.body.appendChild(temp);
-      const computed = getComputedStyle(temp).color;
-      document.body.removeChild(temp);
-
-      // Parse rgb(r, g, b) to hex
-      const match = computed.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-      if (match) {
-        const r = parseInt(match[1]).toString(16).padStart(2, '0');
-        const g = parseInt(match[2]).toString(16).padStart(2, '0');
-        const b = parseInt(match[3]).toString(16).padStart(2, '0');
-        return `#${r}${g}${b}`;
-      }
-      return '#000000'; // fallback
-    }
-    return color;
-  };
-
-  // Inline all computed styles to element (prevents CSS parsing issues)
-  const inlineAllStyles = (element: HTMLElement, computedStyle: CSSStyleDeclaration) => {
-    const importantProps = [
-      'color', 'background-color', 'background-image', 'background',
-      'border', 'border-color', 'border-radius', 'box-shadow',
-      'font-family', 'font-size', 'font-weight', 'line-height',
-      'text-align', 'padding', 'margin', 'width', 'height',
-      'min-width', 'min-height', 'max-width', 'max-height',
-      'display', 'flex-direction', 'justify-content', 'align-items',
-      'gap', 'position', 'top', 'right', 'bottom', 'left',
-      'overflow', 'opacity', 'transform', 'z-index'
-    ];
-
-    importantProps.forEach(prop => {
-      const value = computedStyle.getPropertyValue(prop);
-      if (value && value !== 'none' && value !== 'auto' && value !== 'normal') {
-        // Convert any modern color functions to computed rgb
-        if (value.includes('oklab') || value.includes('oklch')) {
-          const converted = convertModernColorToHex(value);
-          element.style.setProperty(prop, converted, 'important');
-        } else {
-          element.style.setProperty(prop, value);
-        }
-      }
-    });
-  };
-
-  // Download image function
+  // Download image function - simplified approach
   const handleDownload = async () => {
     if (!previewRef.current || isDownloading) return;
 
     setIsDownloading(true);
     try {
-      const clone = previewRef.current.cloneNode(true) as HTMLElement;
+      // Convert all images to base64 first (in the original DOM)
+      const originalImages = previewRef.current.querySelectorAll('img');
+      const originalSrcs: Map<HTMLImageElement, string> = new Map();
 
-      // Convert img tags
-      const images = clone.querySelectorAll('img');
+      // Save original sources and convert to base64
       await Promise.all(
-        Array.from(images).map(async (img) => {
+        Array.from(originalImages).map(async (img) => {
           const src = img.src;
-          if (src && (src.startsWith('http://') || src.startsWith('https://'))) {
+          if (src && src.startsWith('http')) {
+            originalSrcs.set(img, src);
             try {
               const base64 = await convertImageToBase64(src);
               img.src = base64;
             } catch {
-              // Keep original src
+              // Keep original
             }
           }
         })
       );
 
-      // Append clone first to get computed styles
-      clone.style.position = 'absolute';
-      clone.style.left = '-9999px';
-      clone.style.top = '0';
-      document.body.appendChild(clone);
-
-      // Inline all computed styles on every element to avoid CSS parsing issues
-      const allElements = clone.querySelectorAll('*');
-      allElements.forEach(el => {
-        const element = el as HTMLElement;
-        const originalElement = previewRef.current?.querySelector(
-          `[class="${element.className}"]`
-        ) || el;
-        inlineAllStyles(element, getComputedStyle(originalElement));
-      });
-      inlineAllStyles(clone, getComputedStyle(previewRef.current));
-
-      // Convert CSS background-images
-      await Promise.all(
-        Array.from(allElements).map(async (el) => {
-          const element = el as HTMLElement;
-          const computedBg = getComputedStyle(element).backgroundImage;
-          if (computedBg && computedBg !== 'none') {
-            const url = extractBgUrl(computedBg);
-            if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-              try {
-                const base64 = await convertImageToBase64(url);
-                element.style.backgroundImage = `url("${base64}")`;
-              } catch {
-                // Keep original
-              }
-            }
-          }
-        })
-      );
-
-      // Also handle the clone element's background
-      const cloneBg = getComputedStyle(clone).backgroundImage;
-      if (cloneBg && cloneBg !== 'none') {
-        const url = extractBgUrl(cloneBg);
-        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      // Convert background image to base64
+      const bgStyle = previewRef.current.style.backgroundImage;
+      let originalBg = '';
+      if (bgStyle) {
+        const match = bgStyle.match(/url\(["']?([^"')]+)/);
+        if (match && match[1].startsWith('http')) {
+          originalBg = bgStyle;
           try {
-            const base64 = await convertImageToBase64(url);
-            clone.style.backgroundImage = `url("${base64}")`;
+            const base64 = await convertImageToBase64(match[1]);
+            previewRef.current.style.backgroundImage = `url("${base64}")`;
           } catch {
             // Keep original
           }
         }
       }
 
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Small delay for images to render
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-      const canvas = await html2canvas(clone, {
+      // Capture with html2canvas
+      const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         useCORS: true,
-        allowTaint: false,
-        backgroundColor: '#0a0a0a',
+        allowTaint: true,
+        backgroundColor: null,
         logging: false,
-        onclone: (clonedDoc) => {
-          // Remove all stylesheets to prevent oklab/oklch parsing errors
-          const stylesheets = clonedDoc.querySelectorAll('link[rel="stylesheet"], style');
-          stylesheets.forEach(sheet => {
-            if (sheet.textContent?.includes('oklab') || sheet.textContent?.includes('oklch')) {
-              sheet.remove();
-            }
-          });
-        }
+        imageTimeout: 15000,
+        removeContainer: true
       });
 
-      document.body.removeChild(clone);
+      // Restore original image sources
+      originalSrcs.forEach((src, img) => {
+        img.src = src;
+      });
+      if (originalBg) {
+        previewRef.current.style.backgroundImage = originalBg;
+      }
 
+      // Download
       const link = document.createElement('a');
       const timestamp = new Date().toISOString().slice(0, 10);
       link.download = `RTP-${selectedWebsite.name}-${selectedLayout.name}-${timestamp}.png`;
