@@ -189,7 +189,17 @@ export default function CyberLayout({
         className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(primaryColor)}
       >
-        <div className="flex items-center gap-3 mb-3">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex items-center gap-3 mb-3">
           <div className="px-3 py-1" style={{ background: primaryColor, color: '#000' }}>
             <span className="font-mono font-bold text-sm">PRAGMATIC_PLAY</span>
           </div>
@@ -200,7 +210,7 @@ export default function CyberLayout({
             alt="Pragmatic Play"
           />
         </div>
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="relative z-10 flex flex-wrap justify-center gap-2">
           {pragmaticGamesWithRTP.map((game, index) => (
             <CyberGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}
@@ -219,7 +229,17 @@ export default function CyberLayout({
         className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(secondaryColor)}
       >
-        <div className="flex items-center gap-3 mb-3">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex items-center gap-3 mb-3">
           <div className="px-3 py-1" style={{ background: secondaryColor, color: '#fff' }}>
             <span className="font-mono font-bold text-sm">PG_SOFT</span>
           </div>
@@ -230,7 +250,7 @@ export default function CyberLayout({
             alt="PG Soft"
           />
         </div>
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="relative z-10 flex flex-wrap justify-center gap-2">
           {pgSoftGamesWithRTP.map((game, index) => (
             <CyberGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}

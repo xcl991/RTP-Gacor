@@ -162,11 +162,21 @@ export default function CasinoLuxuryLayout({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 relative z-10">
         <div
-          className={"lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
+          className={"relative lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
           style={getSectionStyle(primaryColor)}
         >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
+            />
+          )}
           <div
-            className="flex items-center justify-center gap-3 mb-4 p-3 rounded-xl"
+            className="relative z-10 flex items-center justify-center gap-3 mb-4 p-3 rounded-xl"
             style={{
               background: "linear-gradient(90deg, transparent, " + primaryColor + "20, transparent)",
               borderTop: "1px solid " + primaryColor + "50",
@@ -180,7 +190,7 @@ export default function CasinoLuxuryLayout({
               alt="Pragmatic Play"
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="relative z-10 grid grid-cols-2 gap-3">
             {pragmaticGamesWithRTP.slice(1).map((game, index) => (
               <CasinoGameCard
                 key={"pragmatic-" + index}
@@ -194,11 +204,21 @@ export default function CasinoLuxuryLayout({
         </div>
 
         <div
-          className={"lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
+          className={"relative lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
           style={getSectionStyle(primaryColor)}
         >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
+            />
+          )}
           <div
-            className="text-center mb-4 p-3 rounded-xl"
+            className="relative z-10 text-center mb-4 p-3 rounded-xl"
             style={{
               background: "linear-gradient(135deg, " + primaryColor + "20, " + secondaryColor + "20)",
               border: "2px solid " + primaryColor,
@@ -211,7 +231,7 @@ export default function CasinoLuxuryLayout({
           </div>
 
           {featuredPragmatic && (
-            <div className="mb-4">
+            <div className="relative z-10 mb-4">
               <div
                 className="text-center text-xs font-bold mb-2 py-1 rounded"
                 style={{ background: primaryColor, color: "#000" }}
@@ -229,7 +249,7 @@ export default function CasinoLuxuryLayout({
           )}
 
           {featuredPgSoft && (
-            <div>
+            <div className="relative z-10">
               <div
                 className="text-center text-xs font-bold mb-2 py-1 rounded"
                 style={{ background: secondaryColor, color: "#fff" }}
@@ -248,11 +268,21 @@ export default function CasinoLuxuryLayout({
         </div>
 
         <div
-          className={"lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
+          className={"relative lg:col-span-1 p-4 rounded-xl " + getBlurClass()}
           style={getSectionStyle(secondaryColor)}
         >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
+            />
+          )}
           <div
-            className="flex items-center justify-center gap-3 mb-4 p-3 rounded-xl"
+            className="relative z-10 flex items-center justify-center gap-3 mb-4 p-3 rounded-xl"
             style={{
               background: "linear-gradient(90deg, transparent, " + secondaryColor + "20, transparent)",
               borderTop: "1px solid " + secondaryColor + "50",
@@ -266,7 +296,7 @@ export default function CasinoLuxuryLayout({
               alt="PG Soft"
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="relative z-10 grid grid-cols-2 gap-3">
             {pgSoftGamesWithRTP.slice(1).map((game, index) => (
               <CasinoGameCard
                 key={"pgsoft-" + index}

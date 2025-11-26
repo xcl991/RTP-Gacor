@@ -225,8 +225,18 @@ export default function SteampunkLayout({
         className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(primaryColor)}
       >
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
         <div
-          className="text-center p-4 mb-6 rounded-xl"
+          className="relative z-10 text-center p-4 mb-6 rounded-xl"
         >
           <div className="flex items-center justify-center gap-4">
             <img
@@ -243,7 +253,7 @@ export default function SteampunkLayout({
             </h3>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="relative z-10 flex flex-wrap justify-center gap-6">
           {pragmaticGamesWithRTP.map((game, index) => (
             <SteampunkGameCard
               key={`pragmatic-${index}`}
@@ -269,8 +279,18 @@ export default function SteampunkLayout({
         className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(secondaryColor)}
       >
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
         <div
-          className="text-center p-4 mb-6 rounded-xl"
+          className="relative z-10 text-center p-4 mb-6 rounded-xl"
         >
           <div className="flex items-center justify-center gap-4">
             <img
@@ -287,7 +307,7 @@ export default function SteampunkLayout({
             </h3>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="relative z-10 flex flex-wrap justify-center gap-6">
           {pgSoftGamesWithRTP.map((game, index) => (
             <SteampunkGameCard
               key={`pgsoft-${index}`}

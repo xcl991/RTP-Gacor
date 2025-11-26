@@ -174,7 +174,17 @@ export default function FuturisticLayout({
         className={`relative z-10 flex items-stretch gap-2 mb-4 p-3 rounded-2xl ${getBlurClass()}`}
         style={getSectionStyle()}
       >
-        <div className="flex-1 flex flex-wrap justify-center gap-2">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex-1 flex flex-wrap justify-center gap-2">
           {pragmaticGamesWithRTP.map((game, index) => (
             <FuturisticGameCard
               key={`pragmatic-${index}`}
@@ -186,7 +196,7 @@ export default function FuturisticLayout({
         </div>
 
         <div
-          className="w-56 flex flex-col items-center justify-center rounded-xl relative overflow-hidden"
+          className="relative z-10 w-56 flex flex-col items-center justify-center rounded-xl overflow-hidden"
           style={{
             background: 'linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2))',
             border: '1px solid rgba(255, 255, 255, 0.1)'
@@ -219,7 +229,17 @@ export default function FuturisticLayout({
         className={`relative z-10 flex items-stretch gap-2 mb-4 p-3 rounded-2xl ${getBlurClass()}`}
         style={getSectionStyle()}
       >
-        <div className="flex-1 flex flex-wrap justify-center gap-2">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex-1 flex flex-wrap justify-center gap-2">
           {pgSoftGamesWithRTP.map((game, index) => (
             <FuturisticGameCard
               key={`pgsoft-${index}`}
@@ -231,7 +251,7 @@ export default function FuturisticLayout({
         </div>
 
         <div
-          className="w-56 flex flex-col items-center justify-center rounded-xl relative overflow-hidden"
+          className="relative z-10 w-56 flex flex-col items-center justify-center rounded-xl overflow-hidden"
           style={{
             background: 'linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2))',
             border: '1px solid rgba(255, 255, 255, 0.1)'

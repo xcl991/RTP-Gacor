@@ -158,8 +158,18 @@ export default function ElegantLayout({
         className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(primaryColor)}
       >
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
         <div
-          className="flex items-center gap-4 mb-4 pb-2"
+          className="relative z-10 flex items-center gap-4 mb-4 pb-2"
           style={{ borderBottom: `1px solid ${primaryColor}50` }}
         >
           <img
@@ -170,7 +180,7 @@ export default function ElegantLayout({
           />
           <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PRAGMATIC PLAY</span>
         </div>
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="relative z-10 flex flex-wrap justify-center gap-4">
           {pragmaticGamesWithRTP.map((game, index) => (
             <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}
@@ -189,8 +199,18 @@ export default function ElegantLayout({
         className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(secondaryColor)}
       >
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
         <div
-          className="flex items-center gap-4 mb-4 pb-2"
+          className="relative z-10 flex items-center gap-4 mb-4 pb-2"
           style={{ borderBottom: `1px solid ${primaryColor}50` }}
         >
           <img
@@ -201,7 +221,7 @@ export default function ElegantLayout({
           />
           <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PG SOFT</span>
         </div>
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="relative z-10 flex flex-wrap justify-center gap-4">
           {pgSoftGamesWithRTP.map((game, index) => (
             <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           ))}

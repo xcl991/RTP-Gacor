@@ -188,7 +188,17 @@ export default function GalaxyLayout2({
         className={"relative z-10 mb-8 p-4 rounded-xl " + getBlurClass()}
         style={getSectionStyle(primaryColor)}
       >
-        <div className="flex items-stretch gap-4">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex items-stretch gap-4">
           <div
             className="w-32 rounded-xl flex items-center justify-center shrink-0"
             style={{
@@ -233,7 +243,17 @@ export default function GalaxyLayout2({
         className={"relative z-10 mb-8 p-4 rounded-xl " + getBlurClass()}
         style={getSectionStyle(secondaryColor)}
       >
-        <div className="flex items-stretch gap-4">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex items-stretch gap-4">
           <div
             className="w-32 rounded-xl flex items-center justify-center shrink-0"
             style={{

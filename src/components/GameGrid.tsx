@@ -109,9 +109,19 @@ export default function GameGrid({
   });
 
   return (
-    <div className={`mb-8 p-4 rounded-lg ${getBlurClass()}`} style={getSectionStyle()}>
+    <div className={`relative mb-8 p-4 rounded-lg ${getBlurClass()}`} style={getSectionStyle()}>
+      {/* Pattern Overlay */}
+      {cardStyle?.pattern && cardStyle.pattern !== 'none' && (
+        <div
+          className="absolute inset-0 pointer-events-none rounded-lg"
+          style={{
+            backgroundImage: cardStyle.pattern,
+            backgroundRepeat: 'repeat'
+          }}
+        />
+      )}
       {/* Provider Header */}
-      <div className="flex flex-col items-center mb-4 p-4 rounded-lg"
+      <div className="relative z-10 flex flex-col items-center mb-4 p-4 rounded-lg"
       >
         <div className="flex items-center gap-4 mb-2">
           <img
@@ -141,7 +151,7 @@ export default function GameGrid({
       </div>
 
       {/* Games Grid */}
-      <div className="flex flex-wrap justify-center gap-4">
+      <div className="relative z-10 flex flex-wrap justify-center gap-4">
         {gamesWithRTP.map((game, index) => (
           <GameCard
             key={`${game.name}-${index}`}

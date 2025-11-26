@@ -224,8 +224,18 @@ export default function CyberpunkLayout2({
         className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(primaryColor)}
       >
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
         <div
-          className="flex items-center gap-3 mb-3 p-2"
+          className="relative z-10 flex items-center gap-3 mb-3 p-2"
           style={{
             background: `linear-gradient(90deg, ${primaryColor}20, transparent)`,
             borderLeft: `4px solid ${primaryColor}`
@@ -245,7 +255,7 @@ export default function CyberpunkLayout2({
             [{pragmaticGamesWithRTP.length} SLOTS LOADED]
           </span>
         </div>
-        <div className="space-y-1">
+        <div className="relative z-10 space-y-1">
           {pragmaticGamesWithRTP.map((game, index) => (
             <CyberpunkGameCard
               key={`pragmatic-${index}`}
@@ -273,8 +283,18 @@ export default function CyberpunkLayout2({
         className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(secondaryColor)}
       >
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
         <div
-          className="flex items-center gap-3 mb-3 p-2"
+          className="relative z-10 flex items-center gap-3 mb-3 p-2"
           style={{
             background: `linear-gradient(90deg, ${secondaryColor}20, transparent)`,
             borderLeft: `4px solid ${secondaryColor}`
@@ -294,7 +314,7 @@ export default function CyberpunkLayout2({
             [{pgSoftGamesWithRTP.length} SLOTS LOADED]
           </span>
         </div>
-        <div className="space-y-1">
+        <div className="relative z-10 space-y-1">
           {pgSoftGamesWithRTP.map((game, index) => (
             <CyberpunkGameCard
               key={`pgsoft-${index}`}

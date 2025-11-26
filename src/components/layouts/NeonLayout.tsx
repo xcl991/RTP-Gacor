@@ -171,7 +171,17 @@ export default function NeonLayout({
         className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(primaryColor)}
       >
-        <div className="flex items-center gap-4 mb-4">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex items-center gap-4 mb-4">
           <img
             src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
             className="h-20"
@@ -180,7 +190,7 @@ export default function NeonLayout({
           />
           <div className="flex-1 h-1 rounded" style={{ background: `linear-gradient(90deg, ${primaryColor}, transparent)` }} />
         </div>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="relative z-10 flex flex-wrap justify-center gap-3">
           {pragmaticGamesWithRTP.map((game, index) => (
             <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} />
           ))}
@@ -192,7 +202,17 @@ export default function NeonLayout({
         className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
         style={getSectionStyle(secondaryColor)}
       >
-        <div className="flex items-center gap-4 mb-4">
+        {/* Pattern Overlay */}
+        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-xl"
+            style={{
+              backgroundImage: selectedCardStyle.pattern,
+              backgroundRepeat: 'repeat'
+            }}
+          />
+        )}
+        <div className="relative z-10 flex items-center gap-4 mb-4">
           <img
             src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
             className="h-20"
@@ -201,7 +221,7 @@ export default function NeonLayout({
           />
           <div className="flex-1 h-1 rounded" style={{ background: `linear-gradient(90deg, ${secondaryColor}, transparent)` }} />
         </div>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="relative z-10 flex flex-wrap justify-center gap-3">
           {pgSoftGamesWithRTP.map((game, index) => (
             <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} />
           ))}
