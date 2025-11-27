@@ -1,10 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Camera } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
-import ScreenshotSelector from '@/components/ScreenshotSelector';
 import { WEBSITES, RTP_STYLES, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
 import { WebsiteOption, RTPStyle, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
@@ -23,10 +21,6 @@ export default function Home() {
   const [selectedPragmaticGames, setSelectedPragmaticGames] = useState<Game[]>([]);
   const [selectedPgSoftGames, setSelectedPgSoftGames] = useState<Game[]>([]);
 
-  // Screenshot state
-  const [showScreenshotSelector, setShowScreenshotSelector] = useState(false);
-  const previewRef = useRef<HTMLDivElement>(null);
-
   // Generate random games saat pertama kali atau saat count berubah
   const generateRandomGames = useCallback(() => {
     const shuffledPragmatic = [...GAMES_PRAGMATIC].sort(() => Math.random() - 0.5);
@@ -44,12 +38,6 @@ export default function Home() {
   // Shuffle functions
   const shuffleGames = () => {
     generateRandomGames();
-  };
-
-  // Generate filename for download
-  const getFileName = () => {
-    const timestamp = new Date().toISOString().slice(0, 10);
-    return `RTP-${selectedWebsite.name}-${selectedLayout.name}-${timestamp}.png`;
   };
 
   return (
@@ -80,30 +68,18 @@ export default function Home() {
 
         {/* Main Content */}
         <div className="bg-gray-900 rounded-lg p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-blue-400">
-                RTP Live Generator
-              </h1>
-              <p className="text-gray-400 text-sm mt-1">
-                Generate dan download gambar RTP Live untuk website Anda
-              </p>
-            </div>
-
-            {/* Screenshot Button */}
-            <button
-              onClick={() => setShowScreenshotSelector(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-green-500/25"
-            >
-              <Camera className="w-5 h-5" />
-              Screenshot & Download
-            </button>
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-blue-400">
+              RTP Live Generator
+            </h1>
+            <p className="text-gray-400 text-sm mt-1">
+              Generate gambar RTP Live untuk website Anda
+            </p>
           </div>
 
           {/* RTP Preview */}
           <div className="overflow-x-auto">
             <RTPPreview
-              ref={previewRef}
               selectedWebsite={selectedWebsite}
               selectedStyle={selectedStyle}
               customTimeLabel={customTimeLabel}
@@ -127,19 +103,10 @@ export default function Home() {
             <li>Atur jumlah game yang ingin ditampilkan untuk Pragmatic Play dan PG Soft</li>
             <li>Klik tombol "Acak" untuk mengacak games, jam, background, atau style</li>
             <li>Preview RTP akan otomatis diperbarui sesuai pilihan Anda</li>
-            <li>Klik "Screenshot & Download" untuk membuka tool screenshot</li>
-            <li>Drag mouse untuk pilih area yang ingin di-capture, atau klik "Download Full"</li>
+            <li>Gunakan screenshot tool bawaan browser atau OS untuk capture gambar</li>
           </ol>
         </div>
       </div>
-
-      {/* Screenshot Selector */}
-      <ScreenshotSelector
-        targetRef={previewRef}
-        isOpen={showScreenshotSelector}
-        onClose={() => setShowScreenshotSelector(false)}
-        fileName={getFileName()}
-      />
     </div>
   );
 }
