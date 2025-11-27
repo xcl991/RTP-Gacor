@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import html2canvas from 'html2canvas';
-import { Download, Loader2 } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
+import ScreenshotSelector from '@/components/ScreenshotSelector';
 import { WEBSITES, RTP_STYLES, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
 import { WebsiteOption, RTPStyle, Game, LayoutOption, TextureOption, CardStyleOption } from '@/types';
 
@@ -23,8 +23,8 @@ export default function Home() {
   const [selectedPragmaticGames, setSelectedPragmaticGames] = useState<Game[]>([]);
   const [selectedPgSoftGames, setSelectedPgSoftGames] = useState<Game[]>([]);
 
-  // Download state
-  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  // Screenshot state
+  const [showScreenshotSelector, setShowScreenshotSelector] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
   // Generate random games saat pertama kali atau saat count berubah
@@ -46,100 +46,10 @@ export default function Home() {
     generateRandomGames();
   };
 
-  // Convert image to base64 via proxy
-  const convertImageToBase64 = async (url: string): Promise<string> => {
-    try {
-      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(url)}`;
-      const response = await fetch(proxyUrl);
-      if (!response.ok) throw new Error('Failed to fetch');
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch {
-      return url;
-    }
-  };
-
-  // Download image function - simplified approach
-  const handleDownload = async () => {
-    if (!previewRef.current || isDownloading) return;
-
-    setIsDownloading(true);
-    try {
-      // Convert all images to base64 first (in the original DOM)
-      const originalImages = previewRef.current.querySelectorAll('img');
-      const originalSrcs: Map<HTMLImageElement, string> = new Map();
-
-      // Save original sources and convert to base64
-      await Promise.all(
-        Array.from(originalImages).map(async (img) => {
-          const src = img.src;
-          if (src && src.startsWith('http')) {
-            originalSrcs.set(img, src);
-            try {
-              const base64 = await convertImageToBase64(src);
-              img.src = base64;
-            } catch {
-              // Keep original
-            }
-          }
-        })
-      );
-
-      // Convert background image to base64
-      const bgStyle = previewRef.current.style.backgroundImage;
-      let originalBg = '';
-      if (bgStyle) {
-        const match = bgStyle.match(/url\(["']?([^"')]+)/);
-        if (match && match[1].startsWith('http')) {
-          originalBg = bgStyle;
-          try {
-            const base64 = await convertImageToBase64(match[1]);
-            previewRef.current.style.backgroundImage = `url("${base64}")`;
-          } catch {
-            // Keep original
-          }
-        }
-      }
-
-      // Small delay for images to render
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      // Capture with html2canvas
-      const canvas = await html2canvas(previewRef.current, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null,
-        logging: false,
-        imageTimeout: 15000,
-        removeContainer: true
-      });
-
-      // Restore original image sources
-      originalSrcs.forEach((src, img) => {
-        img.src = src;
-      });
-      if (originalBg) {
-        previewRef.current.style.backgroundImage = originalBg;
-      }
-
-      // Download
-      const link = document.createElement('a');
-      const timestamp = new Date().toISOString().slice(0, 10);
-      link.download = `RTP-${selectedWebsite.name}-${selectedLayout.name}-${timestamp}.png`;
-      link.href = canvas.toDataURL('image/png', 1.0);
-      link.click();
-    } catch (error) {
-      console.error('Error generating image:', error);
-      alert('Gagal mengunduh gambar. Silakan coba lagi.');
-    } finally {
-      setIsDownloading(false);
-    }
+  // Generate filename for download
+  const getFileName = () => {
+    const timestamp = new Date().toISOString().slice(0, 10);
+    return `RTP-${selectedWebsite.name}-${selectedLayout.name}-${timestamp}.png`;
   };
 
   return (
@@ -180,23 +90,13 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Download Button */}
+            {/* Screenshot Button */}
             <button
-              onClick={handleDownload}
-              disabled={isDownloading}
-              className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-500 disabled:to-gray-600 text-white px-6 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-green-500/25 disabled:cursor-not-allowed"
+              onClick={() => setShowScreenshotSelector(true)}
+              className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-green-500/25"
             >
-              {isDownloading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Download className="w-5 h-5" />
-                  Download Image
-                </>
-              )}
+              <Camera className="w-5 h-5" />
+              Screenshot & Download
             </button>
           </div>
 
@@ -227,10 +127,19 @@ export default function Home() {
             <li>Atur jumlah game yang ingin ditampilkan untuk Pragmatic Play dan PG Soft</li>
             <li>Klik tombol "Acak" untuk mengacak games, jam, background, atau style</li>
             <li>Preview RTP akan otomatis diperbarui sesuai pilihan Anda</li>
-            <li>Klik "Generate & Download Image" untuk mengunduh gambar RTP</li>
+            <li>Klik "Screenshot & Download" untuk membuka tool screenshot</li>
+            <li>Drag mouse untuk pilih area yang ingin di-capture, atau klik "Download Full"</li>
           </ol>
         </div>
       </div>
+
+      {/* Screenshot Selector */}
+      <ScreenshotSelector
+        targetRef={previewRef}
+        isOpen={showScreenshotSelector}
+        onClose={() => setShowScreenshotSelector(false)}
+        fileName={getFileName()}
+      />
     </div>
   );
 }
