@@ -686,37 +686,93 @@ export const WEBSITES: WebsiteOption[] = [
   {
     id: "qq77bet",
     name: "QQ77BET",
-    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/QQ77.png"
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/QQ77.png",
+    backgrounds: [
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG1.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG2.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG3.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG4.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG5.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG6.jpg"
+    ]
   },
   {
     id: "qq303bet",
     name: "QQ303BET",
-    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/QQ303.png"
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/QQ303.png",
+    backgrounds: [
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG7.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG8.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG9.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG10.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG11.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG12.jpg"
+    ]
   },
   {
     id: "ciputrabet",
     name: "CIPUTRABET",
-    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/CIPUTRA.png"
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/CIPUTRA.png",
+    backgrounds: [
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG13.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG14.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG15.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG16.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG17.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG18.jpg"
+    ]
   },
   {
     id: "garudabet77",
     name: "GARUDABET77",
-    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/GARUDA.png"
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/GARUDA.png",
+    backgrounds: [
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG19.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG20.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG21.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG22.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG23.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG24.jpg"
+    ]
   },
   {
     id: "istanabet17",
     name: "ISTANABET17",
-    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/ISTANA.png"
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/ISTANA.png",
+    backgrounds: [
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG25.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG26.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG27.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG28.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG29.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG30.jpg"
+    ]
   },
   {
     id: "misteritogel",
     name: "MISTERITOGEL",
-    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/MT.png"
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/MT.png",
+    backgrounds: [
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG31.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG32.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG33.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG34.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG35.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG36.jpg"
+    ]
   },
   {
     id: "turbobet77",
     name: "TURBOBET77",
-    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/TURBO.png"
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/TURBO.png",
+    backgrounds: [
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG37.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG38.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG39.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG40.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG41.jpg",
+      "https://ik.imagekit.io/4yddi8qaz/RTP/BG42.jpg"
+    ]
   }
 ];
 

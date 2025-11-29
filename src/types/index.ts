@@ -17,6 +17,7 @@ export interface WebsiteOption {
   id: string;
   name: string;
   logo: string;
+  backgrounds?: string[]; // Background khusus untuk website ini
 }
 
 export interface TimeSlot {

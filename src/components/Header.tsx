@@ -60,6 +60,12 @@ export default function Header({
 
   // Get current category name from selected background
   const getCurrentCategoryName = () => {
+    // Check website-specific backgrounds first
+    if (selectedWebsite.backgrounds?.includes(selectedBackground)) {
+      const index = selectedWebsite.backgrounds.indexOf(selectedBackground) + 1;
+      return `${selectedWebsite.name} ${index}`;
+    }
+    // Check general categories
     for (const category of BACKGROUND_CATEGORIES) {
       if (category.backgrounds.includes(selectedBackground)) {
         const index = category.backgrounds.indexOf(selectedBackground) + 1;
@@ -68,6 +74,9 @@ export default function Header({
     }
     return 'Background';
   };
+
+  // Check if website has custom backgrounds
+  const hasCustomBackgrounds = selectedWebsite.backgrounds && selectedWebsite.backgrounds.length > 0;
 
   // Filter websites based on search
   const filteredWebsites = WEBSITES.filter(website =>
@@ -228,6 +237,46 @@ export default function Header({
 
           {isBackgroundDropdownOpen && (
             <div className="absolute top-full left-0 mt-2 w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
+              {/* Website-specific backgrounds (if available) */}
+              {hasCustomBackgrounds && (
+                <div>
+                  {/* Website Category Header */}
+                  <button
+                    onClick={() => setExpandedCategory(expandedCategory === 'website-custom' ? null : 'website-custom')}
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-indigo-700 transition-colors text-left border-b border-gray-700 bg-indigo-600/20"
+                  >
+                    <span className="text-indigo-300 font-semibold">{selectedWebsite.name}</span>
+                    <ChevronRight className={`w-4 h-4 text-indigo-400 transition-transform ${expandedCategory === 'website-custom' ? 'rotate-90' : ''}`} />
+                  </button>
+
+                  {/* Website Background Items */}
+                  {expandedCategory === 'website-custom' && (
+                    <div className="bg-gray-900">
+                      {selectedWebsite.backgrounds!.map((bg, index) => (
+                        <button
+                          key={bg}
+                          onClick={() => {
+                            onBackgroundChange(bg);
+                            setIsBackgroundDropdownOpen(false);
+                            setExpandedCategory(null);
+                          }}
+                          className={`w-full flex items-center gap-3 px-6 py-2 hover:bg-gray-700 transition-colors text-left ${
+                            selectedBackground === bg ? 'bg-indigo-600/30' : ''
+                          }`}
+                        >
+                          <div
+                            className="w-8 h-8 rounded border border-indigo-400/50 bg-cover bg-center"
+                            style={{ backgroundImage: `url("${bg}")` }}
+                          />
+                          <span className="text-indigo-300 text-sm">{selectedWebsite.name} {index + 1}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* General background categories */}
               {BACKGROUND_CATEGORIES.map((category) => (
                 <div key={category.id}>
                   {/* Category Header */}
