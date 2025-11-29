@@ -682,6 +682,41 @@ export const WEBSITES: WebsiteOption[] = [
     id: "taipan77",
     name: "TAIPAN77",
     logo: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZv2sibamPDnYDT6G738Nuo3S7KHzTGIZLqo7VJYapihz6Cw5WpzBTmQ6JHkKdarha2USFg_bIZFaKCSbYLq80lHr98kwu9YXxIaxeb_jkQ_Cv7GovEbW9jTqfIFi8EE-y5mfHYm30IC3UC1rqw9bBM2jlxrTtAjRuAEyckPmTU05rUydUwoGa8dIPwRTm/w631-h118/TAIPAN77%20FIX.png"
+  },
+  {
+    id: "qq77bet",
+    name: "QQ77BET",
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/QQ77.png"
+  },
+  {
+    id: "qq303bet",
+    name: "QQ303BET",
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/QQ303.png"
+  },
+  {
+    id: "ciputrabet",
+    name: "CIPUTRABET",
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/CIPUTRA.png"
+  },
+  {
+    id: "garudabet77",
+    name: "GARUDABET77",
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/GARUDA.png"
+  },
+  {
+    id: "istanabet17",
+    name: "ISTANABET17",
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/ISTANA.png"
+  },
+  {
+    id: "misteritogel",
+    name: "MISTERITOGEL",
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/MT.png"
+  },
+  {
+    id: "turbobet77",
+    name: "TURBOBET77",
+    logo: "https://ik.imagekit.io/4yddi8qaz/RTP/TURBO.png"
   }
 ];
 
