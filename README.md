@@ -97,15 +97,139 @@ npm start
 ## Customization
 
 ### Menambah Website Baru
-Edit `src/data/games.ts` dan tambahkan ke array `WEBSITES`:
+
+Edit file `src/data/games.ts` dan tambahkan ke array `WEBSITES`:
+
+#### Website Tanpa Background Khusus (Menggunakan Background Umum)
+
+```typescript
+{
+  id: "website-id",           // ID unik (lowercase, tanpa spasi)
+  name: "WEBSITE NAME",       // Nama website (uppercase)
+  logo: "https://example.com/logo.png"  // URL logo CDN
+}
+```
+
+**Contoh:**
+```typescript
+{
+  id: "sultan88",
+  name: "SULTAN88",
+  logo: "https://ik.imagekit.io/xxx/sultan88-logo.png"
+}
+```
+
+#### Website Dengan Background Eksklusif
+
+Jika ingin website memiliki background khusus yang hanya muncul saat website tersebut dipilih, tambahkan field `backgrounds`:
 
 ```typescript
 {
   id: "website-id",
   name: "WEBSITE NAME",
-  logo: "https://example.com/logo.png"
+  logo: "https://example.com/logo.png",
+  backgrounds: [
+    "https://example.com/bg1.jpg",
+    "https://example.com/bg2.jpg",
+    "https://example.com/bg3.jpg",
+    // tambahkan sebanyak yang diinginkan
+  ]
 }
 ```
+
+**Contoh:**
+```typescript
+{
+  id: "misteritogel",
+  name: "MISTERITOGEL",
+  logo: "https://ik.imagekit.io/4yddi8qaz/RTP/MT.png",
+  backgrounds: [
+    "https://ik.imagekit.io/4yddi8qaz/RTP/BG31.jpg",
+    "https://ik.imagekit.io/4yddi8qaz/RTP/BG32.jpg",
+    "https://ik.imagekit.io/4yddi8qaz/RTP/BG33.jpg",
+    "https://ik.imagekit.io/4yddi8qaz/RTP/BG34.jpg",
+    "https://ik.imagekit.io/4yddi8qaz/RTP/BG35.jpg",
+    "https://ik.imagekit.io/4yddi8qaz/RTP/BG36.jpg"
+  ]
+}
+```
+
+> **Catatan:** Website dengan background eksklusif akan menampilkan background khusus di dropdown (dengan highlight warna indigo) + background umum tetap tersedia.
+
+---
+
+### Update Link CDN Logo
+
+Untuk mengupdate logo website yang sudah ada:
+
+1. Buka file `src/data/games.ts`
+2. Cari website yang ingin diupdate di array `WEBSITES`
+3. Ganti value `logo` dengan URL CDN baru
+
+```typescript
+// Sebelum
+{
+  id: "qq77bet",
+  name: "QQ77BET",
+  logo: "https://old-cdn.com/old-logo.png"
+}
+
+// Sesudah
+{
+  id: "qq77bet",
+  name: "QQ77BET",
+  logo: "https://ik.imagekit.io/4yddi8qaz/RTP/QQ77.png"
+}
+```
+
+---
+
+### Update Link CDN Background
+
+#### Background Umum (Semua Website)
+
+Edit array `BACKGROUND_CATEGORIES` di `src/data/games.ts`:
+
+```typescript
+export const BACKGROUND_CATEGORIES: BackgroundCategory[] = [
+  {
+    id: "casino",
+    name: "Casino",
+    backgrounds: [
+      "https://cdn.example.com/casino1.jpg",
+      "https://cdn.example.com/casino2.jpg",
+      // ...
+    ]
+  },
+  {
+    id: "custom-category",    // Tambah kategori baru
+    name: "Nama Kategori",
+    backgrounds: [
+      "https://cdn.example.com/bg1.jpg",
+      "https://cdn.example.com/bg2.jpg",
+    ]
+  }
+];
+```
+
+#### Background Khusus Website
+
+Update field `backgrounds` di website yang bersangkutan:
+
+```typescript
+{
+  id: "turbobet77",
+  name: "TURBOBET77",
+  logo: "https://ik.imagekit.io/4yddi8qaz/RTP/TURBO.png",
+  backgrounds: [
+    "https://new-cdn.com/turbo-bg1.jpg",  // Update URL di sini
+    "https://new-cdn.com/turbo-bg2.jpg",
+    // ...
+  ]
+}
+```
+
+---
 
 ### Menambah Style Baru
 Edit `src/data/games.ts` dan tambahkan ke array `RTP_STYLES`:
@@ -121,12 +245,16 @@ Edit `src/data/games.ts` dan tambahkan ke array `RTP_STYLES`:
 }
 ```
 
-### Menambah Background Baru
-Edit `src/data/games.ts` dan tambahkan ke array `BACKGROUNDS`:
+---
 
-```typescript
-"https://example.com/background.jpg"
-```
+### Ringkasan Struktur Data Website
+
+| Field | Tipe | Wajib | Deskripsi |
+|-------|------|-------|-----------|
+| `id` | string | Ya | ID unik website (lowercase, tanpa spasi) |
+| `name` | string | Ya | Nama website yang ditampilkan (biasanya uppercase) |
+| `logo` | string | Ya | URL lengkap ke gambar logo (CDN recommended) |
+| `backgrounds` | string[] | Tidak | Array URL background khusus untuk website ini |
 
 ## Contoh Gambar RTP
 
