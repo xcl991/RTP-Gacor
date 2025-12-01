@@ -1,8 +1,8 @@
 'use client';
 
 import GameGrid from '../GameGrid';
+import TrikPanel from '../TrikPanel';
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig } from '@/types';
-import { Check, X } from 'lucide-react';
 
 interface DefaultLayoutProps {
   selectedWebsite: WebsiteOption;
@@ -17,148 +17,6 @@ interface DefaultLayoutProps {
   pragmaticTrik: TrikConfig;
   pgSoftTrik: TrikConfig;
 }
-
-// Komponen untuk menampilkan pattern centang/silang
-const PatternDisplay = ({ pattern }: { pattern: string }) => {
-  return (
-    <div className="flex items-center gap-1">
-      {pattern.split('').map((char, index) => (
-        <span key={index}>
-          {char === 'V' ? (
-            <Check className="w-4 h-4 text-green-400" />
-          ) : (
-            <X className="w-4 h-4 text-red-400" />
-          )}
-        </span>
-      ))}
-    </div>
-  );
-};
-
-// Komponen Panel Trik (Compact - untuk side-by-side layout)
-const TrikPanel = ({
-  trik,
-  provider,
-  style
-}: {
-  trik: TrikConfig;
-  provider: 'PRAGMATIC PLAY' | 'PG SOFT';
-  style: RTPStyle;
-}) => {
-  if (!trik.enabled) return null;
-
-  const providerColor = provider === 'PRAGMATIC PLAY' ? '#ffd700' : '#00f0ff';
-
-  return (
-    <div
-      className="h-full rounded-xl overflow-hidden flex flex-col"
-      style={{
-        background: 'linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20,20,40,0.95) 100%)',
-        border: `2px solid ${providerColor}`,
-        boxShadow: `0 0 15px ${providerColor}30, inset 0 0 20px rgba(0,0,0,0.5)`
-      }}
-    >
-      {/* Header */}
-      <div
-        className="px-3 py-2 text-center"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${providerColor}30, transparent)`,
-          borderBottom: `1px solid ${providerColor}50`
-        }}
-      >
-        <h3
-          className="text-base font-black uppercase tracking-wider"
-          style={{
-            color: providerColor,
-            textShadow: `0 0 10px ${providerColor}, 0 0 20px ${providerColor}50`
-          }}
-        >
-          TRIK GACOR
-        </h3>
-      </div>
-
-      {/* Content - flex-1 dan justify-between untuk distribusi merata */}
-      <div className="p-3 flex-1 flex flex-col justify-between gap-1">
-        {/* Deposit Kode */}
-        <div className="bg-black/50 rounded-lg px-2 py-1.5 text-center">
-          <span className="text-gray-400 text-[10px] block leading-tight">DEPOSIT KODE UNIK</span>
-          <span
-            className="text-xl font-black leading-tight"
-            style={{
-              color: providerColor,
-              textShadow: `0 0 10px ${providerColor}`
-            }}
-          >
-            {trik.depositKode}
-          </span>
-        </div>
-
-        {/* Putaran Bet */}
-        <div className="bg-black/50 rounded-lg px-2 py-1.5 text-center">
-          <span className="text-gray-400 text-[10px] block leading-tight">PUTARAN BET</span>
-          <span
-            className="text-sm font-bold leading-tight"
-            style={{ color: providerColor }}
-          >
-            {trik.putaranBetMin.toLocaleString()} - {trik.putaranBetMax.toLocaleString()}
-          </span>
-        </div>
-
-        {/* Fitur Ganda */}
-        <div className="bg-black/50 rounded-lg px-2 py-1.5 text-center">
-          <span className="text-gray-400 text-[10px] block leading-tight">FITUR GANDA</span>
-          <span
-            className={`text-xs font-bold px-2 py-0.5 rounded-full inline-block ${
-              trik.fiturGanda ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-            }`}
-          >
-            MODE {trik.fiturGanda ? 'ON' : 'OFF'}
-          </span>
-        </div>
-
-        {/* Trik Items */}
-        <div className="space-y-1 flex-1 flex flex-col justify-center">
-          {trik.trikItems.map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between bg-black/50 rounded px-2 py-1"
-            >
-              <div className="flex flex-col leading-tight">
-                <span className="text-white text-xs font-semibold">{item.name}</span>
-                <span
-                  className="text-[10px] font-bold"
-                  style={{ color: providerColor }}
-                >
-                  {item.value}
-                </span>
-              </div>
-              <PatternDisplay pattern={item.pattern} />
-            </div>
-          ))}
-        </div>
-
-        {/* Custom Text */}
-        <div
-          className="text-center py-1.5 px-2 rounded-lg"
-          style={{
-            background: `linear-gradient(90deg, transparent, ${providerColor}20, transparent)`,
-            border: `1px solid ${providerColor}30`
-          }}
-        >
-          <p
-            className="text-[10px] font-bold uppercase leading-tight"
-            style={{
-              color: providerColor,
-              textShadow: `0 0 5px ${providerColor}50`
-            }}
-          >
-            {trik.customText}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export default function DefaultLayout({
   selectedWebsite,
@@ -237,7 +95,13 @@ export default function DefaultLayout({
           {/* Trik Panel Pragmatic */}
           {pragmaticTrik.enabled && (
             <div className="min-h-0">
-              <TrikPanel trik={pragmaticTrik} provider="PRAGMATIC PLAY" style={selectedStyle} />
+              <TrikPanel
+                trik={pragmaticTrik}
+                providerColor="#ffd700"
+                fontFamily="var(--font-orbitron), sans-serif"
+                cardStyle={selectedCardStyle}
+                variant="default"
+              />
             </div>
           )}
         </div>
@@ -264,7 +128,13 @@ export default function DefaultLayout({
           {/* Trik Panel PG Soft */}
           {pgSoftTrik.enabled && (
             <div className="min-h-0">
-              <TrikPanel trik={pgSoftTrik} provider="PG SOFT" style={selectedStyle} />
+              <TrikPanel
+                trik={pgSoftTrik}
+                providerColor="#00f0ff"
+                fontFamily="var(--font-orbitron), sans-serif"
+                cardStyle={selectedCardStyle}
+                variant="default"
+              />
             </div>
           )}
         </div>
