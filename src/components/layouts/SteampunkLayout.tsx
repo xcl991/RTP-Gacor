@@ -1,6 +1,7 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig } from '@/types';
+import TrikPanel from '../TrikPanel';
 
 interface SteampunkGameCardProps {
   game: Game;
@@ -98,6 +99,8 @@ interface SteampunkLayoutProps {
   pgSoftCount: number;
   getCurrentDate: () => string;
   selectedCardStyle: CardStyleOption;
+  pragmaticTrik: TrikConfig;
+  pgSoftTrik: TrikConfig;
 }
 
 export default function SteampunkLayout({
@@ -109,7 +112,9 @@ export default function SteampunkLayout({
   pragmaticCount,
   pgSoftCount,
   getCurrentDate,
-  selectedCardStyle
+  selectedCardStyle,
+  pragmaticTrik,
+  pgSoftTrik
 }: SteampunkLayoutProps) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
@@ -220,51 +225,67 @@ export default function SteampunkLayout({
         </div>
       </div>
 
-      {/* Pragmatic Section */}
+      {/* Pragmatic Section with Grid */}
       <div
-        className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
-        style={getSectionStyle(primaryColor)}
+        className="grid items-stretch gap-4 mb-8"
+        style={{
+          gridTemplateColumns: pragmaticTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
-          <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
-            style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
-            }}
-          />
-        )}
         <div
-          className="relative z-10 text-center p-4 mb-6 rounded-xl"
+          className={`relative p-4 rounded-xl ${getBlurClass()}`}
+          style={getSectionStyle(primaryColor)}
         >
-          <div className="flex items-center justify-center gap-4">
-            <img
-              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
-              className="h-20"
-              style={{ filter: `drop-shadow(0 0 10px ${primaryColor}80)`, transform: 'scale(1.3)' }}
-              alt="Pragmatic Play"
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
             />
-            <h3
-              className="text-xl font-bold"
-              style={{ color: primaryColor }}
-            >
-              PRAGMATIC PLAY
-            </h3>
+          )}
+          <div
+            className="relative z-10 text-center p-4 mb-6 rounded-xl"
+          >
+            <div className="flex items-center justify-center gap-4">
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
+                className="h-20"
+                style={{ filter: `drop-shadow(0 0 10px ${primaryColor}80)`, transform: 'scale(1.3)' }}
+                alt="Pragmatic Play"
+              />
+              <h3
+                className="text-xl font-bold"
+                style={{ color: primaryColor }}
+              >
+                PRAGMATIC PLAY
+              </h3>
+            </div>
+          </div>
+          <div className="relative z-10 flex flex-wrap justify-center gap-6">
+            {pragmaticGamesWithRTP.map((game, index) => (
+              <SteampunkGameCard
+                key={`pragmatic-${index}`}
+                game={game}
+                rtp={game.rtp}
+                primaryColor={primaryColor}
+                secondaryColor={secondaryColor}
+                rotation={index % 2 === 0 ? 2 : -2}
+              />
+            ))}
           </div>
         </div>
-        <div className="relative z-10 flex flex-wrap justify-center gap-6">
-          {pragmaticGamesWithRTP.map((game, index) => (
-            <SteampunkGameCard
-              key={`pragmatic-${index}`}
-              game={game}
-              rtp={game.rtp}
-              primaryColor={primaryColor}
-              secondaryColor={secondaryColor}
-              rotation={index % 2 === 0 ? 2 : -2}
-            />
-          ))}
-        </div>
+        {pragmaticTrik.enabled && (
+          <TrikPanel
+            trik={pragmaticTrik}
+            providerColor={primaryColor}
+            fontFamily="var(--font-cinzel), serif"
+            cardStyle={selectedCardStyle}
+            variant="steampunk"
+          />
+        )}
       </div>
 
       {/* Divider */}
@@ -274,51 +295,67 @@ export default function SteampunkLayout({
         <div className="flex-1 h-1 rounded" style={{ background: `linear-gradient(90deg, transparent, ${primaryColor}, transparent)` }} />
       </div>
 
-      {/* PG Soft Section */}
+      {/* PG Soft Section with Grid */}
       <div
-        className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
-        style={getSectionStyle(secondaryColor)}
+        className="grid items-stretch gap-4 mb-8"
+        style={{
+          gridTemplateColumns: pgSoftTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
-          <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
-            style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
-            }}
-          />
-        )}
         <div
-          className="relative z-10 text-center p-4 mb-6 rounded-xl"
+          className={`relative p-4 rounded-xl ${getBlurClass()}`}
+          style={getSectionStyle(secondaryColor)}
         >
-          <div className="flex items-center justify-center gap-4">
-            <img
-              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
-              className="h-20"
-              style={{ filter: `drop-shadow(0 0 10px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
-              alt="PG Soft"
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
             />
-            <h3
-              className="text-xl font-bold"
-              style={{ color: secondaryColor }}
-            >
-              PG SOFT
-            </h3>
+          )}
+          <div
+            className="relative z-10 text-center p-4 mb-6 rounded-xl"
+          >
+            <div className="flex items-center justify-center gap-4">
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
+                className="h-20"
+                style={{ filter: `drop-shadow(0 0 10px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
+                alt="PG Soft"
+              />
+              <h3
+                className="text-xl font-bold"
+                style={{ color: secondaryColor }}
+              >
+                PG SOFT
+              </h3>
+            </div>
+          </div>
+          <div className="relative z-10 flex flex-wrap justify-center gap-6">
+            {pgSoftGamesWithRTP.map((game, index) => (
+              <SteampunkGameCard
+                key={`pgsoft-${index}`}
+                game={game}
+                rtp={game.rtp}
+                primaryColor={secondaryColor}
+                secondaryColor={primaryColor}
+                rotation={index % 2 === 0 ? -2 : 2}
+              />
+            ))}
           </div>
         </div>
-        <div className="relative z-10 flex flex-wrap justify-center gap-6">
-          {pgSoftGamesWithRTP.map((game, index) => (
-            <SteampunkGameCard
-              key={`pgsoft-${index}`}
-              game={game}
-              rtp={game.rtp}
-              primaryColor={secondaryColor}
-              secondaryColor={primaryColor}
-              rotation={index % 2 === 0 ? -2 : 2}
-            />
-          ))}
-        </div>
+        {pgSoftTrik.enabled && (
+          <TrikPanel
+            trik={pgSoftTrik}
+            providerColor={secondaryColor}
+            fontFamily="var(--font-cinzel), serif"
+            cardStyle={selectedCardStyle}
+            variant="steampunk"
+          />
+        )}
       </div>
 
       {/* Footer */}

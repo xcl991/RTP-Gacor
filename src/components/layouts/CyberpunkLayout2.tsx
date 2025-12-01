@@ -1,6 +1,7 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig } from '@/types';
+import TrikPanel from '../TrikPanel';
 
 interface CyberpunkGameCardProps {
   game: Game;
@@ -109,6 +110,8 @@ interface CyberpunkLayout2Props {
   pgSoftCount: number;
   getCurrentDate: () => string;
   selectedCardStyle: CardStyleOption;
+  pragmaticTrik: TrikConfig;
+  pgSoftTrik: TrikConfig;
 }
 
 export default function CyberpunkLayout2({
@@ -120,7 +123,9 @@ export default function CyberpunkLayout2({
   pragmaticCount,
   pgSoftCount,
   getCurrentDate,
-  selectedCardStyle
+  selectedCardStyle,
+  pragmaticTrik,
+  pgSoftTrik
 }: CyberpunkLayout2Props) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
@@ -219,54 +224,70 @@ export default function CyberpunkLayout2({
         </div>
       </div>
 
-      {/* Pragmatic Section */}
+      {/* Pragmatic Section with Grid */}
       <div
-        className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
-        style={getSectionStyle(primaryColor)}
+        className="grid items-stretch gap-4 mb-6"
+        style={{
+          gridTemplateColumns: pragmaticTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+        <div
+          className={`relative p-4 rounded-xl ${getBlurClass()}`}
+          style={getSectionStyle(primaryColor)}
+        >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
+            />
+          )}
           <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
+            className="relative z-10 flex items-center gap-3 mb-3 p-2"
             style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
+              background: `linear-gradient(90deg, ${primaryColor}20, transparent)`,
+              borderLeft: `4px solid ${primaryColor}`
             }}
+          >
+            <span className="font-mono text-sm" style={{ color: primaryColor }}>{'>'}</span>
+            <img
+              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
+              className="h-10"
+              style={{ filter: `drop-shadow(0 0 5px ${primaryColor}80)`, transform: 'scale(1.3)' }}
+              alt="Pragmatic Play"
+            />
+            <span className="font-mono font-bold" style={{ color: primaryColor }}>
+              PRAGMATIC_PLAY.exe
+            </span>
+            <span className="font-mono text-xs ml-auto" style={{ color: primaryColor }}>
+              [{pragmaticGamesWithRTP.length} SLOTS LOADED]
+            </span>
+          </div>
+          <div className="relative z-10 space-y-1">
+            {pragmaticGamesWithRTP.map((game, index) => (
+              <CyberpunkGameCard
+                key={`pragmatic-${index}`}
+                game={game}
+                rtp={game.rtp}
+                index={index}
+                primaryColor={primaryColor}
+                secondaryColor={secondaryColor}
+              />
+            ))}
+          </div>
+        </div>
+        {pragmaticTrik.enabled && (
+          <TrikPanel
+            trik={pragmaticTrik}
+            providerColor={primaryColor}
+            fontFamily="monospace"
+            cardStyle={selectedCardStyle}
+            variant="cyberpunk"
           />
         )}
-        <div
-          className="relative z-10 flex items-center gap-3 mb-3 p-2"
-          style={{
-            background: `linear-gradient(90deg, ${primaryColor}20, transparent)`,
-            borderLeft: `4px solid ${primaryColor}`
-          }}
-        >
-          <span className="font-mono text-sm" style={{ color: primaryColor }}>{'>'}</span>
-          <img
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
-            className="h-10"
-            style={{ filter: `drop-shadow(0 0 5px ${primaryColor}80)`, transform: 'scale(1.3)' }}
-            alt="Pragmatic Play"
-          />
-          <span className="font-mono font-bold" style={{ color: primaryColor }}>
-            PRAGMATIC_PLAY.exe
-          </span>
-          <span className="font-mono text-xs ml-auto" style={{ color: primaryColor }}>
-            [{pragmaticGamesWithRTP.length} SLOTS LOADED]
-          </span>
-        </div>
-        <div className="relative z-10 space-y-1">
-          {pragmaticGamesWithRTP.map((game, index) => (
-            <CyberpunkGameCard
-              key={`pragmatic-${index}`}
-              game={game}
-              rtp={game.rtp}
-              index={index}
-              primaryColor={primaryColor}
-              secondaryColor={secondaryColor}
-            />
-          ))}
-        </div>
       </div>
 
       {/* Divider */}
@@ -278,54 +299,70 @@ export default function CyberpunkLayout2({
         <div className="flex-1 h-px" style={{ background: primaryColor }} />
       </div>
 
-      {/* PG Soft Section */}
+      {/* PG Soft Section with Grid */}
       <div
-        className={`relative z-10 mb-6 p-4 rounded-xl ${getBlurClass()}`}
-        style={getSectionStyle(secondaryColor)}
+        className="grid items-stretch gap-4 mb-6"
+        style={{
+          gridTemplateColumns: pgSoftTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+        <div
+          className={`relative p-4 rounded-xl ${getBlurClass()}`}
+          style={getSectionStyle(secondaryColor)}
+        >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
+            />
+          )}
           <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
+            className="relative z-10 flex items-center gap-3 mb-3 p-2"
             style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
+              background: `linear-gradient(90deg, ${secondaryColor}20, transparent)`,
+              borderLeft: `4px solid ${secondaryColor}`
             }}
+          >
+            <span className="font-mono text-sm" style={{ color: secondaryColor }}>{'>'}</span>
+            <img
+              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
+              className="h-10"
+              style={{ filter: `drop-shadow(0 0 5px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
+              alt="PG Soft"
+            />
+            <span className="font-mono font-bold" style={{ color: secondaryColor }}>
+              PG_SOFT.exe
+            </span>
+            <span className="font-mono text-xs ml-auto" style={{ color: secondaryColor }}>
+              [{pgSoftGamesWithRTP.length} SLOTS LOADED]
+            </span>
+          </div>
+          <div className="relative z-10 space-y-1">
+            {pgSoftGamesWithRTP.map((game, index) => (
+              <CyberpunkGameCard
+                key={`pgsoft-${index}`}
+                game={game}
+                rtp={game.rtp}
+                index={index}
+                primaryColor={secondaryColor}
+                secondaryColor={primaryColor}
+              />
+            ))}
+          </div>
+        </div>
+        {pgSoftTrik.enabled && (
+          <TrikPanel
+            trik={pgSoftTrik}
+            providerColor={secondaryColor}
+            fontFamily="monospace"
+            cardStyle={selectedCardStyle}
+            variant="cyberpunk"
           />
         )}
-        <div
-          className="relative z-10 flex items-center gap-3 mb-3 p-2"
-          style={{
-            background: `linear-gradient(90deg, ${secondaryColor}20, transparent)`,
-            borderLeft: `4px solid ${secondaryColor}`
-          }}
-        >
-          <span className="font-mono text-sm" style={{ color: secondaryColor }}>{'>'}</span>
-          <img
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
-            className="h-10"
-            style={{ filter: `drop-shadow(0 0 5px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
-            alt="PG Soft"
-          />
-          <span className="font-mono font-bold" style={{ color: secondaryColor }}>
-            PG_SOFT.exe
-          </span>
-          <span className="font-mono text-xs ml-auto" style={{ color: secondaryColor }}>
-            [{pgSoftGamesWithRTP.length} SLOTS LOADED]
-          </span>
-        </div>
-        <div className="relative z-10 space-y-1">
-          {pgSoftGamesWithRTP.map((game, index) => (
-            <CyberpunkGameCard
-              key={`pgsoft-${index}`}
-              game={game}
-              rtp={game.rtp}
-              index={index}
-              primaryColor={secondaryColor}
-              secondaryColor={primaryColor}
-            />
-          ))}
-        </div>
       </div>
 
       {/* Footer */}

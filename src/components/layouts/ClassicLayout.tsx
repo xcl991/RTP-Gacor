@@ -1,6 +1,7 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig } from '@/types';
+import TrikPanel from '../TrikPanel';
 
 interface ClassicGameCardProps {
   game: Game;
@@ -69,6 +70,8 @@ interface ClassicLayoutProps {
   pgSoftCount: number;
   getCurrentDate: () => string;
   selectedCardStyle: CardStyleOption;
+  pragmaticTrik: TrikConfig;
+  pgSoftTrik: TrikConfig;
 }
 
 export default function ClassicLayout({
@@ -80,7 +83,9 @@ export default function ClassicLayout({
   pragmaticCount,
   pgSoftCount,
   getCurrentDate,
-  selectedCardStyle
+  selectedCardStyle,
+  pragmaticTrik,
+  pgSoftTrik
 }: ClassicLayoutProps) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
@@ -155,74 +160,106 @@ export default function ClassicLayout({
 
       {/* Content */}
       <div className="relative z-10 flex-1 px-8 py-4 flex flex-col justify-center gap-6">
-        {/* Pragmatic Section */}
+        {/* Pragmatic Section with Grid */}
         <div
-          className={`relative rounded-xl p-4 shadow-xl ${getBlurClass()}`}
-          style={getSectionStyle(primaryColor)}
+          className="grid items-stretch gap-4"
+          style={{
+            gridTemplateColumns: pragmaticTrik.enabled ? '1fr 256px' : '1fr'
+          }}
         >
-          {/* Pattern Overlay */}
-          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
-            <div
-              className="absolute inset-0 pointer-events-none rounded-xl"
-              style={{
-                backgroundImage: selectedCardStyle.pattern,
-                backgroundRepeat: 'repeat'
-              }}
+          <div
+            className={`relative rounded-xl p-4 shadow-xl ${getBlurClass()}`}
+            style={getSectionStyle(primaryColor)}
+          >
+            {/* Pattern Overlay */}
+            {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+              <div
+                className="absolute inset-0 pointer-events-none rounded-xl"
+                style={{
+                  backgroundImage: selectedCardStyle.pattern,
+                  backgroundRepeat: 'repeat'
+                }}
+              />
+            )}
+            <div className="relative z-10 flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${primaryColor}30` }}>
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
+                className="h-24"
+                style={{ filter: `drop-shadow(0 0 5px ${primaryColor}80)`, transform: 'scale(1.3)' }}
+                alt="Pragmatic Play"
+              />
+            </div>
+            <div className="relative z-10 flex flex-wrap justify-center gap-4">
+              {pragmaticGamesWithRTP.map((game, index) => (
+                <ClassicGameCard
+                  key={`pragmatic-${index}`}
+                  game={game}
+                  rtp={game.rtp}
+                  style={selectedStyle}
+                />
+              ))}
+            </div>
+          </div>
+          {pragmaticTrik.enabled && (
+            <TrikPanel
+              trik={pragmaticTrik}
+              providerColor={primaryColor}
+              fontFamily="var(--font-rajdhani), sans-serif"
+              cardStyle={selectedCardStyle}
+              variant="classic"
             />
           )}
-          <div className="relative z-10 flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${primaryColor}30` }}>
-            <img
-              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
-              className="h-24"
-              style={{ filter: `drop-shadow(0 0 5px ${primaryColor}80)`, transform: 'scale(1.3)' }}
-              alt="Pragmatic Play"
-            />
-          </div>
-          <div className="relative z-10 flex flex-wrap justify-center gap-4">
-            {pragmaticGamesWithRTP.map((game, index) => (
-              <ClassicGameCard
-                key={`pragmatic-${index}`}
-                game={game}
-                rtp={game.rtp}
-                style={selectedStyle}
-              />
-            ))}
-          </div>
         </div>
 
-        {/* PG Soft Section */}
+        {/* PG Soft Section with Grid */}
         <div
-          className={`relative rounded-xl p-4 shadow-xl ${getBlurClass()}`}
-          style={getSectionStyle(secondaryColor)}
+          className="grid items-stretch gap-4"
+          style={{
+            gridTemplateColumns: pgSoftTrik.enabled ? '1fr 256px' : '1fr'
+          }}
         >
-          {/* Pattern Overlay */}
-          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
-            <div
-              className="absolute inset-0 pointer-events-none rounded-xl"
-              style={{
-                backgroundImage: selectedCardStyle.pattern,
-                backgroundRepeat: 'repeat'
-              }}
+          <div
+            className={`relative rounded-xl p-4 shadow-xl ${getBlurClass()}`}
+            style={getSectionStyle(secondaryColor)}
+          >
+            {/* Pattern Overlay */}
+            {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+              <div
+                className="absolute inset-0 pointer-events-none rounded-xl"
+                style={{
+                  backgroundImage: selectedCardStyle.pattern,
+                  backgroundRepeat: 'repeat'
+                }}
+              />
+            )}
+            <div className="relative z-10 flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${secondaryColor}30` }}>
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
+                className="h-24"
+                style={{ filter: `drop-shadow(0 0 5px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
+                alt="PG Soft"
+              />
+            </div>
+            <div className="relative z-10 flex flex-wrap justify-center gap-4">
+              {pgSoftGamesWithRTP.map((game, index) => (
+                <ClassicGameCard
+                  key={`pgsoft-${index}`}
+                  game={game}
+                  rtp={game.rtp}
+                  style={selectedStyle}
+                />
+              ))}
+            </div>
+          </div>
+          {pgSoftTrik.enabled && (
+            <TrikPanel
+              trik={pgSoftTrik}
+              providerColor={secondaryColor}
+              fontFamily="var(--font-rajdhani), sans-serif"
+              cardStyle={selectedCardStyle}
+              variant="classic"
             />
           )}
-          <div className="relative z-10 flex items-center justify-center mb-4 pb-2" style={{ borderBottom: `1px solid ${secondaryColor}30` }}>
-            <img
-              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
-              className="h-24"
-              style={{ filter: `drop-shadow(0 0 5px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
-              alt="PG Soft"
-            />
-          </div>
-          <div className="relative z-10 flex flex-wrap justify-center gap-4">
-            {pgSoftGamesWithRTP.map((game, index) => (
-              <ClassicGameCard
-                key={`pgsoft-${index}`}
-                game={game}
-                rtp={game.rtp}
-                style={selectedStyle}
-              />
-            ))}
-          </div>
         </div>
       </div>
 

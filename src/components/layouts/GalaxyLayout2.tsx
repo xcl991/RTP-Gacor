@@ -1,6 +1,7 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig } from '@/types';
+import TrikPanel from '../TrikPanel';
 
 interface GalaxyGameCardProps {
   game: Game;
@@ -90,6 +91,8 @@ interface GalaxyLayout2Props {
   pgSoftCount: number;
   getCurrentDate: () => string;
   selectedCardStyle: CardStyleOption;
+  pragmaticTrik: TrikConfig;
+  pgSoftTrik: TrikConfig;
 }
 
 export default function GalaxyLayout2({
@@ -101,7 +104,9 @@ export default function GalaxyLayout2({
   pragmaticCount,
   pgSoftCount,
   getCurrentDate,
-  selectedCardStyle
+  selectedCardStyle,
+  pragmaticTrik,
+  pgSoftTrik
 }: GalaxyLayout2Props) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
@@ -184,49 +189,66 @@ export default function GalaxyLayout2({
         </div>
       </div>
 
+      {/* Pragmatic Section with Grid */}
       <div
-        className={"relative z-10 mb-8 p-4 rounded-xl " + getBlurClass()}
-        style={getSectionStyle(primaryColor)}
+        className="grid items-stretch gap-4 mb-8"
+        style={{
+          gridTemplateColumns: pragmaticTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
-          <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
-            style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
-            }}
-          />
-        )}
-        <div className="relative z-10 flex items-stretch gap-4">
-          <div
-            className="w-32 rounded-xl flex items-center justify-center shrink-0"
-            style={{
-              background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-              border: "2px solid " + primaryColor + "60", boxShadow: "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
-            }}
-          >
-            <img
-              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
-              className="h-16"
-              style={{ filter: "drop-shadow(0 0 10px " + primaryColor + "cc)" }}
-              alt="Pragmatic Play"
+        <div
+          className={"relative p-4 rounded-xl " + getBlurClass()}
+          style={getSectionStyle(primaryColor)}
+        >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
             />
-          </div>
-          <div className="flex-1">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {pragmaticGamesWithRTP.map((game, index) => (
-                <GalaxyGameCard
-                  key={"pragmatic-" + index}
-                  game={game}
-                  rtp={game.rtp}
-                  primaryColor={primaryColor}
-                  secondaryColor={secondaryColor}
-                />
-              ))}
+          )}
+          <div className="relative z-10 flex items-stretch gap-4">
+            <div
+              className="w-32 rounded-xl flex items-center justify-center shrink-0"
+              style={{
+                background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
+                border: "2px solid " + primaryColor + "60", boxShadow: "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
+              }}
+            >
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
+                className="h-16"
+                style={{ filter: "drop-shadow(0 0 10px " + primaryColor + "cc)" }}
+                alt="Pragmatic Play"
+              />
+            </div>
+            <div className="flex-1">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {pragmaticGamesWithRTP.map((game, index) => (
+                  <GalaxyGameCard
+                    key={"pragmatic-" + index}
+                    game={game}
+                    rtp={game.rtp}
+                    primaryColor={primaryColor}
+                    secondaryColor={secondaryColor}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
+        {pragmaticTrik.enabled && (
+          <TrikPanel
+            trik={pragmaticTrik}
+            providerColor={primaryColor}
+            fontFamily="var(--font-orbitron), sans-serif"
+            cardStyle={selectedCardStyle}
+            variant="galaxy"
+          />
+        )}
       </div>
 
       <div className="flex items-center gap-4 my-6">
@@ -239,49 +261,66 @@ export default function GalaxyLayout2({
         <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, " + primaryColor + ", transparent)" }} />
       </div>
 
+      {/* PG Soft Section with Grid */}
       <div
-        className={"relative z-10 mb-8 p-4 rounded-xl " + getBlurClass()}
-        style={getSectionStyle(secondaryColor)}
+        className="grid items-stretch gap-4 mb-8"
+        style={{
+          gridTemplateColumns: pgSoftTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
-          <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
-            style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
-            }}
-          />
-        )}
-        <div className="relative z-10 flex items-stretch gap-4">
-          <div
-            className="w-32 rounded-xl flex items-center justify-center shrink-0"
-            style={{
-              background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-              border: "2px solid " + secondaryColor + "60", boxShadow: "0 0 20px " + secondaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
-            }}
-          >
-            <img
-              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
-              className="h-16"
-              style={{ filter: "drop-shadow(0 0 10px " + secondaryColor + "cc)" }}
-              alt="PG Soft"
+        <div
+          className={"relative p-4 rounded-xl " + getBlurClass()}
+          style={getSectionStyle(secondaryColor)}
+        >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
             />
-          </div>
-          <div className="flex-1">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {pgSoftGamesWithRTP.map((game, index) => (
-                <GalaxyGameCard
-                  key={"pgsoft-" + index}
-                  game={game}
-                  rtp={game.rtp}
-                  primaryColor={secondaryColor}
-                  secondaryColor={primaryColor}
-                />
-              ))}
+          )}
+          <div className="relative z-10 flex items-stretch gap-4">
+            <div
+              className="w-32 rounded-xl flex items-center justify-center shrink-0"
+              style={{
+                background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
+                border: "2px solid " + secondaryColor + "60", boxShadow: "0 0 20px " + secondaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
+              }}
+            >
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
+                className="h-16"
+                style={{ filter: "drop-shadow(0 0 10px " + secondaryColor + "cc)" }}
+                alt="PG Soft"
+              />
+            </div>
+            <div className="flex-1">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {pgSoftGamesWithRTP.map((game, index) => (
+                  <GalaxyGameCard
+                    key={"pgsoft-" + index}
+                    game={game}
+                    rtp={game.rtp}
+                    primaryColor={secondaryColor}
+                    secondaryColor={primaryColor}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
+        {pgSoftTrik.enabled && (
+          <TrikPanel
+            trik={pgSoftTrik}
+            providerColor={secondaryColor}
+            fontFamily="var(--font-orbitron), sans-serif"
+            cardStyle={selectedCardStyle}
+            variant="galaxy"
+          />
+        )}
       </div>
 
       <div className="relative z-10 mt-auto text-center">

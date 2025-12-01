@@ -1,6 +1,7 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig } from '@/types';
+import TrikPanel from '../TrikPanel';
 
 interface FuturisticGameCardProps {
   game: Game;
@@ -78,6 +79,8 @@ interface FuturisticLayoutProps {
   pgSoftCount: number;
   getCurrentDate: () => string;
   selectedCardStyle: CardStyleOption;
+  pragmaticTrik: TrikConfig;
+  pgSoftTrik: TrikConfig;
 }
 
 export default function FuturisticLayout({
@@ -89,7 +92,9 @@ export default function FuturisticLayout({
   pragmaticCount,
   pgSoftCount,
   getCurrentDate,
-  selectedCardStyle
+  selectedCardStyle,
+  pragmaticTrik,
+  pgSoftTrik
 }: FuturisticLayoutProps) {
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -216,6 +221,16 @@ export default function FuturisticLayout({
             Pragmatic Play
           </span>
         </div>
+
+        {pragmaticTrik.enabled && (
+          <TrikPanel
+            trik={pragmaticTrik}
+            providerColor={selectedStyle.primaryColor}
+            fontFamily="var(--font-teko), sans-serif"
+            cardStyle={selectedCardStyle}
+            variant="futuristic"
+          />
+        )}
       </div>
 
       {/* Decorative Line */}
@@ -271,6 +286,16 @@ export default function FuturisticLayout({
             PG Soft
           </span>
         </div>
+
+        {pgSoftTrik.enabled && (
+          <TrikPanel
+            trik={pgSoftTrik}
+            providerColor={selectedStyle.secondaryColor}
+            fontFamily="var(--font-teko), sans-serif"
+            cardStyle={selectedCardStyle}
+            variant="futuristic"
+          />
+        )}
       </div>
 
       {/* Footer */}

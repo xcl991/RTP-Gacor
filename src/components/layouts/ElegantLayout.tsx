@@ -1,6 +1,7 @@
 'use client';
 
-import { RTPStyle, WebsiteOption, Game, CardStyleOption } from '@/types';
+import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig } from '@/types';
+import TrikPanel from '../TrikPanel';
 
 interface ElegantGameCardProps {
   game: Game;
@@ -70,6 +71,8 @@ interface ElegantLayoutProps {
   pgSoftCount: number;
   getCurrentDate: () => string;
   selectedCardStyle: CardStyleOption;
+  pragmaticTrik: TrikConfig;
+  pgSoftTrik: TrikConfig;
 }
 
 export default function ElegantLayout({
@@ -81,7 +84,9 @@ export default function ElegantLayout({
   pragmaticCount,
   pgSoftCount,
   getCurrentDate,
-  selectedCardStyle
+  selectedCardStyle,
+  pragmaticTrik,
+  pgSoftTrik
 }: ElegantLayoutProps) {
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
@@ -153,38 +158,54 @@ export default function ElegantLayout({
         </div>
       </div>
 
-      {/* Pragmatic Section */}
+      {/* Pragmatic Section with Grid */}
       <div
-        className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
-        style={getSectionStyle(primaryColor)}
+        className="grid items-stretch gap-4 mb-8"
+        style={{
+          gridTemplateColumns: pragmaticTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+        <div
+          className={`relative p-4 rounded-xl ${getBlurClass()}`}
+          style={getSectionStyle(primaryColor)}
+        >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
+            />
+          )}
           <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
-            style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
-            }}
+            className="relative z-10 flex items-center gap-4 mb-4 pb-2"
+            style={{ borderBottom: `1px solid ${primaryColor}50` }}
+          >
+            <img
+              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
+              className="h-16"
+              style={{ filter: `drop-shadow(0 0 10px ${primaryColor}80)`, transform: 'scale(1.3)' }}
+              alt="Pragmatic Play"
+            />
+            <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PRAGMATIC PLAY</span>
+          </div>
+          <div className="relative z-10 flex flex-wrap justify-center gap-4">
+            {pragmaticGamesWithRTP.map((game, index) => (
+              <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
+            ))}
+          </div>
+        </div>
+        {pragmaticTrik.enabled && (
+          <TrikPanel
+            trik={pragmaticTrik}
+            providerColor={primaryColor}
+            fontFamily="var(--font-exo2), sans-serif"
+            cardStyle={selectedCardStyle}
+            variant="elegant"
           />
         )}
-        <div
-          className="relative z-10 flex items-center gap-4 mb-4 pb-2"
-          style={{ borderBottom: `1px solid ${primaryColor}50` }}
-        >
-          <img
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
-            className="h-16"
-            style={{ filter: `drop-shadow(0 0 10px ${primaryColor}80)`, transform: 'scale(1.3)' }}
-            alt="Pragmatic Play"
-          />
-          <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PRAGMATIC PLAY</span>
-        </div>
-        <div className="relative z-10 flex flex-wrap justify-center gap-4">
-          {pragmaticGamesWithRTP.map((game, index) => (
-            <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
-          ))}
-        </div>
       </div>
 
       {/* Divider */}
@@ -194,38 +215,54 @@ export default function ElegantLayout({
         <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, transparent, ${primaryColor}, transparent)` }} />
       </div>
 
-      {/* PG Soft Section */}
+      {/* PG Soft Section with Grid */}
       <div
-        className={`relative z-10 mb-8 p-4 rounded-xl ${getBlurClass()}`}
-        style={getSectionStyle(secondaryColor)}
+        className="grid items-stretch gap-4 mb-8"
+        style={{
+          gridTemplateColumns: pgSoftTrik.enabled ? '1fr 256px' : '1fr'
+        }}
       >
-        {/* Pattern Overlay */}
-        {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+        <div
+          className={`relative p-4 rounded-xl ${getBlurClass()}`}
+          style={getSectionStyle(secondaryColor)}
+        >
+          {/* Pattern Overlay */}
+          {selectedCardStyle?.pattern && selectedCardStyle.pattern !== 'none' && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-xl"
+              style={{
+                backgroundImage: selectedCardStyle.pattern,
+                backgroundRepeat: 'repeat'
+              }}
+            />
+          )}
           <div
-            className="absolute inset-0 pointer-events-none rounded-xl"
-            style={{
-              backgroundImage: selectedCardStyle.pattern,
-              backgroundRepeat: 'repeat'
-            }}
+            className="relative z-10 flex items-center gap-4 mb-4 pb-2"
+            style={{ borderBottom: `1px solid ${primaryColor}50` }}
+          >
+            <img
+              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
+              className="h-16"
+              style={{ filter: `drop-shadow(0 0 10px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
+              alt="PG Soft"
+            />
+            <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PG SOFT</span>
+          </div>
+          <div className="relative z-10 flex flex-wrap justify-center gap-4">
+            {pgSoftGamesWithRTP.map((game, index) => (
+              <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
+            ))}
+          </div>
+        </div>
+        {pgSoftTrik.enabled && (
+          <TrikPanel
+            trik={pgSoftTrik}
+            providerColor={secondaryColor}
+            fontFamily="var(--font-exo2), sans-serif"
+            cardStyle={selectedCardStyle}
+            variant="elegant"
           />
         )}
-        <div
-          className="relative z-10 flex items-center gap-4 mb-4 pb-2"
-          style={{ borderBottom: `1px solid ${primaryColor}50` }}
-        >
-          <img
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
-            className="h-16"
-            style={{ filter: `drop-shadow(0 0 10px ${secondaryColor}80)`, transform: 'scale(1.3)' }}
-            alt="PG Soft"
-          />
-          <span className="text-lg font-semibold tracking-wider" style={{ color: primaryColor }}>PG SOFT</span>
-        </div>
-        <div className="relative z-10 flex flex-wrap justify-center gap-4">
-          {pgSoftGamesWithRTP.map((game, index) => (
-            <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} />
-          ))}
-        </div>
       </div>
 
       {/* Footer */}
