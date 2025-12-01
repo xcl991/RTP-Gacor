@@ -545,6 +545,26 @@ export default function Header({
                       />
                     </div>
 
+                    {/* Font Size */}
+                    <div className="flex items-center gap-3">
+                      <label className="text-white text-sm w-40">Ukuran Font:</label>
+                      <div className="flex gap-2">
+                        {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
+                          <button
+                            key={size}
+                            onClick={() => setCurrentTrik({ ...currentTrik, fontSize: size })}
+                            className={`px-3 py-1 rounded font-semibold text-sm transition-colors ${
+                              currentTrik.fontSize === size
+                                ? 'bg-yellow-500 text-black'
+                                : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                            }`}
+                          >
+                            {size.toUpperCase()}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     {/* Deposit Kode */}
                     <div className="flex items-center gap-3">
                       <label className="text-white text-sm w-40">Deposit Kode Unik:</label>

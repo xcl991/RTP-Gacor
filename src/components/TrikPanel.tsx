@@ -3,16 +3,106 @@
 import { TrikConfig, CardStyleOption } from '@/types';
 import { Check, X } from 'lucide-react';
 
-// Komponen untuk menampilkan pattern centang/silang
-const PatternDisplay = ({ pattern, color }: { pattern: string; color: string }) => {
+// Font size configurations
+const fontSizeConfig = {
+  xs: {
+    title: 'text-xs',
+    titleSize: 12,
+    depositKode: 'text-base',
+    label: 8,
+    value: 'text-xs',
+    badge: 'text-[8px]',
+    itemName: 'text-[9px]',
+    itemValue: 8,
+    customText: 8,
+    iconSize: 10,
+    padding: 'p-2',
+    headerPadding: 'px-2 py-1',
+    itemPadding: 'px-1.5 py-1',
+    gap: 'gap-0.5'
+  },
+  sm: {
+    title: 'text-sm',
+    titleSize: 14,
+    depositKode: 'text-lg',
+    label: 9,
+    value: 'text-sm',
+    badge: 'text-[9px]',
+    itemName: 'text-[10px]',
+    itemValue: 9,
+    customText: 9,
+    iconSize: 12,
+    padding: 'p-2.5',
+    headerPadding: 'px-2.5 py-1.5',
+    itemPadding: 'px-1.5 py-1',
+    gap: 'gap-0.5'
+  },
+  md: {
+    title: 'text-base',
+    titleSize: 16,
+    depositKode: 'text-xl',
+    label: 10,
+    value: 'text-sm',
+    badge: 'text-xs',
+    itemName: 'text-xs',
+    itemValue: 10,
+    customText: 10,
+    iconSize: 14,
+    padding: 'p-3',
+    headerPadding: 'px-3 py-2',
+    itemPadding: 'px-2 py-1',
+    gap: 'gap-1'
+  },
+  lg: {
+    title: 'text-lg',
+    titleSize: 18,
+    depositKode: 'text-2xl',
+    label: 11,
+    value: 'text-base',
+    badge: 'text-sm',
+    itemName: 'text-sm',
+    itemValue: 11,
+    customText: 11,
+    iconSize: 16,
+    padding: 'p-4',
+    headerPadding: 'px-4 py-2.5',
+    itemPadding: 'px-2.5 py-1.5',
+    gap: 'gap-1'
+  },
+  xl: {
+    title: 'text-xl',
+    titleSize: 20,
+    depositKode: 'text-3xl',
+    label: 12,
+    value: 'text-lg',
+    badge: 'text-base',
+    itemName: 'text-base',
+    itemValue: 12,
+    customText: 12,
+    iconSize: 18,
+    padding: 'p-5',
+    headerPadding: 'px-5 py-3',
+    itemPadding: 'px-3 py-2',
+    gap: 'gap-1.5'
+  }
+};
+
+// Komponen untuk menampilkan pattern centang/silang dengan ukuran adaptif
+const PatternDisplay = ({ pattern, iconSize }: { pattern: string; iconSize: number }) => {
   return (
     <div className="flex items-center gap-0.5">
       {pattern.split('').map((char, index) => (
         <span key={index}>
           {char === 'V' ? (
-            <Check className="w-3 h-3 text-green-400" />
+            <Check
+              className="text-green-400"
+              style={{ width: iconSize, height: iconSize }}
+            />
           ) : (
-            <X className="w-3 h-3 text-red-400" />
+            <X
+              className="text-red-400"
+              style={{ width: iconSize, height: iconSize }}
+            />
           )}
         </span>
       ))}
@@ -38,6 +128,9 @@ export default function TrikPanel({
   variant = 'default'
 }: TrikPanelProps) {
   if (!trik.enabled) return null;
+
+  // Get font size config
+  const sizes = fontSizeConfig[trik.fontSize || 'md'];
 
   // Get variant-specific styles
   const getVariantStyles = () => {
@@ -155,14 +248,14 @@ export default function TrikPanel({
 
       {/* Header */}
       <div
-        className="px-3 py-2 text-center relative z-10"
+        className={`${sizes.headerPadding} text-center relative z-10`}
         style={{
           background: styles.headerBg,
           borderBottom: `1px solid ${providerColor}50`
         }}
       >
         <h3
-          className={`text-base font-black uppercase tracking-wider ${isMono ? 'font-mono' : ''}`}
+          className={`${sizes.title} font-black uppercase tracking-wider ${isMono ? 'font-mono' : ''}`}
           style={{
             color: providerColor,
             textShadow: `0 0 10px ${providerColor}, 0 0 20px ${providerColor}50`
@@ -173,14 +266,17 @@ export default function TrikPanel({
       </div>
 
       {/* Content */}
-      <div className="p-3 flex-1 flex flex-col justify-between gap-1 relative z-10">
+      <div className={`${sizes.padding} flex-1 flex flex-col justify-between ${sizes.gap} relative z-10`}>
         {/* Deposit Kode */}
-        <div className="rounded-lg px-2 py-1.5 text-center" style={{ background: styles.itemBg }}>
-          <span className={`text-gray-400 text-[10px] block leading-tight ${isMono ? 'font-mono' : ''}`}>
+        <div className={`rounded-lg ${sizes.itemPadding} text-center`} style={{ background: styles.itemBg }}>
+          <span
+            className={`text-gray-400 block leading-tight ${isMono ? 'font-mono' : ''}`}
+            style={{ fontSize: sizes.label }}
+          >
             {isMono ? 'DEPOSIT_KODE_UNIK' : 'DEPOSIT KODE UNIK'}
           </span>
           <span
-            className={`text-xl font-black leading-tight ${isMono ? 'font-mono' : ''}`}
+            className={`${sizes.depositKode} font-black leading-tight ${isMono ? 'font-mono' : ''}`}
             style={{
               color: providerColor,
               textShadow: `0 0 10px ${providerColor}`
@@ -191,12 +287,15 @@ export default function TrikPanel({
         </div>
 
         {/* Putaran Bet */}
-        <div className="rounded-lg px-2 py-1.5 text-center" style={{ background: styles.itemBg }}>
-          <span className={`text-gray-400 text-[10px] block leading-tight ${isMono ? 'font-mono' : ''}`}>
+        <div className={`rounded-lg ${sizes.itemPadding} text-center`} style={{ background: styles.itemBg }}>
+          <span
+            className={`text-gray-400 block leading-tight ${isMono ? 'font-mono' : ''}`}
+            style={{ fontSize: sizes.label }}
+          >
             {isMono ? 'PUTARAN_BET' : 'PUTARAN BET'}
           </span>
           <span
-            className={`text-sm font-bold leading-tight ${isMono ? 'font-mono' : ''}`}
+            className={`${sizes.value} font-bold leading-tight ${isMono ? 'font-mono' : ''}`}
             style={{ color: providerColor }}
           >
             {trik.putaranBetMin.toLocaleString()} - {trik.putaranBetMax.toLocaleString()}
@@ -204,12 +303,15 @@ export default function TrikPanel({
         </div>
 
         {/* Fitur Ganda */}
-        <div className="rounded-lg px-2 py-1.5 text-center" style={{ background: styles.itemBg }}>
-          <span className={`text-gray-400 text-[10px] block leading-tight ${isMono ? 'font-mono' : ''}`}>
+        <div className={`rounded-lg ${sizes.itemPadding} text-center`} style={{ background: styles.itemBg }}>
+          <span
+            className={`text-gray-400 block leading-tight ${isMono ? 'font-mono' : ''}`}
+            style={{ fontSize: sizes.label }}
+          >
             {isMono ? 'FITUR_GANDA' : 'FITUR GANDA'}
           </span>
           <span
-            className={`text-xs font-bold px-2 py-0.5 rounded-full inline-block ${isMono ? 'font-mono' : ''} ${
+            className={`${sizes.badge} font-bold px-2 py-0.5 rounded-full inline-block ${isMono ? 'font-mono' : ''} ${
               trik.fiturGanda ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
             }`}
           >
@@ -218,40 +320,43 @@ export default function TrikPanel({
         </div>
 
         {/* Trik Items */}
-        <div className="space-y-1 flex-1 flex flex-col justify-center">
+        <div className={`${sizes.gap} flex-1 flex flex-col justify-center`} style={{ gap: trik.fontSize === 'xs' ? '2px' : trik.fontSize === 'sm' ? '3px' : '4px' }}>
           {trik.trikItems.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-between rounded px-2 py-1"
+              className={`flex items-center justify-between rounded ${sizes.itemPadding}`}
               style={{ background: styles.itemBg }}
             >
               <div className="flex flex-col leading-tight">
-                <span className={`text-white text-xs font-semibold ${isMono ? 'font-mono' : ''}`}>{item.name}</span>
+                <span className={`text-white ${sizes.itemName} font-semibold ${isMono ? 'font-mono' : ''}`}>
+                  {item.name}
+                </span>
                 <span
-                  className={`text-[10px] font-bold ${isMono ? 'font-mono' : ''}`}
-                  style={{ color: providerColor }}
+                  className={`font-bold ${isMono ? 'font-mono' : ''}`}
+                  style={{ color: providerColor, fontSize: sizes.itemValue }}
                 >
                   {item.value}
                 </span>
               </div>
-              <PatternDisplay pattern={item.pattern} color={providerColor} />
+              <PatternDisplay pattern={item.pattern} iconSize={sizes.iconSize} />
             </div>
           ))}
         </div>
 
         {/* Custom Text */}
         <div
-          className="text-center py-1.5 px-2 rounded-lg"
+          className={`text-center ${sizes.itemPadding} rounded-lg`}
           style={{
             background: `linear-gradient(90deg, transparent, ${providerColor}20, transparent)`,
             border: `1px solid ${providerColor}30`
           }}
         >
           <p
-            className={`text-[10px] font-bold uppercase leading-tight ${isMono ? 'font-mono' : ''}`}
+            className={`font-bold uppercase leading-tight ${isMono ? 'font-mono' : ''}`}
             style={{
               color: providerColor,
-              textShadow: `0 0 5px ${providerColor}50`
+              textShadow: `0 0 5px ${providerColor}50`,
+              fontSize: sizes.customText
             }}
           >
             {trik.customText}

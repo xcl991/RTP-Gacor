@@ -21,6 +21,7 @@ export default function Home() {
   const defaultTrikConfig: TrikConfig = {
     enabled: false,
     title: 'TRIK GACOR',
+    fontSize: 'md',
     depositKode: '7777',
     putaranBetMin: 100,
     putaranBetMax: 2000,

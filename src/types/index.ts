@@ -74,6 +74,7 @@ export interface TrikItem {
 export interface TrikConfig {
   enabled: boolean;
   title: string; // Custom title untuk panel (default: "TRIK GACOR")
+  fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // Font size untuk panel
   depositKode: string;
   putaranBetMin: number;
   putaranBetMax: number;
