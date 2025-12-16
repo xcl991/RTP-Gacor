@@ -32,6 +32,15 @@ interface RTPPreviewProps {
   selectedCardStyle: CardStyleOption;
   pragmaticTrik: TrikConfig;
   pgSoftTrik: TrikConfig;
+  // Screenshot actions
+  onDownload?: () => void;
+  onCopy?: () => void;
+  onShare?: () => void;
+  browserCapabilities?: {
+    clipboard: boolean;
+    webShare: boolean;
+  };
+  isImageReady?: boolean;
 }
 
 const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
@@ -47,7 +56,12 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
   selectedLayout,
   selectedCardStyle,
   pragmaticTrik,
-  pgSoftTrik
+  pgSoftTrik,
+  onDownload,
+  onCopy,
+  onShare,
+  browserCapabilities,
+  isImageReady = false
 }, ref) => {
   const getCurrentDate = () => {
     const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
@@ -130,6 +144,67 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
         {selectedLayout.id === 'casinomatrix' && <CasinoMatrixLayout {...layoutProps} />}
         {selectedLayout.id === 'casinoquantum' && <CasinoQuantumLayout {...layoutProps} />}
         {selectedLayout.id === 'casinospacestation' && <CasinoSpaceStationLayout {...layoutProps} />}
+
+        {/* Floating Action Buttons */}
+        {isImageReady && (
+          <div className="absolute bottom-8 right-8 flex flex-col gap-3 z-50">
+            {/* Download Button */}
+            {onDownload && (
+              <button
+                onClick={onDownload}
+                className="group flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105"
+                style={{
+                  backgroundColor: 'rgba(0, 240, 255, 0.15)',
+                  border: '2px solid rgba(0, 240, 255, 0.5)',
+                  boxShadow: '0 4px 12px rgba(0, 240, 255, 0.3)'
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                <span className="text-white font-bold">Download</span>
+              </button>
+            )}
+
+            {/* Copy to Clipboard Button */}
+            {onCopy && browserCapabilities?.clipboard && (
+              <button
+                onClick={onCopy}
+                className="group flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105"
+                style={{
+                  backgroundColor: 'rgba(255, 215, 0, 0.15)',
+                  border: '2px solid rgba(255, 215, 0, 0.5)',
+                  boxShadow: '0 4px 12px rgba(255, 215, 0, 0.3)'
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffd700" strokeWidth="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span className="text-white font-bold">Copy</span>
+              </button>
+            )}
+
+            {/* Share Button */}
+            {onShare && browserCapabilities?.webShare && (
+              <button
+                onClick={onShare}
+                className="group flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105"
+                style={{
+                  backgroundColor: 'rgba(147, 51, 234, 0.15)',
+                  border: '2px solid rgba(147, 51, 234, 0.5)',
+                  boxShadow: '0 4px 12px rgba(147, 51, 234, 0.3)'
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9333ea" strokeWidth="2">
+                  <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                  <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+                </svg>
+                <span className="text-white font-bold">Share</span>
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

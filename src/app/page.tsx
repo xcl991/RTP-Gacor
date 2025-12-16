@@ -877,6 +877,11 @@ export default function Home() {
               selectedCardStyle={selectedCardStyle}
               pragmaticTrik={pragmaticTrik}
               pgSoftTrik={pgSoftTrik}
+              onDownload={downloadImage}
+              onCopy={copyToClipboard}
+              onShare={shareImage}
+              browserCapabilities={browserCapabilities}
+              isImageReady={!!cachedImage}
             />
           </div>
         </div>
