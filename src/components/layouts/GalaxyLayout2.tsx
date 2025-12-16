@@ -44,36 +44,31 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameC
             position: 'absolute',
             top: '8px',
             right: '8px',
-            backgroundColor: '#ffd700',
-            color: '#000',
-            boxShadow: '0 0 10px #ffd700',
-            zIndex: 10,
-            // Perfect centering solution
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: 'table',
             minWidth: '45px',
             height: '24px',
-            padding: '0 10px',
-            // Font reset for perfect alignment
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            fontSize: '14px',
-            fontWeight: 700,
-            lineHeight: '1',
-            letterSpacing: '0',
-            textAlign: 'center',
-            verticalAlign: 'middle',
-            // Border radius
+            backgroundColor: '#ffd700',
             borderRadius: '9999px',
-            // Remove any inherited styles
-            margin: '0',
-            border: 'none',
-            outline: 'none',
-            textDecoration: 'none',
-            textTransform: 'none'
+            boxShadow: '0 0 10px #ffd700',
+            zIndex: 10
           }}
         >
-          {rtp}%
+          <div
+            style={{
+              display: 'table-cell',
+              verticalAlign: 'middle',
+              textAlign: 'center',
+              padding: '0 10px',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontSize: '14px',
+              fontWeight: 700,
+              lineHeight: '14px',
+              color: '#000',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {rtp}%
+          </div>
         </div>
       </div>
       <div className="p-3" style={{ background: 'linear-gradient(rgba(5, 11, 20, 0.867), rgb(5, 11, 20))' }}>
@@ -250,35 +245,29 @@ export default function GalaxyLayout2({
             </h2>
             <div
               style={{
-                backgroundColor: '#ffd700',
-                color: '#000',
-                // Perfect centering solution
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: 'table',
                 height: '28px',
-                padding: '0 16px',
                 marginTop: '8px',
-                // Font reset for perfect alignment
-                fontFamily: 'system-ui, -apple-system, sans-serif',
-                fontSize: '14px',
-                fontWeight: 700,
-                lineHeight: '1',
-                letterSpacing: '0',
-                textAlign: 'center',
-                verticalAlign: 'middle',
-                // Border radius
-                borderRadius: '9999px',
-                // Remove any inherited styles
-                margin: '8px 0 0 0',
-                border: 'none',
-                outline: 'none',
-                textDecoration: 'none',
-                textTransform: 'none',
-                whiteSpace: 'nowrap'
+                backgroundColor: '#ffd700',
+                borderRadius: '9999px'
               }}
             >
-              {pragmaticCount} Games
+              <div
+                style={{
+                  display: 'table-cell',
+                  verticalAlign: 'middle',
+                  textAlign: 'center',
+                  padding: '0 16px',
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  lineHeight: '14px',
+                  color: '#000',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {pragmaticCount} Games
+              </div>
             </div>
           </div>
           <div className="relative z-10 flex flex-wrap justify-center gap-4">
@@ -349,35 +338,29 @@ export default function GalaxyLayout2({
             </h2>
             <div
               style={{
-                backgroundColor: '#00f0ff',
-                color: '#000',
-                // Perfect centering solution
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: 'table',
                 height: '28px',
-                padding: '0 16px',
                 marginTop: '8px',
-                // Font reset for perfect alignment
-                fontFamily: 'system-ui, -apple-system, sans-serif',
-                fontSize: '14px',
-                fontWeight: 700,
-                lineHeight: '1',
-                letterSpacing: '0',
-                textAlign: 'center',
-                verticalAlign: 'middle',
-                // Border radius
-                borderRadius: '9999px',
-                // Remove any inherited styles
-                margin: '8px 0 0 0',
-                border: 'none',
-                outline: 'none',
-                textDecoration: 'none',
-                textTransform: 'none',
-                whiteSpace: 'nowrap'
+                backgroundColor: '#00f0ff',
+                borderRadius: '9999px'
               }}
             >
-              {pgSoftCount} Games
+              <div
+                style={{
+                  display: 'table-cell',
+                  verticalAlign: 'middle',
+                  textAlign: 'center',
+                  padding: '0 16px',
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  lineHeight: '14px',
+                  color: '#000',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {pgSoftCount} Games
+              </div>
             </div>
           </div>
           <div className="relative z-10 flex flex-wrap justify-center gap-4">
@@ -403,21 +386,42 @@ export default function GalaxyLayout2({
         )}
       </div>
 
-      <div className="relative z-10 mt-auto text-center">
+      <div className="relative z-10 mt-8 text-center">
         <div
-          className="inline-flex items-center gap-4 px-8 py-4 rounded-full"
           style={{
-            background: "linear-gradient(135deg, rgba(10,10,30,0.9), rgba(20,10,40,0.95))",
-            border: "2px solid " + primaryColor + "60",
-            boxShadow: "0 0 30px " + primaryColor + "30"
+            display: 'inline-table',
+            background: 'rgba(0,0,0,0.8)',
+            border: '2px solid ' + primaryColor,
+            borderRadius: '9999px',
+            padding: '0'
           }}
         >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill={primaryColor}>
-            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-          </svg>
-          <span className="text-lg font-semibold" style={{ color: primaryColor }}>
-            @{selectedWebsite.name.toUpperCase().replace(/[^A-Z0-9]/g, '')}
-          </span>
+          <div
+            style={{
+              display: 'table-cell',
+              verticalAlign: 'middle',
+              textAlign: 'center',
+              padding: '12px 32px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill={primaryColor}>
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+              </svg>
+              <span
+                style={{
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                  fontSize: '20px',
+                  fontWeight: 700,
+                  lineHeight: '20px',
+                  color: primaryColor,
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                Join Komunitas Telegram : @{selectedWebsite.name.toLowerCase().replace(/[^a-z0-9]/g, '')}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
