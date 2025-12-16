@@ -377,6 +377,42 @@ export default function Home() {
             const htmlEl = el as HTMLElement;
             htmlEl.style.fontFamily = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace';
           });
+
+          // ANTI-WARPING FIX #5: Force perfect centering for ALL badge-like elements
+          // This ensures RTP badges and "X Games" badges are perfectly centered
+          const allDivs = clonedDoc.querySelectorAll('div');
+          allDivs.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            const computedStyle = window.getComputedStyle(htmlEl);
+
+            // If element has display: flex or inline-flex with center alignment
+            if ((computedStyle.display === 'flex' || computedStyle.display === 'inline-flex') &&
+                (computedStyle.alignItems === 'center' || computedStyle.justifyContent === 'center')) {
+              // Force flexbox properties to ensure they work
+              htmlEl.style.display = computedStyle.display;
+              htmlEl.style.alignItems = 'center';
+              htmlEl.style.justifyContent = 'center';
+              htmlEl.style.lineHeight = '1';
+              htmlEl.style.verticalAlign = 'middle';
+
+              // Reset any potential conflicting properties
+              htmlEl.style.textAlign = 'center';
+              htmlEl.style.boxSizing = 'border-box';
+            }
+
+            // Special handling for rounded-full elements (likely badges)
+            if (computedStyle.borderRadius &&
+                (computedStyle.borderRadius === '9999px' ||
+                 parseFloat(computedStyle.borderRadius) > 50)) {
+              htmlEl.style.display = 'inline-flex';
+              htmlEl.style.alignItems = 'center';
+              htmlEl.style.justifyContent = 'center';
+              htmlEl.style.lineHeight = '1';
+              htmlEl.style.textAlign = 'center';
+              htmlEl.style.verticalAlign = 'middle';
+              htmlEl.style.whiteSpace = 'nowrap';
+            }
+          });
         }
       });
 

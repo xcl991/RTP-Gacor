@@ -40,7 +40,6 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameC
           }}
         />
         <div
-          className="absolute rounded-full font-bold text-sm shadow-lg"
           style={{
             position: 'absolute',
             top: '8px',
@@ -49,13 +48,29 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameC
             color: '#000',
             boxShadow: '0 0 10px #ffd700',
             zIndex: 10,
-            display: 'flex',
+            // Perfect centering solution
+            display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
             minWidth: '45px',
             height: '24px',
             padding: '0 10px',
-            lineHeight: '1'
+            // Font reset for perfect alignment
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            fontSize: '14px',
+            fontWeight: 700,
+            lineHeight: '1',
+            letterSpacing: '0',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+            // Border radius
+            borderRadius: '9999px',
+            // Remove any inherited styles
+            margin: '0',
+            border: 'none',
+            outline: 'none',
+            textDecoration: 'none',
+            textTransform: 'none'
           }}
         >
           {rtp}%
@@ -234,16 +249,33 @@ export default function GalaxyLayout2({
               PRAGMATIC PLAY
             </h2>
             <div
-              className="rounded-full text-sm font-bold mt-2"
               style={{
                 backgroundColor: '#ffd700',
                 color: '#000',
-                display: 'flex',
+                // Perfect centering solution
+                display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '28px',
                 padding: '0 16px',
-                lineHeight: '1'
+                marginTop: '8px',
+                // Font reset for perfect alignment
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                fontSize: '14px',
+                fontWeight: 700,
+                lineHeight: '1',
+                letterSpacing: '0',
+                textAlign: 'center',
+                verticalAlign: 'middle',
+                // Border radius
+                borderRadius: '9999px',
+                // Remove any inherited styles
+                margin: '8px 0 0 0',
+                border: 'none',
+                outline: 'none',
+                textDecoration: 'none',
+                textTransform: 'none',
+                whiteSpace: 'nowrap'
               }}
             >
               {pragmaticCount} Games
@@ -316,16 +348,33 @@ export default function GalaxyLayout2({
               PG SOFT
             </h2>
             <div
-              className="rounded-full text-sm font-bold mt-2"
               style={{
                 backgroundColor: '#00f0ff',
                 color: '#000',
-                display: 'flex',
+                // Perfect centering solution
+                display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '28px',
                 padding: '0 16px',
-                lineHeight: '1'
+                marginTop: '8px',
+                // Font reset for perfect alignment
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                fontSize: '14px',
+                fontWeight: 700,
+                lineHeight: '1',
+                letterSpacing: '0',
+                textAlign: 'center',
+                verticalAlign: 'middle',
+                // Border radius
+                borderRadius: '9999px',
+                // Remove any inherited styles
+                margin: '8px 0 0 0',
+                border: 'none',
+                outline: 'none',
+                textDecoration: 'none',
+                textTransform: 'none',
+                whiteSpace: 'nowrap'
               }}
             >
               {pgSoftCount} Games
