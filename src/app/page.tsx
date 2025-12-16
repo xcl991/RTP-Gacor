@@ -258,21 +258,7 @@ export default function Home() {
             htmlEl.style.textOverflow = 'ellipsis';
           });
 
-          // Fix line-clamp elements (game card titles)
-          const lineClampElements = clonedDoc.querySelectorAll('.line-clamp-2, [class*="line-clamp"]');
-          lineClampElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            htmlEl.style.display = '-webkit-box';
-            htmlEl.style.setProperty('-webkit-line-clamp', '2');
-            htmlEl.style.setProperty('-webkit-box-orient', 'vertical');
-            htmlEl.style.overflow = 'hidden';
-            htmlEl.style.textOverflow = 'ellipsis';
-            htmlEl.style.maxHeight = '28px';
-            htmlEl.style.lineHeight = '14px';
-            htmlEl.style.fontSize = '11px';
-          });
-
-          // Fix all h3 elements in game cards (explicit height control)
+          // Fix all h3 elements in game cards (explicit height control - no webkit-line-clamp)
           const gameCardTitles = clonedDoc.querySelectorAll('h3');
           gameCardTitles.forEach((el) => {
             const htmlEl = el as HTMLElement;
@@ -280,15 +266,12 @@ export default function Home() {
             // Only fix if it's a game card title (has text-center class)
             if (htmlEl.classList.contains('text-center') || computedStyle.textAlign === 'center') {
               htmlEl.style.overflow = 'hidden';
+              htmlEl.style.height = '26px';
+              htmlEl.style.lineHeight = '13px';
+              htmlEl.style.fontSize = '10px';
+              htmlEl.style.whiteSpace = 'normal';
+              htmlEl.style.wordWrap = 'break-word';
               htmlEl.style.textOverflow = 'ellipsis';
-              htmlEl.style.display = '-webkit-box';
-              htmlEl.style.setProperty('-webkit-line-clamp', '2');
-              htmlEl.style.setProperty('-webkit-box-orient', 'vertical');
-              htmlEl.style.maxHeight = '28px';
-              htmlEl.style.minHeight = '28px';
-              htmlEl.style.lineHeight = '14px';
-              htmlEl.style.fontSize = '11px';
-              htmlEl.style.wordBreak = 'break-word';
             }
           });
 

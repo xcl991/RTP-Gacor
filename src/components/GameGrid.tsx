@@ -51,16 +51,13 @@ function GameCard({ game, rtp, style }: GameCardProps) {
         <h3
           className="text-white font-bold text-center mb-2"
           style={{
-            fontSize: '11px',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
+            fontSize: '10px',
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            minHeight: '28px',
-            maxHeight: '28px',
-            lineHeight: '14px',
-            wordBreak: 'break-word'
+            height: '26px',
+            lineHeight: '13px',
+            whiteSpace: 'normal',
+            wordWrap: 'break-word',
+            textOverflow: 'ellipsis'
           }}
         >
           {game.name}
