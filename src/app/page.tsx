@@ -93,6 +93,31 @@ export default function Home() {
     }
   };
 
+  // State for converted background
+  const [convertedBackground, setConvertedBackground] = useState<string | null>(null);
+  const [isBackgroundConverting, setIsBackgroundConverting] = useState(false);
+
+  // Pre-convert background when it changes
+  useEffect(() => {
+    const convertBackground = async () => {
+      if (selectedBackground && (selectedBackground.startsWith('http') || selectedBackground.startsWith('//'))) {
+        setIsBackgroundConverting(true);
+        try {
+          const base64 = await imageToBase64(selectedBackground);
+          setConvertedBackground(base64);
+        } catch (e) {
+          console.error('Failed to pre-convert background:', e);
+          setConvertedBackground(null);
+        } finally {
+          setIsBackgroundConverting(false);
+        }
+      } else {
+        setConvertedBackground(selectedBackground);
+      }
+    };
+    convertBackground();
+  }, [selectedBackground]);
+
   // Prepare image for download
   const prepareImage = async () => {
     if (!previewRef.current) return;
@@ -107,19 +132,88 @@ export default function Home() {
       // Get the preview element
       const element = previewRef.current;
 
-      // Find all images and convert to base64
-      const images = element.querySelectorAll('img');
+      // Store original values for restoration
       const originalSrcs: Map<HTMLImageElement, string> = new Map();
+      const originalBgs: Map<HTMLElement, string> = new Map();
 
-      // Convert all external images to base64
+      // Helper function to extract URL from background-image
+      const extractBgUrl = (bgImage: string): string | null => {
+        const match = bgImage.match(/url\(['"]?(.*?)['"]?\)/);
+        return match ? match[1] : null;
+      };
+
+      // Helper function to check if URL is external
+      const isExternalUrl = (url: string): boolean => {
+        return url.startsWith('http') || url.startsWith('//');
+      };
+
+      // 1. Set the main background to converted base64 version
+      const originalMainBg = element.style.backgroundImage;
+      if (convertedBackground) {
+        element.style.backgroundImage = `url("${convertedBackground}")`;
+        originalBgs.set(element, originalMainBg);
+      }
+
+      // 2. Find ALL elements with background images (including nested ones)
+      const allElements = element.querySelectorAll('*');
+      await Promise.all(
+        Array.from(allElements).map(async (el) => {
+          const htmlEl = el as HTMLElement;
+
+          // Check inline style
+          const inlineBg = htmlEl.style.backgroundImage;
+          if (inlineBg && inlineBg !== 'none' && inlineBg !== '') {
+            const url = extractBgUrl(inlineBg);
+            if (url && isExternalUrl(url)) {
+              if (!originalBgs.has(htmlEl)) {
+                originalBgs.set(htmlEl, inlineBg);
+              }
+              try {
+                const base64 = await imageToBase64(url);
+                htmlEl.style.backgroundImage = `url("${base64}")`;
+              } catch (e) {
+                console.error('Failed to convert background:', url, e);
+              }
+            }
+          }
+
+          // Check computed style (for backgrounds set via CSS classes)
+          const computedStyle = window.getComputedStyle(htmlEl);
+          const computedBg = computedStyle.backgroundImage;
+          if (computedBg && computedBg !== 'none' && !originalBgs.has(htmlEl)) {
+            const url = extractBgUrl(computedBg);
+            if (url && isExternalUrl(url)) {
+              originalBgs.set(htmlEl, htmlEl.style.backgroundImage || '');
+              try {
+                const base64 = await imageToBase64(url);
+                htmlEl.style.backgroundImage = `url("${base64}")`;
+              } catch (e) {
+                console.error('Failed to convert computed background:', url, e);
+              }
+            }
+          }
+        })
+      );
+
+      // 3. Convert all img elements
+      const images = element.querySelectorAll('img');
       await Promise.all(
         Array.from(images).map(async (img) => {
           const src = img.src;
-          if (src && (src.startsWith('http') || src.startsWith('//'))) {
+          if (src && isExternalUrl(src)) {
             originalSrcs.set(img, src);
             try {
               const base64 = await imageToBase64(src);
               img.src = base64;
+              // Wait for image to load
+              await new Promise<void>((resolve) => {
+                if (img.complete) {
+                  resolve();
+                } else {
+                  img.onload = () => resolve();
+                  img.onerror = () => resolve();
+                }
+              });
             } catch (e) {
               console.error('Failed to convert image:', src, e);
             }
@@ -127,42 +221,29 @@ export default function Home() {
         })
       );
 
-      // Also handle background images in style
-      const elementsWithBg = element.querySelectorAll('[style*="background-image"]');
-      const originalBgs: Map<Element, string> = new Map();
-
-      await Promise.all(
-        Array.from(elementsWithBg).map(async (el) => {
-          const htmlEl = el as HTMLElement;
-          const bgImage = htmlEl.style.backgroundImage;
-          if (bgImage && bgImage.includes('url(')) {
-            const match = bgImage.match(/url\(['"]?(.*?)['"]?\)/);
-            if (match && match[1] && (match[1].startsWith('http') || match[1].startsWith('//'))) {
-              originalBgs.set(el, bgImage);
-              try {
-                const base64 = await imageToBase64(match[1]);
-                htmlEl.style.backgroundImage = `url("${base64}")`;
-              } catch (e) {
-                console.error('Failed to convert background:', match[1], e);
-              }
-            }
-          }
-        })
-      );
-
-      // Small delay to ensure images are loaded
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Wait for all images to be fully loaded
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Render with html2canvas
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: null,
-        logging: false,
-        imageTimeout: 30000,
+        backgroundColor: selectedStyle.backgroundColor || '#000000',
+        logging: true, // Enable logging for debugging
+        imageTimeout: 60000,
         width: element.scrollWidth,
         height: element.scrollHeight,
+        onclone: (clonedDoc) => {
+          // Ensure cloned element has correct background
+          const clonedElement = clonedDoc.querySelector('[data-preview-container]') as HTMLElement;
+          if (clonedElement && convertedBackground) {
+            clonedElement.style.backgroundImage = `url("${convertedBackground}")`;
+            clonedElement.style.backgroundSize = '100% 100%';
+            clonedElement.style.backgroundPosition = 'center';
+            clonedElement.style.backgroundRepeat = 'no-repeat';
+          }
+        }
       });
 
       // Convert to data URL
@@ -175,7 +256,7 @@ export default function Home() {
         img.src = src;
       });
       originalBgs.forEach((bg, el) => {
-        (el as HTMLElement).style.backgroundImage = bg;
+        el.style.backgroundImage = bg;
       });
 
     } catch (error) {
@@ -240,11 +321,19 @@ export default function Home() {
 
           {/* Download Buttons */}
           <div className="flex flex-wrap items-center gap-4 mb-6 p-4 bg-gray-800 rounded-lg">
+            {/* Background conversion status */}
+            {isBackgroundConverting && (
+              <div className="flex items-center gap-2 text-yellow-400 text-sm">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Memuat background...
+              </div>
+            )}
+
             <button
               onClick={prepareImage}
-              disabled={isProcessing}
+              disabled={isProcessing || isBackgroundConverting}
               className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
-                isProcessing
+                isProcessing || isBackgroundConverting
                   ? 'bg-gray-600 cursor-not-allowed'
                   : downloadStatus === 'ready'
                   ? 'bg-green-600 hover:bg-green-700'
@@ -288,7 +377,7 @@ export default function Home() {
               </span>
             )}
 
-            {downloadStatus === 'idle' && (
+            {downloadStatus === 'idle' && !isBackgroundConverting && (
               <span className="text-gray-400 text-sm">
                 Klik "Prepare Image" untuk menyiapkan gambar
               </span>

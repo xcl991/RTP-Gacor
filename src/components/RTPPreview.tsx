@@ -81,6 +81,7 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
       {/* Preview Container */}
       <div
         ref={ref}
+        data-preview-container="true"
         className="relative overflow-hidden rounded-lg shadow-2xl"
         style={{
           width: '1200px',
