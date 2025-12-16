@@ -773,6 +773,19 @@ export const WEBSITES: WebsiteOption[] = [
       "https://ik.imagekit.io/4yddi8qaz/RTP/BG41.jpg",
       "https://ik.imagekit.io/4yddi8qaz/RTP/BG42.jpg"
     ]
+  },
+  {
+    id: "play77bet",
+    name: "PLAY77BET",
+    logo: "https://keren.sgp1.cdn.digitaloceanspaces.com/barang/PLAY77BET%20LOGO%20(1).png",
+    backgrounds: [
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/barang/BACKGROUND%20PLAY77BET%20%20copy%202.png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/barang/BACKGROUND%20PLAY77BET%20%20copy%203.png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/barang/BACKGROUND%20PLAY77BET%20%20copy%204.png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/barang/BACKGROUND%20PLAY77BET%20%20copy%205.png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/barang/BACKGROUND%20PLAY77BET%20%20copy.png",
+      "https://keren.sgp1.cdn.digitaloceanspaces.com/barang/BACKGROUND%20PLAY77BET_.png"
+    ]
   }
 ];
 
