@@ -144,11 +144,29 @@ export default function Home() {
     const finalPragmatic = [...selectedPragmatic].sort(() => Math.random() - 0.5);
 
     // === PG SOFT ===
-    // 1. Pilih 1 random gold tier game
+    // 1. Pilih 1 random gold tier game dengan WEIGHTED PROBABILITY
+    // Mahjong Ways & Mahjong Ways 2 = 70% chance
+    // 12 games lainnya = 30% chance
     const goldTierPgSoftGames = GAMES_PGSOFT.filter(game =>
       GOLD_TIER_PGSOFT.includes(game.name)
     );
-    const randomGoldPgSoft = goldTierPgSoftGames[Math.floor(Math.random() * goldTierPgSoftGames.length)];
+
+    let randomGoldPgSoft: Game;
+    const randomChance = Math.random() * 100; // 0-100
+
+    if (randomChance <= 70) {
+      // 70% chance: Pilih antara Mahjong Ways atau Mahjong Ways 2
+      const mahjongGames = goldTierPgSoftGames.filter(game =>
+        game.name === 'Mahjong Ways' || game.name === 'Mahjong Ways 2'
+      );
+      randomGoldPgSoft = mahjongGames[Math.floor(Math.random() * mahjongGames.length)];
+    } else {
+      // 30% chance: Pilih dari 12 gold tier lainnya
+      const otherGoldGames = goldTierPgSoftGames.filter(game =>
+        game.name !== 'Mahjong Ways' && game.name !== 'Mahjong Ways 2'
+      );
+      randomGoldPgSoft = otherGoldGames[Math.floor(Math.random() * otherGoldGames.length)];
+    }
 
     // 2. Shuffle remaining games untuk fill sisanya
     const remainingPgSoft = GAMES_PGSOFT.filter(game => game.name !== randomGoldPgSoft.name);
