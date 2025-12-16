@@ -15,11 +15,10 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameC
 
   return (
     <div
-      className="relative overflow-hidden w-full rounded-xl"
+      className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 w-[180px]"
       style={{
-        background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-        border: "2px solid " + primaryColor + "60",
-        boxShadow: "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
+        backgroundColor: 'rgb(5, 11, 20)',
+        border: '2px solid ' + primaryColor
       }}
     >
       {isHot && (
@@ -31,50 +30,62 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameC
         </div>
       )}
 
-      <div className="relative w-full aspect-square overflow-hidden">
+      <div className="relative w-full overflow-hidden" style={{ height: '180px', position: 'relative' }}>
         <img
+          alt={game.name + " game preview"}
+          className="w-full h-full object-contain bg-black/50"
           src={game.src}
-          alt={game.name}
-          className="w-full h-full object-contain bg-black/30"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27200%27%3E%3Crect width=%27200%27 height=%27200%27 fill=%27%23333%27/%3E%3Ctext x=%2750%%25%27 y=%2750%%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27white%27 font-family=%27Arial%27 font-size=%2714%27%3ENo Image%3C/text%3E%3C/svg%3E";
           }}
         />
         <div
-          className="absolute inset-0 pointer-events-none opacity-20"
+          className="absolute rounded-full font-bold text-sm shadow-lg"
           style={{
-            background: "radial-gradient(ellipse at center, " + primaryColor + "40, transparent 70%)"
-          }}
-        />
-        <div
-          className="absolute top-2 right-2 px-3 py-1 rounded-lg font-bold text-lg"
-          style={{
-            background: "rgba(0,0,0,0.8)",
-            border: "2px solid " + primaryColor,
-            color: primaryColor,
-            boxShadow: "0 0 15px " + primaryColor + "80",
-            textShadow: "0 0 10px " + primaryColor
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
+            backgroundColor: '#ffd700',
+            color: '#000',
+            boxShadow: '0 0 10px #ffd700',
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '45px',
+            height: '24px',
+            padding: '0 10px',
+            lineHeight: '1'
           }}
         >
           {rtp}%
         </div>
       </div>
-      <div className="p-3">
+      <div className="p-3" style={{ background: 'linear-gradient(rgba(5, 11, 20, 0.867), rgb(5, 11, 20))' }}>
         <h3
-          className="font-semibold text-sm text-center truncate mb-2"
-          style={{ color: primaryColor, textShadow: "0 0 5px " + primaryColor + "50" }}
+          data-game-title="true"
+          className="text-white font-bold text-sm text-center mb-2"
+          style={{
+            overflow: 'hidden',
+            height: '42px',
+            lineHeight: '14px',
+            whiteSpace: 'normal',
+            overflowWrap: 'break-word'
+          }}
         >
           {game.name}
         </h3>
-        <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.5)", border: "1px solid " + primaryColor + "30" }}>
+        <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
           <div
-            className="h-full rounded-full"
+            className="h-full transition-all duration-500 relative"
             style={{
-              width: rtp + "%",
-              background: "linear-gradient(90deg, " + primaryColor + ", " + secondaryColor + ")",
-              boxShadow: "0 0 10px " + primaryColor
+              width: rtp + '%',
+              background: 'linear-gradient(90deg, rgb(0, 240, 255), rgb(255, 215, 0))',
+              boxShadow: '0 0 10px rgb(255, 215, 0)'
             }}
-          />
+          >
+            <div className="absolute right-0 top-0 w-1 h-full bg-white animate-pulse"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -210,34 +221,44 @@ export default function GalaxyLayout2({
               }}
             />
           )}
-          <div className="relative z-10 flex items-stretch gap-4">
-            <div
-              className="w-32 rounded-xl flex items-center justify-center shrink-0"
-              style={{
-                background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-                border: "2px solid " + primaryColor + "60", boxShadow: "0 0 20px " + primaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
-              }}
-            >
+          <div className="relative z-10 flex flex-col items-center mb-4 p-4 rounded-lg">
+            <div className="flex items-center gap-4 mb-2">
               <img
                 src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgd6JBXF6-nJ7cAuYfPpx5tAckyV8KM5guWWeV-ZIHVCUluIE8As1b41nyGJE3FSsL__ImOQ3WOOmymZmvWzECCUR5Qagtg2OdKeatK2elfcSL4rZB-ARMUXCJyWuIY8j29KomqPboqtVqgXBGNyP5LKPgjlfNKkbhnXkgGrAaZ234uQBSauAMzOvQ7zSFq/w411-h274/Pragmatic-Play-logo.png"
-                className="h-16"
-                style={{ filter: "drop-shadow(0 0 10px " + primaryColor + "cc)" }}
-                alt="Pragmatic Play"
+                alt="PRAGMATIC PLAY provider logo"
+                className="h-20 object-contain"
+                style={{ transform: 'scale(1.3)' }}
               />
             </div>
-            <div className="flex-1">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {pragmaticGamesWithRTP.map((game, index) => (
-                  <GalaxyGameCard
-                    key={"pragmatic-" + index}
-                    game={game}
-                    rtp={game.rtp}
-                    primaryColor={primaryColor}
-                    secondaryColor={secondaryColor}
-                  />
-                ))}
-              </div>
+            <h2 className="text-2xl font-bold text-center" style={{ color: '#ffd700' }}>
+              PRAGMATIC PLAY
+            </h2>
+            <div
+              className="rounded-full text-sm font-bold mt-2"
+              style={{
+                backgroundColor: '#ffd700',
+                color: '#000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '28px',
+                padding: '0 16px',
+                lineHeight: '1'
+              }}
+            >
+              {pragmaticCount} Games
             </div>
+          </div>
+          <div className="relative z-10 flex flex-wrap justify-center gap-4">
+            {pragmaticGamesWithRTP.map((game, index) => (
+              <GalaxyGameCard
+                key={"pragmatic-" + index}
+                game={game}
+                rtp={game.rtp}
+                primaryColor={primaryColor}
+                secondaryColor={secondaryColor}
+              />
+            ))}
           </div>
         </div>
         {pragmaticTrik.enabled && (
@@ -282,34 +303,44 @@ export default function GalaxyLayout2({
               }}
             />
           )}
-          <div className="relative z-10 flex items-stretch gap-4">
-            <div
-              className="w-32 rounded-xl flex items-center justify-center shrink-0"
-              style={{
-                background: "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-                border: "2px solid " + secondaryColor + "60", boxShadow: "0 0 20px " + secondaryColor + "30, inset 0 0 30px rgba(0,0,0,0.5)"
-              }}
-            >
+          <div className="relative z-10 flex flex-col items-center mb-4 p-4 rounded-lg">
+            <div className="flex items-center gap-4 mb-2">
               <img
                 src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyRL8QUJ4ATALDgUz3f6Xzp8WeH_7vGwGW6KYIdsi3gC_F9HkYiTABnlxysMEFraHBkUUnc71XGjXybY7EQNqlN3-Ddz480rPdcV_CWGie6bwGds0LzTZ7JClIkg-t-nCTzMOa_qJJQV_ARXE_dbQajerSg7IyDHiDRYswEQdyRQWs6pTlcFbsTNMzbn07/w539-h303/663b3b87ed4e2097a300be14_pg-soft.png"
-                className="h-16"
-                style={{ filter: "drop-shadow(0 0 10px " + secondaryColor + "cc)" }}
-                alt="PG Soft"
+                alt="PG SOFT provider logo"
+                className="h-20 object-contain"
+                style={{ transform: 'scale(1.3)' }}
               />
             </div>
-            <div className="flex-1">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {pgSoftGamesWithRTP.map((game, index) => (
-                  <GalaxyGameCard
-                    key={"pgsoft-" + index}
-                    game={game}
-                    rtp={game.rtp}
-                    primaryColor={secondaryColor}
-                    secondaryColor={primaryColor}
-                  />
-                ))}
-              </div>
+            <h2 className="text-2xl font-bold text-center" style={{ color: '#00f0ff' }}>
+              PG SOFT
+            </h2>
+            <div
+              className="rounded-full text-sm font-bold mt-2"
+              style={{
+                backgroundColor: '#00f0ff',
+                color: '#000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '28px',
+                padding: '0 16px',
+                lineHeight: '1'
+              }}
+            >
+              {pgSoftCount} Games
             </div>
+          </div>
+          <div className="relative z-10 flex flex-wrap justify-center gap-4">
+            {pgSoftGamesWithRTP.map((game, index) => (
+              <GalaxyGameCard
+                key={"pgsoft-" + index}
+                game={game}
+                rtp={game.rtp}
+                primaryColor={secondaryColor}
+                secondaryColor={primaryColor}
+              />
+            ))}
           </div>
         </div>
         {pgSoftTrik.enabled && (
