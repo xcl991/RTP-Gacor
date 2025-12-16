@@ -48,7 +48,20 @@ function GameCard({ game, rtp, style }: GameCardProps) {
           background: `linear-gradient(to bottom, ${style.backgroundColor}dd, ${style.backgroundColor})`
         }}
       >
-        <h3 className="text-white font-bold text-sm text-center mb-2 line-clamp-2">
+        <h3
+          className="text-white font-bold text-sm text-center mb-2"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            minHeight: '2.5em',
+            maxHeight: '2.5em',
+            lineHeight: '1.25em',
+            wordBreak: 'break-word'
+          }}
+        >
           {game.name}
         </h3>
 

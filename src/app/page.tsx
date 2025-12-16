@@ -258,6 +258,35 @@ export default function Home() {
             htmlEl.style.textOverflow = 'ellipsis';
           });
 
+          // Fix line-clamp elements (game card titles)
+          const lineClampElements = clonedDoc.querySelectorAll('.line-clamp-2, [class*="line-clamp"]');
+          lineClampElements.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            htmlEl.style.display = '-webkit-box';
+            htmlEl.style.setProperty('-webkit-line-clamp', '2');
+            htmlEl.style.setProperty('-webkit-box-orient', 'vertical');
+            htmlEl.style.overflow = 'hidden';
+            htmlEl.style.textOverflow = 'ellipsis';
+            htmlEl.style.maxHeight = '2.5em';
+            htmlEl.style.lineHeight = '1.25em';
+          });
+
+          // Fix all h3 elements in game cards (explicit height control)
+          const gameCardTitles = clonedDoc.querySelectorAll('h3');
+          gameCardTitles.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            const computedStyle = window.getComputedStyle(htmlEl);
+            // Only fix if it's a game card title (has text-center class)
+            if (htmlEl.classList.contains('text-center') || computedStyle.textAlign === 'center') {
+              htmlEl.style.overflow = 'hidden';
+              htmlEl.style.textOverflow = 'ellipsis';
+              if (!htmlEl.style.maxHeight) {
+                htmlEl.style.maxHeight = '2.5em';
+                htmlEl.style.lineHeight = '1.25em';
+              }
+            }
+          });
+
           // Fix flex items that might wrap
           const flexItems = clonedDoc.querySelectorAll('.flex-1, [class*="flex-1"]');
           flexItems.forEach((el) => {
@@ -272,6 +301,16 @@ export default function Home() {
           monoElements.forEach((el) => {
             const htmlEl = el as HTMLElement;
             htmlEl.style.fontFamily = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace';
+          });
+
+          // Fix all text elements to prevent unexpected wrapping
+          const allText = clonedDoc.querySelectorAll('span, div, p, h1, h2, h3, h4, h5, h6');
+          allText.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            // Preserve explicit width constraints
+            if (htmlEl.style.width || htmlEl.style.maxWidth) {
+              htmlEl.style.overflow = 'hidden';
+            }
           });
         }
       });
