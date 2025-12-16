@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout, Search, Layers, ChevronRight, Sparkles, X, Check } from 'lucide-react';
+import { ChevronDown, Shuffle, Clock, Image, Palette, Hash, Layout, Search, Layers, ChevronRight, Sparkles, X, Check, ListChecks } from 'lucide-react';
 import { WEBSITES, RTP_STYLES, TIME_SLOTS, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS, BACKGROUND_CATEGORIES } from '@/data/games';
 import { WebsiteOption, RTPStyle, TimeSlot, LayoutOption, TextureOption, CardStyleOption, BackgroundCategory, TrikConfig, TrikItem } from '@/types';
 
@@ -9,6 +9,8 @@ interface HeaderProps {
   selectedWebsite: WebsiteOption;
   onWebsiteChange: (website: WebsiteOption) => void;
   onShuffleGames: () => void;
+  onOpenPragmaticSelector?: () => void;
+  onOpenPgSoftSelector?: () => void;
   selectedBackground: string;
   onBackgroundChange: (background: string) => void;
   selectedStyle: RTPStyle;
@@ -35,6 +37,8 @@ export default function Header({
   selectedWebsite,
   onWebsiteChange,
   onShuffleGames,
+  onOpenPragmaticSelector,
+  onOpenPgSoftSelector,
   selectedBackground,
   onBackgroundChange,
   selectedStyle,
@@ -221,6 +225,27 @@ export default function Header({
           <Shuffle className="w-4 h-4" />
           Acak Games
         </button>
+
+        {/* Manual Selection Buttons */}
+        {onOpenPragmaticSelector && (
+          <button
+            onClick={onOpenPragmaticSelector}
+            className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <ListChecks className="w-4 h-4" />
+            Pilih Pragmatic
+          </button>
+        )}
+
+        {onOpenPgSoftSelector && (
+          <button
+            onClick={onOpenPgSoftSelector}
+            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <ListChecks className="w-4 h-4" />
+            Pilih PG Soft
+          </button>
+        )}
 
         {/* Custom Time Input */}
         <div className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg">

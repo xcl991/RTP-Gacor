@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Download, Loader2, Camera, CheckCircle, Share2, Copy, AlertCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
+import GameSelectorModal from '@/components/GameSelectorModal';
 import { WEBSITES, RTP_STYLES, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
 import { WebsiteOption, RTPStyle, Game, LayoutOption, TextureOption, CardStyleOption, TrikConfig } from '@/types';
 
@@ -120,6 +121,10 @@ export default function Home() {
   const [selectedPragmaticGames, setSelectedPragmaticGames] = useState<Game[]>([]);
   const [selectedPgSoftGames, setSelectedPgSoftGames] = useState<Game[]>([]);
 
+  // Manual selection modal states
+  const [isPragmaticSelectorOpen, setIsPragmaticSelectorOpen] = useState(false);
+  const [isPgSoftSelectorOpen, setIsPgSoftSelectorOpen] = useState(false);
+
   // Generate random games saat pertama kali atau saat count berubah
   // WAJIB include 1 gold tier game setiap acak
   const generateRandomGames = useCallback(() => {
@@ -194,6 +199,15 @@ export default function Home() {
   const shuffleGames = () => {
     generateRandomGames();
   };
+
+  // Manual selection handlers
+  const handleApplyPragmaticSelection = useCallback((games: Game[]) => {
+    setSelectedPragmaticGames(games);
+  }, []);
+
+  const handleApplyPgSoftSelection = useCallback((games: Game[]) => {
+    setSelectedPgSoftGames(games);
+  }, []);
 
   // Reset cached image when settings change
   useEffect(() => {
@@ -459,6 +473,8 @@ export default function Home() {
           selectedWebsite={selectedWebsite}
           onWebsiteChange={setSelectedWebsite}
           onShuffleGames={shuffleGames}
+          onOpenPragmaticSelector={() => setIsPragmaticSelectorOpen(true)}
+          onOpenPgSoftSelector={() => setIsPgSoftSelectorOpen(true)}
           selectedBackground={selectedBackground}
           onBackgroundChange={setSelectedBackground}
           selectedStyle={selectedStyle}
@@ -730,6 +746,27 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Game Selection Modals */}
+      <GameSelectorModal
+        isOpen={isPragmaticSelectorOpen}
+        onClose={() => setIsPragmaticSelectorOpen(false)}
+        games={GAMES_PRAGMATIC}
+        selectedGames={selectedPragmaticGames}
+        onApply={handleApplyPragmaticSelection}
+        provider="Pragmatic Play"
+        maxSelection={pragmaticCount}
+      />
+
+      <GameSelectorModal
+        isOpen={isPgSoftSelectorOpen}
+        onClose={() => setIsPgSoftSelectorOpen(false)}
+        games={GAMES_PGSOFT}
+        selectedGames={selectedPgSoftGames}
+        onApply={handleApplyPgSoftSelection}
+        provider="PG Soft"
+        maxSelection={pgSoftCount}
+      />
     </div>
   );
 }
