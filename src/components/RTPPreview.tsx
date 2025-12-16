@@ -33,6 +33,7 @@ interface RTPPreviewProps {
   pragmaticTrik: TrikConfig;
   pgSoftTrik: TrikConfig;
   // Screenshot actions
+  onPrepareImage?: () => void;
   onDownload?: () => void;
   onCopy?: () => void;
   onShare?: () => void;
@@ -41,6 +42,7 @@ interface RTPPreviewProps {
     webShare: boolean;
   };
   isImageReady?: boolean;
+  isProcessing?: boolean;
 }
 
 const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
@@ -57,11 +59,13 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
   selectedCardStyle,
   pragmaticTrik,
   pgSoftTrik,
+  onPrepareImage,
   onDownload,
   onCopy,
   onShare,
   browserCapabilities,
-  isImageReady = false
+  isImageReady = false,
+  isProcessing = false
 }, ref) => {
   const getCurrentDate = () => {
     const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
@@ -146,8 +150,41 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
         {selectedLayout.id === 'casinospacestation' && <CasinoSpaceStationLayout {...layoutProps} />}
 
         {/* Floating Action Buttons */}
-        {isImageReady && (
-          <div className="absolute bottom-8 right-8 flex flex-col gap-3 z-50">
+        <div className="absolute bottom-8 right-8 flex flex-col gap-3 z-50">
+          {/* Screenshot Button - Always visible */}
+          {onPrepareImage && (
+            <button
+              onClick={onPrepareImage}
+              disabled={isProcessing}
+              className="group flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: isProcessing ? 'rgba(100, 100, 100, 0.3)' : 'rgba(59, 130, 246, 0.2)',
+                border: isProcessing ? '2px solid rgba(100, 100, 100, 0.5)' : '2px solid rgba(59, 130, 246, 0.6)',
+                boxShadow: isProcessing ? 'none' : '0 4px 12px rgba(59, 130, 246, 0.4)'
+              }}
+            >
+              {isProcessing ? (
+                <>
+                  <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="8" />
+                  </svg>
+                  <span className="text-white font-bold">Processing...</span>
+                </>
+              ) : (
+                <>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                  <span className="text-white font-bold">Screenshot</span>
+                </>
+              )}
+            </button>
+          )}
+
+          {/* Download/Copy/Share buttons - Only after image ready */}
+          {isImageReady && (
+            <>
             {/* Download Button */}
             {onDownload && (
               <button
@@ -203,8 +240,9 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
                 <span className="text-white font-bold">Share</span>
               </button>
             )}
-          </div>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
