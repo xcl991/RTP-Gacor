@@ -173,6 +173,8 @@ export default function Home() {
       // Store original values for restoration
       const originalSrcs: Map<HTMLImageElement, string> = new Map();
       const originalBgs: Map<HTMLElement, string> = new Map();
+      const originalTransforms: Map<HTMLElement, string> = new Map();
+      const originalZooms: Map<HTMLElement, string> = new Map();
 
       // Helper function to extract URL from background-image
       const extractBgUrl = (bgImage: string): string | null => {
@@ -185,6 +187,34 @@ export default function Home() {
         return url.startsWith('http') || url.startsWith('//');
       };
 
+      // ANTI-WARPING FIX #1: Reset transform and zoom on main element
+      const originalMainTransform = element.style.transform;
+      const originalMainZoom = element.style.zoom;
+      element.style.transform = 'none';
+      element.style.zoom = '1';
+      originalTransforms.set(element, originalMainTransform);
+      originalZooms.set(element, originalMainZoom);
+
+      // ANTI-WARPING FIX #2: Reset transform and zoom on ALL child elements
+      const allElements = element.querySelectorAll('*');
+      allElements.forEach((el) => {
+        const htmlEl = el as HTMLElement;
+        const computedStyle = window.getComputedStyle(htmlEl);
+
+        // Only reset if transform is not 'none'
+        if (computedStyle.transform && computedStyle.transform !== 'none') {
+          originalTransforms.set(htmlEl, htmlEl.style.transform || '');
+          htmlEl.style.transform = 'none';
+        }
+
+        // Reset zoom if it exists
+        const zoomValue = (htmlEl.style as { zoom?: string }).zoom;
+        if (zoomValue && zoomValue !== '1' && zoomValue !== '') {
+          originalZooms.set(htmlEl, zoomValue);
+          (htmlEl.style as { zoom: string }).zoom = '1';
+        }
+      });
+
       // 1. Set the main background to converted base64 version
       const originalMainBg = element.style.backgroundImage;
       if (convertedBackground) {
@@ -193,7 +223,6 @@ export default function Home() {
       }
 
       // 2. Find ALL elements with background images (including nested ones)
-      const allElements = element.querySelectorAll('*');
       await Promise.all(
         Array.from(allElements).map(async (el) => {
           const htmlEl = el as HTMLElement;
@@ -267,9 +296,12 @@ export default function Home() {
       // Wait for all images to be fully loaded
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Render with html2canvas
+      // ANTI-WARPING FIX #3: Use devicePixelRatio for better quality
+      const optimalScale = window.devicePixelRatio || 2;
+
+      // Render with html2canvas (MOST STABLE CONFIG from warping.txt)
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: optimalScale,
         useCORS: true,
         allowTaint: true,
         backgroundColor: selectedStyle.backgroundColor || '#000000',
@@ -277,7 +309,18 @@ export default function Home() {
         imageTimeout: 60000,
         width: element.scrollWidth,
         height: element.scrollHeight,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        removeContainer: true,
         onclone: (clonedDoc) => {
+          // ANTI-WARPING FIX #4: Reset transform and zoom in cloned doc
+          const allClonedElements = clonedDoc.querySelectorAll('*');
+          allClonedElements.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            htmlEl.style.transform = 'none';
+            (htmlEl.style as { zoom: string }).zoom = '1';
+          });
+
           // Ensure cloned element has correct background
           const clonedElement = clonedDoc.querySelector('[data-preview-container]') as HTMLElement;
           if (clonedElement && convertedBackground) {
@@ -348,6 +391,14 @@ export default function Home() {
       });
       originalBgs.forEach((bg, el) => {
         el.style.backgroundImage = bg;
+      });
+
+      // Restore original transforms and zooms (ANTI-WARPING)
+      originalTransforms.forEach((transform, el) => {
+        el.style.transform = transform;
+      });
+      originalZooms.forEach((zoom, el) => {
+        (el.style as { zoom: string }).zoom = zoom;
       });
 
     } catch (error) {
@@ -708,6 +759,27 @@ export default function Home() {
               <li>
                 <strong className="text-gray-400">Compatibility Check:</strong> Status kompatibilitas browser ditampilkan di bagian atas.
                 Jika fitur tidak tersedia, tombol akan di-disable.
+              </li>
+            </ul>
+          </div>
+
+          <div className="mt-4 p-4 bg-gray-900 rounded-lg border border-green-600">
+            <h3 className="text-lg font-semibold text-green-400 mb-2 flex items-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              Anti-Warping Technology
+            </h3>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li>
+                <strong className="text-green-400">Transform & Zoom Reset:</strong> Otomatis reset CSS transform dan zoom sebelum screenshot untuk mencegah distorsi.
+              </li>
+              <li>
+                <strong className="text-green-400">Device Pixel Ratio:</strong> Menggunakan devicePixelRatio untuk kualitas optimal sesuai layar device.
+              </li>
+              <li>
+                <strong className="text-green-400">Scroll Position Handling:</strong> Menangani scroll position untuk hasil screenshot yang konsisten.
+              </li>
+              <li>
+                <strong className="text-green-400">Font Loading Wait:</strong> Menunggu semua font selesai load sebelum capture untuk mencegah font fallback.
               </li>
             </ul>
           </div>
