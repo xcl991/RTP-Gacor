@@ -170,6 +170,40 @@ export default function Home() {
       // Get the preview element
       const element = previewRef.current;
 
+      // Store original image sources for restoration
+      const originalSrcs: Map<HTMLImageElement, string> = new Map();
+
+      // Helper to check if URL is external
+      const isExternalUrl = (url: string): boolean => {
+        return url && (url.startsWith('http') || url.startsWith('//'));
+      };
+
+      // CRITICAL FIX FOR CORS: Convert ALL external images to base64 before screenshot
+      const allImages = element.querySelectorAll('img');
+      await Promise.all(
+        Array.from(allImages).map(async (img) => {
+          const src = img.src;
+          if (isExternalUrl(src)) {
+            originalSrcs.set(img, src);
+            try {
+              const base64 = await imageToBase64(src);
+              img.src = base64;
+              // Wait for image to load
+              await new Promise<void>((resolve) => {
+                if (img.complete) {
+                  resolve();
+                } else {
+                  img.onload = () => resolve();
+                  img.onerror = () => resolve();
+                }
+              });
+            } catch (e) {
+              console.error('Failed to convert image:', src, e);
+            }
+          }
+        })
+      );
+
       // Wait for fonts to be ready
       if (document.fonts && document.fonts.ready) {
         await document.fonts.ready;
@@ -179,7 +213,6 @@ export default function Home() {
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // Use html-to-image to convert element to PNG
-      // This is MUCH simpler and more reliable than html2canvas
       const dataUrl = await toPng(element, {
         cacheBust: true,
         pixelRatio: window.devicePixelRatio || 2,
@@ -202,6 +235,11 @@ export default function Home() {
 
       setCachedImage(dataUrl);
       setDownloadStatus('ready');
+
+      // Restore original image sources
+      originalSrcs.forEach((src, img) => {
+        img.src = src;
+      });
 
     } catch (error) {
       console.error('Error preparing image:', error);
