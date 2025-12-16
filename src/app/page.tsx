@@ -164,395 +164,44 @@ export default function Home() {
     setDownloadStatus('processing');
 
     try {
-      // Dynamically import html2canvas
-      const html2canvas = (await import('html2canvas')).default;
+      // Dynamically import html-to-image
+      const { toPng } = await import('html-to-image');
 
       // Get the preview element
       const element = previewRef.current;
-
-      // Store original values for restoration
-      const originalSrcs: Map<HTMLImageElement, string> = new Map();
-      const originalBgs: Map<HTMLElement, string> = new Map();
-      const originalTransforms: Map<HTMLElement, string> = new Map();
-      const originalZooms: Map<HTMLElement, string> = new Map();
-
-      // Helper function to extract URL from background-image
-      const extractBgUrl = (bgImage: string): string | null => {
-        const match = bgImage.match(/url\(['"]?(.*?)['"]?\)/);
-        return match ? match[1] : null;
-      };
-
-      // Helper function to check if URL is external
-      const isExternalUrl = (url: string): boolean => {
-        return url.startsWith('http') || url.startsWith('//');
-      };
-
-      // ANTI-WARPING FIX #1: Reset transform and zoom on main element
-      const originalMainTransform = element.style.transform;
-      const originalMainZoom = element.style.zoom;
-      element.style.transform = 'none';
-      element.style.zoom = '1';
-      originalTransforms.set(element, originalMainTransform);
-      originalZooms.set(element, originalMainZoom);
-
-      // ANTI-WARPING FIX #2: Reset transform and zoom on ALL child elements
-      const allElements = element.querySelectorAll('*');
-      allElements.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        const computedStyle = window.getComputedStyle(htmlEl);
-
-        // Only reset if transform is not 'none'
-        if (computedStyle.transform && computedStyle.transform !== 'none') {
-          originalTransforms.set(htmlEl, htmlEl.style.transform || '');
-          htmlEl.style.transform = 'none';
-        }
-
-        // Reset zoom if it exists
-        const zoomValue = (htmlEl.style as { zoom?: string }).zoom;
-        if (zoomValue && zoomValue !== '1' && zoomValue !== '') {
-          originalZooms.set(htmlEl, zoomValue);
-          (htmlEl.style as { zoom: string }).zoom = '1';
-        }
-      });
-
-      // 1. Set the main background to converted base64 version
-      const originalMainBg = element.style.backgroundImage;
-      if (convertedBackground) {
-        element.style.backgroundImage = `url("${convertedBackground}")`;
-        originalBgs.set(element, originalMainBg);
-      }
-
-      // 2. Find ALL elements with background images (including nested ones)
-      await Promise.all(
-        Array.from(allElements).map(async (el) => {
-          const htmlEl = el as HTMLElement;
-
-          // Check inline style
-          const inlineBg = htmlEl.style.backgroundImage;
-          if (inlineBg && inlineBg !== 'none' && inlineBg !== '') {
-            const url = extractBgUrl(inlineBg);
-            if (url && isExternalUrl(url)) {
-              if (!originalBgs.has(htmlEl)) {
-                originalBgs.set(htmlEl, inlineBg);
-              }
-              try {
-                const base64 = await imageToBase64(url);
-                htmlEl.style.backgroundImage = `url("${base64}")`;
-              } catch (e) {
-                console.error('Failed to convert background:', url, e);
-              }
-            }
-          }
-
-          // Check computed style (for backgrounds set via CSS classes)
-          const computedStyle = window.getComputedStyle(htmlEl);
-          const computedBg = computedStyle.backgroundImage;
-          if (computedBg && computedBg !== 'none' && !originalBgs.has(htmlEl)) {
-            const url = extractBgUrl(computedBg);
-            if (url && isExternalUrl(url)) {
-              originalBgs.set(htmlEl, htmlEl.style.backgroundImage || '');
-              try {
-                const base64 = await imageToBase64(url);
-                htmlEl.style.backgroundImage = `url("${base64}")`;
-              } catch (e) {
-                console.error('Failed to convert computed background:', url, e);
-              }
-            }
-          }
-        })
-      );
-
-      // 3. Convert all img elements
-      const images = element.querySelectorAll('img');
-      await Promise.all(
-        Array.from(images).map(async (img) => {
-          const src = img.src;
-          if (src && isExternalUrl(src)) {
-            originalSrcs.set(img, src);
-            try {
-              const base64 = await imageToBase64(src);
-              img.src = base64;
-              // Wait for image to load
-              await new Promise<void>((resolve) => {
-                if (img.complete) {
-                  resolve();
-                } else {
-                  img.onload = () => resolve();
-                  img.onerror = () => resolve();
-                }
-              });
-            } catch (e) {
-              console.error('Failed to convert image:', src, e);
-            }
-          }
-        })
-      );
 
       // Wait for fonts to be ready
       if (document.fonts && document.fonts.ready) {
         await document.fonts.ready;
       }
 
-      // CRITICAL FIX: Validate all images before html2canvas
-      // This prevents "canvas with width/height 0" error
-      const allImages = element.querySelectorAll('img');
-      await Promise.all(
-        Array.from(allImages).map(async (img) => {
-          // Wait for image to load
-          if (!img.complete) {
-            await new Promise<void>((resolve) => {
-              img.onload = () => resolve();
-              img.onerror = () => resolve(); // Resolve even on error
-            });
-          }
+      // Wait a bit for any pending renders
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-          // Validate image dimensions
-          if (img.naturalWidth === 0 || img.naturalHeight === 0) {
-            console.warn('Invalid image dimension:', img.src);
-            // Set minimum dimension to prevent canvas error
-            img.style.minWidth = '1px';
-            img.style.minHeight = '1px';
-          }
-        })
-      );
-
-      // Validate all canvas elements
-      const allCanvases = element.querySelectorAll('canvas');
-      allCanvases.forEach((canvas) => {
-        if (canvas.width === 0 || canvas.height === 0) {
-          console.warn('Invalid canvas dimension');
-          canvas.width = 1;
-          canvas.height = 1;
-        }
-      });
-
-      // Wait for all images to be fully loaded
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // ANTI-WARPING FIX #3: Use devicePixelRatio for better quality
-      const optimalScale = window.devicePixelRatio || 2;
-
-      // Render with html2canvas (MOST STABLE CONFIG from warping.txt)
-      const canvas = await html2canvas(element, {
-        scale: optimalScale,
-        useCORS: true,
-        allowTaint: true,
+      // Use html-to-image to convert element to PNG
+      // This is MUCH simpler and more reliable than html2canvas
+      const dataUrl = await toPng(element, {
+        cacheBust: true,
+        pixelRatio: window.devicePixelRatio || 2,
         backgroundColor: selectedStyle.backgroundColor || '#000000',
-        logging: false,
-        imageTimeout: 60000,
-        width: element.scrollWidth,
-        height: element.scrollHeight,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        removeContainer: true,
-        // CRITICAL: Ignore elements that might cause canvas error
-        ignoreElements: (element) => {
+        filter: (node) => {
           // Ignore floating action buttons
-          if (element instanceof HTMLElement) {
-            if (element.getAttribute('data-screenshot-ignore') === 'true') {
-              return true;
-            }
-            // Also ignore if parent has data-screenshot-ignore
-            if (element.closest('[data-screenshot-ignore="true"]')) {
-              return true;
-            }
+          if (node instanceof HTMLElement) {
+            return node.getAttribute('data-screenshot-ignore') !== 'true';
           }
-
-          // Ignore any element with 0 dimensions
-          if (element instanceof HTMLElement) {
-            const rect = element.getBoundingClientRect();
-            if (rect.width === 0 || rect.height === 0) {
-              console.warn('Ignoring element with 0 dimension:', element);
-              return true;
-            }
-          }
-          // Ignore canvas elements with 0 dimension
-          if (element instanceof HTMLCanvasElement) {
-            if (element.width === 0 || element.height === 0) {
-              console.warn('Ignoring canvas with 0 dimension');
-              return true;
-            }
-          }
-          return false;
+          return true;
         },
-        onclone: (clonedDoc) => {
-          // ANTI-WARPING FIX #4: Reset transform and zoom in cloned doc
-          const allClonedElements = clonedDoc.querySelectorAll('*');
-          allClonedElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            htmlEl.style.transform = 'none';
-            (htmlEl.style as { zoom: string }).zoom = '1';
-          });
-
-          // Ensure cloned element has correct background
-          const clonedElement = clonedDoc.querySelector('[data-preview-container]') as HTMLElement;
-          if (clonedElement && convertedBackground) {
-            clonedElement.style.backgroundImage = `url("${convertedBackground}")`;
-            clonedElement.style.backgroundSize = '100% 100%';
-            clonedElement.style.backgroundPosition = 'center';
-            clonedElement.style.backgroundRepeat = 'no-repeat';
-          }
-
-          // Fix text overflow issues - apply explicit styles to all truncate elements
-          const allTextElements = clonedDoc.querySelectorAll('.truncate, [class*="truncate"]');
-          allTextElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            htmlEl.style.whiteSpace = 'nowrap';
-            htmlEl.style.overflow = 'hidden';
-            htmlEl.style.textOverflow = 'ellipsis';
-          });
-
-          // Fix game title h3 elements only (with data-game-title attribute)
-          const gameTitles = clonedDoc.querySelectorAll('[data-game-title="true"]');
-          gameTitles.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            htmlEl.style.overflow = 'hidden';
-            htmlEl.style.height = '42px';
-            htmlEl.style.lineHeight = '14px';
-            htmlEl.style.whiteSpace = 'normal';
-            htmlEl.style.wordWrap = 'break-word';
-          });
-
-          // Fix absolute positioned elements (RTP badges, etc)
-          const absoluteElements = clonedDoc.querySelectorAll('.absolute');
-          absoluteElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            const computedStyle = window.getComputedStyle(htmlEl);
-            // Ensure absolute positioning is preserved
-            if (computedStyle.position === 'absolute') {
-              htmlEl.style.position = 'absolute';
-              // Preserve top/right positioning for badges
-              if (computedStyle.top) htmlEl.style.top = computedStyle.top;
-              if (computedStyle.right) htmlEl.style.right = computedStyle.right;
-            }
-          });
-
-          // Fix relative containers
-          const relativeElements = clonedDoc.querySelectorAll('.relative');
-          relativeElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            htmlEl.style.position = 'relative';
-          });
-
-          // Ensure monospace font is applied
-          const monoElements = clonedDoc.querySelectorAll('.font-mono, [class*="font-mono"]');
-          monoElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            htmlEl.style.fontFamily = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace';
-          });
-
-          // CRITICAL FIX: Validate and fix images in cloned document
-          // This prevents "canvas with width/height 0" error
-          const clonedImages = clonedDoc.querySelectorAll('img');
-          clonedImages.forEach((img) => {
-            const htmlImg = img as HTMLImageElement;
-            // Validate image dimensions
-            if (htmlImg.naturalWidth === 0 || htmlImg.naturalHeight === 0) {
-              console.warn('Cloned image has 0 dimension, fixing:', htmlImg.src);
-              // Set minimum dimension
-              htmlImg.style.minWidth = '1px';
-              htmlImg.style.minHeight = '1px';
-              htmlImg.style.width = '100px'; // Fallback dimension
-              htmlImg.style.height = '100px';
-            }
-          });
-
-          // CRITICAL FIX: Validate canvas elements in cloned document
-          const clonedCanvases = clonedDoc.querySelectorAll('canvas');
-          clonedCanvases.forEach((canvas) => {
-            const htmlCanvas = canvas as HTMLCanvasElement;
-            if (htmlCanvas.width === 0 || htmlCanvas.height === 0) {
-              console.warn('Cloned canvas has 0 dimension, fixing');
-              htmlCanvas.width = 1;
-              htmlCanvas.height = 1;
-            }
-          });
-
-          // CRITICAL FIX: Preserve CSS Grid and Flexbox layouts
-          // This prevents layout collapse in screenshot
-          const allElements = clonedDoc.querySelectorAll('*');
-          allElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            const computedStyle = window.getComputedStyle(htmlEl);
-
-            // Preserve FLEX layout (critical for game grid)
-            if (computedStyle.display === 'flex' || computedStyle.display === 'inline-flex') {
-              htmlEl.style.display = computedStyle.display;
-              htmlEl.style.flexDirection = computedStyle.flexDirection;
-              htmlEl.style.flexWrap = computedStyle.flexWrap;
-              htmlEl.style.justifyContent = computedStyle.justifyContent;
-              htmlEl.style.alignItems = computedStyle.alignItems;
-              htmlEl.style.gap = computedStyle.gap;
-            }
-
-            // Preserve GRID layout
-            if (computedStyle.display === 'grid' || computedStyle.display === 'inline-grid') {
-              htmlEl.style.display = computedStyle.display;
-              htmlEl.style.gridTemplateColumns = computedStyle.gridTemplateColumns;
-              htmlEl.style.gridTemplateRows = computedStyle.gridTemplateRows;
-              htmlEl.style.gap = computedStyle.gap;
-            }
-
-            // Force game card dimensions (prevent collapse)
-            // Game cards typically have fixed width
-            if (htmlEl.classList.contains('w-[180px]') ||
-                computedStyle.width === '180px' ||
-                (htmlEl.parentElement && htmlEl.parentElement.classList.contains('gap-4'))) {
-              const width = computedStyle.width;
-              const height = computedStyle.height;
-              if (width && width !== 'auto') htmlEl.style.width = width;
-              if (height && height !== 'auto') htmlEl.style.height = height;
-              htmlEl.style.minWidth = width || '180px';
-              htmlEl.style.flexShrink = '0'; // Prevent flex shrinking
-            }
-          });
-
-          // ANTI-WARPING FIX #5: Force perfect centering for ALL badge-like elements
-          // This ensures RTP badges and "X Games" badges are perfectly centered
-          const allDivs = clonedDoc.querySelectorAll('div');
-          allDivs.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            const computedStyle = window.getComputedStyle(htmlEl);
-
-            // Special handling for rounded-full elements (likely badges)
-            if (computedStyle.borderRadius &&
-                (computedStyle.borderRadius === '9999px' ||
-                 parseFloat(computedStyle.borderRadius) > 50)) {
-              // Don't override if already set above
-              if (!htmlEl.style.display) {
-                htmlEl.style.display = 'inline-flex';
-                htmlEl.style.alignItems = 'center';
-                htmlEl.style.justifyContent = 'center';
-              }
-              htmlEl.style.lineHeight = '1';
-              htmlEl.style.textAlign = 'center';
-              htmlEl.style.verticalAlign = 'middle';
-              htmlEl.style.whiteSpace = 'nowrap';
-            }
-          });
+        style: {
+          // Ensure background is applied
+          backgroundImage: convertedBackground ? `url("${convertedBackground}")` : undefined,
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }
       });
 
-      // Convert to data URL
-      const dataUrl = canvas.toDataURL('image/png', 1.0);
       setCachedImage(dataUrl);
       setDownloadStatus('ready');
-
-      // Restore original sources
-      originalSrcs.forEach((src, img) => {
-        img.src = src;
-      });
-      originalBgs.forEach((bg, el) => {
-        el.style.backgroundImage = bg;
-      });
-
-      // Restore original transforms and zooms (ANTI-WARPING)
-      originalTransforms.forEach((transform, el) => {
-        el.style.transform = transform;
-      });
-      originalZooms.forEach((zoom, el) => {
-        (el.style as { zoom: string }).zoom = zoom;
-      });
 
     } catch (error) {
       console.error('Error preparing image:', error);
@@ -561,13 +210,7 @@ export default function Home() {
       // Provide more helpful error message
       let errorMessage = 'Gagal memproses gambar. ';
       if (error instanceof Error) {
-        if (error.message.includes('canvas') && error.message.includes('width or height of 0')) {
-          errorMessage += 'Ada elemen dengan ukuran 0. Coba refresh halaman dan tunggu semua gambar selesai load sebelum klik "Prepare Image".';
-        } else if (error.message.includes('tainted')) {
-          errorMessage += 'Ada gambar dari domain external yang tidak bisa diakses. Coba pilih background lain.';
-        } else {
-          errorMessage += error.message;
-        }
+        errorMessage += error.message;
       } else {
         errorMessage += 'Silakan coba lagi.';
       }
