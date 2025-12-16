@@ -457,6 +457,45 @@ export default function Home() {
             }
           });
 
+          // CRITICAL FIX: Preserve CSS Grid and Flexbox layouts
+          // This prevents layout collapse in screenshot
+          const allElements = clonedDoc.querySelectorAll('*');
+          allElements.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            const computedStyle = window.getComputedStyle(htmlEl);
+
+            // Preserve FLEX layout (critical for game grid)
+            if (computedStyle.display === 'flex' || computedStyle.display === 'inline-flex') {
+              htmlEl.style.display = computedStyle.display;
+              htmlEl.style.flexDirection = computedStyle.flexDirection;
+              htmlEl.style.flexWrap = computedStyle.flexWrap;
+              htmlEl.style.justifyContent = computedStyle.justifyContent;
+              htmlEl.style.alignItems = computedStyle.alignItems;
+              htmlEl.style.gap = computedStyle.gap;
+            }
+
+            // Preserve GRID layout
+            if (computedStyle.display === 'grid' || computedStyle.display === 'inline-grid') {
+              htmlEl.style.display = computedStyle.display;
+              htmlEl.style.gridTemplateColumns = computedStyle.gridTemplateColumns;
+              htmlEl.style.gridTemplateRows = computedStyle.gridTemplateRows;
+              htmlEl.style.gap = computedStyle.gap;
+            }
+
+            // Force game card dimensions (prevent collapse)
+            // Game cards typically have fixed width
+            if (htmlEl.classList.contains('w-[180px]') ||
+                computedStyle.width === '180px' ||
+                (htmlEl.parentElement && htmlEl.parentElement.classList.contains('gap-4'))) {
+              const width = computedStyle.width;
+              const height = computedStyle.height;
+              if (width && width !== 'auto') htmlEl.style.width = width;
+              if (height && height !== 'auto') htmlEl.style.height = height;
+              htmlEl.style.minWidth = width || '180px';
+              htmlEl.style.flexShrink = '0'; // Prevent flex shrinking
+            }
+          });
+
           // ANTI-WARPING FIX #5: Force perfect centering for ALL badge-like elements
           // This ensures RTP badges and "X Games" badges are perfectly centered
           const allDivs = clonedDoc.querySelectorAll('div');
@@ -464,28 +503,16 @@ export default function Home() {
             const htmlEl = el as HTMLElement;
             const computedStyle = window.getComputedStyle(htmlEl);
 
-            // If element has display: flex or inline-flex with center alignment
-            if ((computedStyle.display === 'flex' || computedStyle.display === 'inline-flex') &&
-                (computedStyle.alignItems === 'center' || computedStyle.justifyContent === 'center')) {
-              // Force flexbox properties to ensure they work
-              htmlEl.style.display = computedStyle.display;
-              htmlEl.style.alignItems = 'center';
-              htmlEl.style.justifyContent = 'center';
-              htmlEl.style.lineHeight = '1';
-              htmlEl.style.verticalAlign = 'middle';
-
-              // Reset any potential conflicting properties
-              htmlEl.style.textAlign = 'center';
-              htmlEl.style.boxSizing = 'border-box';
-            }
-
             // Special handling for rounded-full elements (likely badges)
             if (computedStyle.borderRadius &&
                 (computedStyle.borderRadius === '9999px' ||
                  parseFloat(computedStyle.borderRadius) > 50)) {
-              htmlEl.style.display = 'inline-flex';
-              htmlEl.style.alignItems = 'center';
-              htmlEl.style.justifyContent = 'center';
+              // Don't override if already set above
+              if (!htmlEl.style.display) {
+                htmlEl.style.display = 'inline-flex';
+                htmlEl.style.alignItems = 'center';
+                htmlEl.style.justifyContent = 'center';
+              }
               htmlEl.style.lineHeight = '1';
               htmlEl.style.textAlign = 'center';
               htmlEl.style.verticalAlign = 'middle';

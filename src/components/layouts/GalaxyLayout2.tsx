@@ -15,10 +15,14 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor }: GalaxyGameC
 
   return (
     <div
-      className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 w-[180px]"
+      className="relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
       style={{
+        width: '180px',
+        minWidth: '180px',
+        maxWidth: '180px',
         backgroundColor: 'rgb(5, 11, 20)',
-        border: '2px solid ' + primaryColor
+        border: '2px solid ' + primaryColor,
+        flexShrink: 0
       }}
     >
       {isHot && (
@@ -270,7 +274,16 @@ export default function GalaxyLayout2({
               </div>
             </div>
           </div>
-          <div className="relative z-10 flex flex-wrap justify-center gap-4">
+          <div
+            className="relative z-10"
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '16px',
+              width: '100%'
+            }}
+          >
             {pragmaticGamesWithRTP.map((game, index) => (
               <GalaxyGameCard
                 key={"pragmatic-" + index}
@@ -363,7 +376,16 @@ export default function GalaxyLayout2({
               </div>
             </div>
           </div>
-          <div className="relative z-10 flex flex-wrap justify-center gap-4">
+          <div
+            className="relative z-10"
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '16px',
+              width: '100%'
+            }}
+          >
             {pgSoftGamesWithRTP.map((game, index) => (
               <GalaxyGameCard
                 key={"pgsoft-" + index}
