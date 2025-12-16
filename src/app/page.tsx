@@ -293,6 +293,39 @@ export default function Home() {
         await document.fonts.ready;
       }
 
+      // CRITICAL FIX: Validate all images before html2canvas
+      // This prevents "canvas with width/height 0" error
+      const allImages = element.querySelectorAll('img');
+      await Promise.all(
+        Array.from(allImages).map(async (img) => {
+          // Wait for image to load
+          if (!img.complete) {
+            await new Promise<void>((resolve) => {
+              img.onload = () => resolve();
+              img.onerror = () => resolve(); // Resolve even on error
+            });
+          }
+
+          // Validate image dimensions
+          if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+            console.warn('Invalid image dimension:', img.src);
+            // Set minimum dimension to prevent canvas error
+            img.style.minWidth = '1px';
+            img.style.minHeight = '1px';
+          }
+        })
+      );
+
+      // Validate all canvas elements
+      const allCanvases = element.querySelectorAll('canvas');
+      allCanvases.forEach((canvas) => {
+        if (canvas.width === 0 || canvas.height === 0) {
+          console.warn('Invalid canvas dimension');
+          canvas.width = 1;
+          canvas.height = 1;
+        }
+      });
+
       // Wait for all images to be fully loaded
       await new Promise(resolve => setTimeout(resolve, 1500));
 
@@ -312,6 +345,25 @@ export default function Home() {
         scrollX: 0,
         scrollY: -window.scrollY,
         removeContainer: true,
+        // CRITICAL: Ignore elements that might cause canvas error
+        ignoreElements: (element) => {
+          // Ignore any element with 0 dimensions
+          if (element instanceof HTMLElement) {
+            const rect = element.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) {
+              console.warn('Ignoring element with 0 dimension:', element);
+              return true;
+            }
+          }
+          // Ignore canvas elements with 0 dimension
+          if (element instanceof HTMLCanvasElement) {
+            if (element.width === 0 || element.height === 0) {
+              console.warn('Ignoring canvas with 0 dimension');
+              return true;
+            }
+          }
+          return false;
+        },
         onclone: (clonedDoc) => {
           // ANTI-WARPING FIX #4: Reset transform and zoom in cloned doc
           const allClonedElements = clonedDoc.querySelectorAll('*');
@@ -378,6 +430,33 @@ export default function Home() {
             htmlEl.style.fontFamily = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace';
           });
 
+          // CRITICAL FIX: Validate and fix images in cloned document
+          // This prevents "canvas with width/height 0" error
+          const clonedImages = clonedDoc.querySelectorAll('img');
+          clonedImages.forEach((img) => {
+            const htmlImg = img as HTMLImageElement;
+            // Validate image dimensions
+            if (htmlImg.naturalWidth === 0 || htmlImg.naturalHeight === 0) {
+              console.warn('Cloned image has 0 dimension, fixing:', htmlImg.src);
+              // Set minimum dimension
+              htmlImg.style.minWidth = '1px';
+              htmlImg.style.minHeight = '1px';
+              htmlImg.style.width = '100px'; // Fallback dimension
+              htmlImg.style.height = '100px';
+            }
+          });
+
+          // CRITICAL FIX: Validate canvas elements in cloned document
+          const clonedCanvases = clonedDoc.querySelectorAll('canvas');
+          clonedCanvases.forEach((canvas) => {
+            const htmlCanvas = canvas as HTMLCanvasElement;
+            if (htmlCanvas.width === 0 || htmlCanvas.height === 0) {
+              console.warn('Cloned canvas has 0 dimension, fixing');
+              htmlCanvas.width = 1;
+              htmlCanvas.height = 1;
+            }
+          });
+
           // ANTI-WARPING FIX #5: Force perfect centering for ALL badge-like elements
           // This ensures RTP badges and "X Games" badges are perfectly centered
           const allDivs = clonedDoc.querySelectorAll('div');
@@ -440,7 +519,22 @@ export default function Home() {
     } catch (error) {
       console.error('Error preparing image:', error);
       setDownloadStatus('idle');
-      alert('Gagal memproses gambar. Silakan coba lagi.');
+
+      // Provide more helpful error message
+      let errorMessage = 'Gagal memproses gambar. ';
+      if (error instanceof Error) {
+        if (error.message.includes('canvas') && error.message.includes('width or height of 0')) {
+          errorMessage += 'Ada elemen dengan ukuran 0. Coba refresh halaman dan tunggu semua gambar selesai load sebelum klik "Prepare Image".';
+        } else if (error.message.includes('tainted')) {
+          errorMessage += 'Ada gambar dari domain external yang tidak bisa diakses. Coba pilih background lain.';
+        } else {
+          errorMessage += error.message;
+        }
+      } else {
+        errorMessage += 'Silakan coba lagi.';
+      }
+
+      showNotification('error', errorMessage);
     } finally {
       setIsProcessing(false);
     }
