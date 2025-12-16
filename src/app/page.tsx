@@ -347,6 +347,17 @@ export default function Home() {
         removeContainer: true,
         // CRITICAL: Ignore elements that might cause canvas error
         ignoreElements: (element) => {
+          // Ignore floating action buttons
+          if (element instanceof HTMLElement) {
+            if (element.getAttribute('data-screenshot-ignore') === 'true') {
+              return true;
+            }
+            // Also ignore if parent has data-screenshot-ignore
+            if (element.closest('[data-screenshot-ignore="true"]')) {
+              return true;
+            }
+          }
+
           // Ignore any element with 0 dimensions
           if (element instanceof HTMLElement) {
             const rect = element.getBoundingClientRect();

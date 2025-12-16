@@ -150,7 +150,10 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
         {selectedLayout.id === 'casinospacestation' && <CasinoSpaceStationLayout {...layoutProps} />}
 
         {/* Floating Action Buttons */}
-        <div className="absolute bottom-8 right-8 flex flex-col gap-3 z-50">
+        <div
+          data-screenshot-ignore="true"
+          className="absolute bottom-8 right-8 flex flex-col gap-3 z-50"
+        >
           {/* Screenshot Button - Always visible */}
           {onPrepareImage && (
             <button
