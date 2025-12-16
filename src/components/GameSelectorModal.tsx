@@ -42,11 +42,11 @@ export default function GameSelectorModal({
   );
 
   const toggleGame = (game: Game) => {
-    const isSelected = tempSelected.some(g => g.id === game.id);
+    const isSelected = tempSelected.some(g => g.name === game.name);
 
     if (isSelected) {
       // Remove game
-      setTempSelected(tempSelected.filter(g => g.id !== game.id));
+      setTempSelected(tempSelected.filter(g => g.name !== game.name));
     } else {
       // Add game (check max limit)
       if (tempSelected.length < maxSelection) {
@@ -132,12 +132,12 @@ export default function GameSelectorModal({
           {filteredGames.length > 0 ? (
             <div className="grid grid-cols-1 gap-2">
               {filteredGames.map((game) => {
-                const isSelected = tempSelected.some(g => g.id === game.id);
+                const isSelected = tempSelected.some(g => g.name === game.name);
                 const isDisabled = !isSelected && tempSelected.length >= maxSelection;
 
                 return (
                   <button
-                    key={game.id}
+                    key={game.name}
                     onClick={() => toggleGame(game)}
                     disabled={isDisabled}
                     className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all text-left ${
@@ -161,7 +161,7 @@ export default function GameSelectorModal({
 
                     {/* Game Image */}
                     <img
-                      src={game.image}
+                      src={game.src}
                       alt={game.name}
                       className="w-12 h-12 object-cover rounded"
                     />
