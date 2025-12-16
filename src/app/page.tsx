@@ -267,8 +267,9 @@ export default function Home() {
             htmlEl.style.setProperty('-webkit-box-orient', 'vertical');
             htmlEl.style.overflow = 'hidden';
             htmlEl.style.textOverflow = 'ellipsis';
-            htmlEl.style.maxHeight = '2.5em';
-            htmlEl.style.lineHeight = '1.25em';
+            htmlEl.style.maxHeight = '28px';
+            htmlEl.style.lineHeight = '14px';
+            htmlEl.style.fontSize = '11px';
           });
 
           // Fix all h3 elements in game cards (explicit height control)
@@ -280,10 +281,14 @@ export default function Home() {
             if (htmlEl.classList.contains('text-center') || computedStyle.textAlign === 'center') {
               htmlEl.style.overflow = 'hidden';
               htmlEl.style.textOverflow = 'ellipsis';
-              if (!htmlEl.style.maxHeight) {
-                htmlEl.style.maxHeight = '2.5em';
-                htmlEl.style.lineHeight = '1.25em';
-              }
+              htmlEl.style.display = '-webkit-box';
+              htmlEl.style.setProperty('-webkit-line-clamp', '2');
+              htmlEl.style.setProperty('-webkit-box-orient', 'vertical');
+              htmlEl.style.maxHeight = '28px';
+              htmlEl.style.minHeight = '28px';
+              htmlEl.style.lineHeight = '14px';
+              htmlEl.style.fontSize = '11px';
+              htmlEl.style.wordBreak = 'break-word';
             }
           });
 
