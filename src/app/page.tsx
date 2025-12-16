@@ -861,18 +861,47 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Cached Image Preview */}
+          {/* Screenshot Result */}
           {cachedImage && (
-            <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-              <h3 className="text-lg font-semibold text-green-400 mb-3">Preview Hasil:</h3>
-              <div className="max-h-96 overflow-auto rounded-lg border border-gray-700">
-                <img src={cachedImage} alt="Preview" className="w-full" />
+            <div className="mb-6 p-6 bg-gray-800 rounded-lg border-2 border-green-500">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold text-green-400">✓ Screenshot Berhasil!</h3>
+                <div className="flex gap-3">
+                  <button
+                    onClick={downloadImage}
+                    className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold transition-all"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download
+                  </button>
+                  {browserCapabilities.clipboard && (
+                    <button
+                      onClick={copyToClipboard}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-all"
+                    >
+                      <Copy className="w-5 h-5" />
+                      Copy
+                    </button>
+                  )}
+                  {browserCapabilities.webShare && (
+                    <button
+                      onClick={shareImage}
+                      className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-all"
+                    >
+                      <Share2 className="w-5 h-5" />
+                      Share
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="overflow-auto rounded-lg border-2 border-gray-700 bg-black">
+                <img src={cachedImage} alt="Screenshot Result" className="w-full" />
               </div>
             </div>
           )}
 
-          {/* RTP Preview */}
-          <div className="overflow-x-auto">
+          {/* RTP Preview - Hidden, only for screenshot */}
+          <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
             <RTPPreview
               ref={previewRef}
               selectedWebsite={selectedWebsite}
