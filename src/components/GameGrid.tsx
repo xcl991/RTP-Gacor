@@ -18,7 +18,10 @@ function GameCard({ game, rtp, style }: GameCardProps) {
       }}
     >
       {/* Game Image */}
-      <div className="relative w-full aspect-square overflow-hidden">
+      <div
+        className="relative w-full overflow-hidden"
+        style={{ height: '180px', position: 'relative' }}
+      >
         <img
           src={game.src}
           alt={`${game.name} game preview`}
@@ -30,11 +33,15 @@ function GameCard({ game, rtp, style }: GameCardProps) {
 
         {/* RTP Badge */}
         <div
-          className="absolute top-2 right-2 px-3 py-1 rounded-full font-bold text-sm shadow-lg"
+          className="absolute px-3 py-1 rounded-full font-bold text-sm shadow-lg"
           style={{
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
             backgroundColor: style.secondaryColor,
             color: '#000',
-            boxShadow: `0 0 10px ${style.secondaryColor}`
+            boxShadow: `0 0 10px ${style.secondaryColor}`,
+            zIndex: 10
           }}
         >
           {rtp}%
