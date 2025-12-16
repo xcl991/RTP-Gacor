@@ -258,7 +258,7 @@ export default function Home() {
             htmlEl.style.textOverflow = 'ellipsis';
           });
 
-          // Fix all h3 elements in game cards (explicit height control - no webkit-line-clamp)
+          // Fix all h3 elements in game cards (taller height for longer text)
           const gameCardTitles = clonedDoc.querySelectorAll('h3');
           gameCardTitles.forEach((el) => {
             const htmlEl = el as HTMLElement;
@@ -266,12 +266,10 @@ export default function Home() {
             // Only fix if it's a game card title (has text-center class)
             if (htmlEl.classList.contains('text-center') || computedStyle.textAlign === 'center') {
               htmlEl.style.overflow = 'hidden';
-              htmlEl.style.height = '26px';
-              htmlEl.style.lineHeight = '13px';
-              htmlEl.style.fontSize = '10px';
+              htmlEl.style.height = '42px';
+              htmlEl.style.lineHeight = '14px';
               htmlEl.style.whiteSpace = 'normal';
               htmlEl.style.wordWrap = 'break-word';
-              htmlEl.style.textOverflow = 'ellipsis';
             }
           });
 
