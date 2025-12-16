@@ -258,28 +258,36 @@ export default function Home() {
             htmlEl.style.textOverflow = 'ellipsis';
           });
 
-          // Fix all h3 elements in game cards (taller height for longer text)
-          const gameCardTitles = clonedDoc.querySelectorAll('h3');
-          gameCardTitles.forEach((el) => {
+          // Fix game title h3 elements only (with data-game-title attribute)
+          const gameTitles = clonedDoc.querySelectorAll('[data-game-title="true"]');
+          gameTitles.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            htmlEl.style.overflow = 'hidden';
+            htmlEl.style.height = '42px';
+            htmlEl.style.lineHeight = '14px';
+            htmlEl.style.whiteSpace = 'normal';
+            htmlEl.style.wordWrap = 'break-word';
+          });
+
+          // Fix absolute positioned elements (RTP badges, etc)
+          const absoluteElements = clonedDoc.querySelectorAll('.absolute');
+          absoluteElements.forEach((el) => {
             const htmlEl = el as HTMLElement;
             const computedStyle = window.getComputedStyle(htmlEl);
-            // Only fix if it's a game card title (has text-center class)
-            if (htmlEl.classList.contains('text-center') || computedStyle.textAlign === 'center') {
-              htmlEl.style.overflow = 'hidden';
-              htmlEl.style.height = '42px';
-              htmlEl.style.lineHeight = '14px';
-              htmlEl.style.whiteSpace = 'normal';
-              htmlEl.style.wordWrap = 'break-word';
+            // Ensure absolute positioning is preserved
+            if (computedStyle.position === 'absolute') {
+              htmlEl.style.position = 'absolute';
+              // Preserve top/right positioning for badges
+              if (computedStyle.top) htmlEl.style.top = computedStyle.top;
+              if (computedStyle.right) htmlEl.style.right = computedStyle.right;
             }
           });
 
-          // Fix flex items that might wrap
-          const flexItems = clonedDoc.querySelectorAll('.flex-1, [class*="flex-1"]');
-          flexItems.forEach((el) => {
+          // Fix relative containers
+          const relativeElements = clonedDoc.querySelectorAll('.relative');
+          relativeElements.forEach((el) => {
             const htmlEl = el as HTMLElement;
-            if (htmlEl.style.minWidth === '0px' || htmlEl.classList.contains('min-w-0')) {
-              htmlEl.style.overflow = 'hidden';
-            }
+            htmlEl.style.position = 'relative';
           });
 
           // Ensure monospace font is applied
@@ -287,16 +295,6 @@ export default function Home() {
           monoElements.forEach((el) => {
             const htmlEl = el as HTMLElement;
             htmlEl.style.fontFamily = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace';
-          });
-
-          // Fix all text elements to prevent unexpected wrapping
-          const allText = clonedDoc.querySelectorAll('span, div, p, h1, h2, h3, h4, h5, h6');
-          allText.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            // Preserve explicit width constraints
-            if (htmlEl.style.width || htmlEl.style.maxWidth) {
-              htmlEl.style.overflow = 'hidden';
-            }
           });
         }
       });

@@ -56,6 +56,7 @@ function GameCard({ game, rtp, style }: GameCardProps) {
         }}
       >
         <h3
+          data-game-title="true"
           className="text-white font-bold text-sm text-center mb-2"
           style={{
             overflow: 'hidden',
