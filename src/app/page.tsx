@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Download, Loader2, Camera, CheckCircle } from 'lucide-react';
+import { Download, Loader2, Camera, CheckCircle, Share2, Copy, AlertCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import RTPPreview from '@/components/RTPPreview';
 import { WEBSITES, RTP_STYLES, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
@@ -23,6 +23,44 @@ export default function Home() {
   const [cachedImage, setCachedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [downloadStatus, setDownloadStatus] = useState<'idle' | 'processing' | 'ready'>('idle');
+
+  // Modern screenshot features - Browser capabilities
+  const [browserCapabilities, setBrowserCapabilities] = useState({
+    clipboard: false,
+    webShare: false,
+    html2canvas: true, // assumed available via npm
+  });
+
+  // Notification state
+  const [notification, setNotification] = useState<{
+    type: 'success' | 'error' | 'info';
+    message: string;
+  } | null>(null);
+
+  // Check browser capabilities on mount
+  useEffect(() => {
+    const checkCapabilities = () => {
+      // Check Clipboard API support
+      const hasClipboard = !!(navigator.clipboard && navigator.clipboard.write);
+
+      // Check Web Share API support
+      const hasWebShare = !!(navigator.share && navigator.canShare);
+
+      setBrowserCapabilities({
+        clipboard: hasClipboard,
+        webShare: hasWebShare,
+        html2canvas: true,
+      });
+    };
+
+    checkCapabilities();
+  }, []);
+
+  // Show notification helper
+  const showNotification = (type: 'success' | 'error' | 'info', message: string) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   // States untuk Trik Modal
   const defaultTrikConfig: TrikConfig = {
@@ -329,10 +367,103 @@ export default function Home() {
     link.download = `RTP-${selectedWebsite.name}-${new Date().toISOString().split('T')[0]}.png`;
     link.href = cachedImage;
     link.click();
+    showNotification('success', 'Gambar berhasil didownload!');
+  };
+
+  // Modern Feature: Copy to Clipboard
+  const copyToClipboard = async () => {
+    if (!cachedImage) {
+      showNotification('error', 'Silakan prepare image terlebih dahulu');
+      return;
+    }
+
+    if (!browserCapabilities.clipboard) {
+      showNotification('error', 'Browser Anda tidak mendukung fitur copy to clipboard');
+      return;
+    }
+
+    try {
+      // Convert base64 to blob
+      const response = await fetch(cachedImage);
+      const blob = await response.blob();
+
+      // Create ClipboardItem
+      const clipboardItem = new ClipboardItem({ 'image/png': blob });
+
+      // Write to clipboard
+      await navigator.clipboard.write([clipboardItem]);
+      showNotification('success', 'Gambar berhasil dicopy ke clipboard!');
+    } catch (error) {
+      console.error('Error copying to clipboard:', error);
+      showNotification('error', 'Gagal copy ke clipboard. Coba gunakan download.');
+    }
+  };
+
+  // Modern Feature: Share via Web Share API
+  const shareImage = async () => {
+    if (!cachedImage) {
+      showNotification('error', 'Silakan prepare image terlebih dahulu');
+      return;
+    }
+
+    if (!browserCapabilities.webShare) {
+      showNotification('error', 'Browser Anda tidak mendukung fitur share');
+      return;
+    }
+
+    try {
+      // Convert base64 to blob
+      const response = await fetch(cachedImage);
+      const blob = await response.blob();
+
+      // Create File object
+      const file = new File(
+        [blob],
+        `RTP-${selectedWebsite.name}-${new Date().toISOString().split('T')[0]}.png`,
+        { type: 'image/png' }
+      );
+
+      // Check if we can share this
+      if (navigator.canShare && !navigator.canShare({ files: [file] })) {
+        showNotification('error', 'Browser Anda tidak dapat share file gambar');
+        return;
+      }
+
+      // Share the file
+      await navigator.share({
+        title: `RTP Live ${selectedWebsite.name}`,
+        text: `RTP Live untuk ${selectedWebsite.name}`,
+        files: [file],
+      });
+
+      showNotification('success', 'Gambar berhasil dishare!');
+    } catch (error: unknown) {
+      // Check if user cancelled the share
+      if (error instanceof Error && error.name === 'AbortError') {
+        showNotification('info', 'Share dibatalkan');
+      } else {
+        console.error('Error sharing:', error);
+        showNotification('error', 'Gagal share gambar. Coba gunakan download.');
+      }
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4">
+      {/* Notification Toast */}
+      {notification && (
+        <div className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-2xl animate-slide-in-right flex items-center gap-3 max-w-md ${
+          notification.type === 'success' ? 'bg-green-600 text-white' :
+          notification.type === 'error' ? 'bg-red-600 text-white' :
+          'bg-blue-600 text-white'
+        }`}>
+          {notification.type === 'success' && <CheckCircle className="w-5 h-5 flex-shrink-0" />}
+          {notification.type === 'error' && <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+          {notification.type === 'info' && <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+          <span className="font-medium">{notification.message}</span>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <Header
@@ -372,69 +503,143 @@ export default function Home() {
             </p>
           </div>
 
+          {/* Browser Compatibility Status */}
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              Status Kompatibilitas Browser
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${browserCapabilities.html2canvas ? 'bg-green-500' : 'bg-red-500'}`} />
+                <span className="text-gray-300">Screenshot (html2canvas): </span>
+                <span className={browserCapabilities.html2canvas ? 'text-green-400' : 'text-red-400'}>
+                  {browserCapabilities.html2canvas ? '✓ Supported' : '✗ Not Supported'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${browserCapabilities.clipboard ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                <span className="text-gray-300">Copy to Clipboard: </span>
+                <span className={browserCapabilities.clipboard ? 'text-green-400' : 'text-yellow-400'}>
+                  {browserCapabilities.clipboard ? '✓ Supported' : '✗ Not Supported'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${browserCapabilities.webShare ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                <span className="text-gray-300">Web Share API: </span>
+                <span className={browserCapabilities.webShare ? 'text-green-400' : 'text-yellow-400'}>
+                  {browserCapabilities.webShare ? '✓ Supported' : '✗ Not Supported'}
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* Download Buttons */}
-          <div className="flex flex-wrap items-center gap-4 mb-6 p-4 bg-gray-800 rounded-lg">
+          <div className="mb-6 p-4 bg-gray-800 rounded-lg">
             {/* Background conversion status */}
             {isBackgroundConverting && (
-              <div className="flex items-center gap-2 text-yellow-400 text-sm">
+              <div className="flex items-center gap-2 text-yellow-400 text-sm mb-4">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Memuat background...
               </div>
             )}
 
-            <button
-              onClick={prepareImage}
-              disabled={isProcessing || isBackgroundConverting}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
-                isProcessing || isBackgroundConverting
-                  ? 'bg-gray-600 cursor-not-allowed'
-                  : downloadStatus === 'ready'
-                  ? 'bg-green-600 hover:bg-green-700'
-                  : 'bg-blue-600 hover:bg-blue-700'
-              } text-white`}
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Memproses...
-                </>
-              ) : downloadStatus === 'ready' ? (
-                <>
-                  <CheckCircle className="w-5 h-5" />
-                  Siap Download
-                </>
-              ) : (
-                <>
-                  <Camera className="w-5 h-5" />
-                  Prepare Image
-                </>
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <button
+                onClick={prepareImage}
+                disabled={isProcessing || isBackgroundConverting}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  isProcessing || isBackgroundConverting
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : downloadStatus === 'ready'
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-blue-600 hover:bg-blue-700'
+                } text-white`}
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Memproses...
+                  </>
+                ) : downloadStatus === 'ready' ? (
+                  <>
+                    <CheckCircle className="w-5 h-5" />
+                    Siap Download
+                  </>
+                ) : (
+                  <>
+                    <Camera className="w-5 h-5" />
+                    Prepare Image
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={downloadImage}
+                disabled={!cachedImage || isProcessing}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  cachedImage && !isProcessing
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                <Download className="w-5 h-5" />
+                Download PNG
+              </button>
+
+              {/* Modern Screenshot Features */}
+              <button
+                onClick={copyToClipboard}
+                disabled={!cachedImage || isProcessing || !browserCapabilities.clipboard}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  cachedImage && !isProcessing && browserCapabilities.clipboard
+                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                    : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                }`}
+                title={!browserCapabilities.clipboard ? 'Browser tidak mendukung copy to clipboard' : 'Copy gambar ke clipboard'}
+              >
+                <Copy className="w-5 h-5" />
+                Copy to Clipboard
+              </button>
+
+              <button
+                onClick={shareImage}
+                disabled={!cachedImage || isProcessing || !browserCapabilities.webShare}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  cachedImage && !isProcessing && browserCapabilities.webShare
+                    ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                    : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                }`}
+                title={!browserCapabilities.webShare ? 'Browser tidak mendukung Web Share API' : 'Share gambar via Web Share API'}
+              >
+                <Share2 className="w-5 h-5" />
+                Share
+              </button>
+            </div>
+
+            {/* Status Messages */}
+            <div className="space-y-2">
+              {downloadStatus === 'ready' && (
+                <div className="text-green-400 text-sm flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  Gambar siap didownload, dicopy, atau dishare
+                </div>
               )}
-            </button>
 
-            <button
-              onClick={downloadImage}
-              disabled={!cachedImage || isProcessing}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
-                cachedImage && !isProcessing
-                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                  : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-              }`}
-            >
-              <Download className="w-5 h-5" />
-              Download PNG
-            </button>
+              {downloadStatus === 'idle' && !isBackgroundConverting && (
+                <div className="text-gray-400 text-sm">
+                  Klik "Prepare Image" untuk menyiapkan gambar
+                </div>
+              )}
 
-            {downloadStatus === 'ready' && (
-              <span className="text-green-400 text-sm">
-                ✓ Gambar siap didownload
-              </span>
-            )}
-
-            {downloadStatus === 'idle' && !isBackgroundConverting && (
-              <span className="text-gray-400 text-sm">
-                Klik "Prepare Image" untuk menyiapkan gambar
-              </span>
-            )}
+              {!browserCapabilities.clipboard && !browserCapabilities.webShare && (
+                <div className="text-yellow-400 text-sm flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" />
+                  Beberapa fitur modern tidak tersedia di browser Anda. Gunakan browser terbaru untuk pengalaman terbaik.
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Cached Image Preview */}
@@ -477,8 +682,35 @@ export default function Home() {
             <li>Klik tombol "Acak" untuk mengacak games, jam, background, atau style</li>
             <li>Preview RTP akan otomatis diperbarui sesuai pilihan Anda</li>
             <li>Klik <strong className="text-blue-400">"Prepare Image"</strong> untuk memproses gambar</li>
-            <li>Setelah siap, klik <strong className="text-emerald-400">"Download PNG"</strong> untuk mengunduh</li>
+            <li>Setelah siap, pilih salah satu opsi:
+              <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+                <li><strong className="text-emerald-400">"Download PNG"</strong> - Download gambar ke komputer</li>
+                <li><strong className="text-purple-400">"Copy to Clipboard"</strong> - Copy gambar ke clipboard untuk paste langsung</li>
+                <li><strong className="text-indigo-400">"Share"</strong> - Share gambar via aplikasi lain (mobile/desktop)</li>
+              </ul>
+            </li>
           </ol>
+
+          <div className="mt-6 p-4 bg-gray-900 rounded-lg border border-yellow-600">
+            <h3 className="text-lg font-semibold text-yellow-400 mb-2 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" />
+              Fitur Modern Screenshot
+            </h3>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li>
+                <strong className="text-purple-400">Copy to Clipboard:</strong> Fitur ini menggunakan Clipboard API modern.
+                Didukung di Chrome 76+, Edge 79+, Safari 13.1+, Firefox 90+
+              </li>
+              <li>
+                <strong className="text-indigo-400">Web Share API:</strong> Fitur ini memungkinkan sharing langsung ke aplikasi lain.
+                Didukung di Chrome 89+, Edge 93+, Safari 12.1+ (iOS/macOS)
+              </li>
+              <li>
+                <strong className="text-gray-400">Compatibility Check:</strong> Status kompatibilitas browser ditampilkan di bagian atas.
+                Jika fitur tidak tersedia, tombol akan di-disable.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
