@@ -52,8 +52,16 @@ function CyberpunkGameCard({ game, rtp, index, primaryColor, secondaryColor }: C
         </div>
 
         {/* Game Info */}
-        <div className="flex-1 min-w-0">
-          <div className="font-mono text-sm truncate text-white mb-1">
+        <div className="flex-1 min-w-0" style={{ overflow: 'hidden' }}>
+          <div
+            className="font-mono text-sm text-white mb-1"
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '100%'
+            }}
+          >
             {game.name}
           </div>
           <div className="flex items-center gap-2">

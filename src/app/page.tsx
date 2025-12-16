@@ -221,6 +221,11 @@ export default function Home() {
         })
       );
 
+      // Wait for fonts to be ready
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+
       // Wait for all images to be fully loaded
       await new Promise(resolve => setTimeout(resolve, 1500));
 
@@ -230,7 +235,7 @@ export default function Home() {
         useCORS: true,
         allowTaint: true,
         backgroundColor: selectedStyle.backgroundColor || '#000000',
-        logging: true, // Enable logging for debugging
+        logging: false,
         imageTimeout: 60000,
         width: element.scrollWidth,
         height: element.scrollHeight,
@@ -243,6 +248,31 @@ export default function Home() {
             clonedElement.style.backgroundPosition = 'center';
             clonedElement.style.backgroundRepeat = 'no-repeat';
           }
+
+          // Fix text overflow issues - apply explicit styles to all truncate elements
+          const allTextElements = clonedDoc.querySelectorAll('.truncate, [class*="truncate"]');
+          allTextElements.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            htmlEl.style.whiteSpace = 'nowrap';
+            htmlEl.style.overflow = 'hidden';
+            htmlEl.style.textOverflow = 'ellipsis';
+          });
+
+          // Fix flex items that might wrap
+          const flexItems = clonedDoc.querySelectorAll('.flex-1, [class*="flex-1"]');
+          flexItems.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            if (htmlEl.style.minWidth === '0px' || htmlEl.classList.contains('min-w-0')) {
+              htmlEl.style.overflow = 'hidden';
+            }
+          });
+
+          // Ensure monospace font is applied
+          const monoElements = clonedDoc.querySelectorAll('.font-mono, [class*="font-mono"]');
+          monoElements.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            htmlEl.style.fontFamily = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace';
+          });
         }
       });
 
