@@ -33,7 +33,7 @@ function GameCard({ game, rtp, style }: GameCardProps) {
 
         {/* RTP Badge */}
         <div
-          className="absolute px-3 py-1 rounded-full font-bold text-sm shadow-lg"
+          className="absolute rounded-full font-bold text-sm shadow-lg"
           style={{
             position: 'absolute',
             top: '8px',
@@ -41,7 +41,13 @@ function GameCard({ game, rtp, style }: GameCardProps) {
             backgroundColor: style.secondaryColor,
             color: '#000',
             boxShadow: `0 0 10px ${style.secondaryColor}`,
-            zIndex: 10
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '45px',
+            height: '24px',
+            padding: '0 10px'
           }}
         >
           {rtp}%
@@ -158,10 +164,15 @@ export default function GameGrid({
           {title}
         </h2>
         <div
-          className="px-4 py-2 rounded-full text-sm font-bold mt-2"
+          className="rounded-full text-sm font-bold mt-2"
           style={{
             backgroundColor: providerColor,
-            color: '#000'
+            color: '#000',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '28px',
+            padding: '0 16px'
           }}
         >
           {gameCount} Games
