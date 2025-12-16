@@ -766,35 +766,6 @@ export default function Home() {
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 mb-4">
               <button
-                onClick={prepareImage}
-                disabled={isProcessing || isBackgroundConverting}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
-                  isProcessing || isBackgroundConverting
-                    ? 'bg-gray-600 cursor-not-allowed'
-                    : downloadStatus === 'ready'
-                    ? 'bg-green-600 hover:bg-green-700'
-                    : 'bg-blue-600 hover:bg-blue-700'
-                } text-white`}
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Memproses...
-                  </>
-                ) : downloadStatus === 'ready' ? (
-                  <>
-                    <CheckCircle className="w-5 h-5" />
-                    Siap Download
-                  </>
-                ) : (
-                  <>
-                    <Camera className="w-5 h-5" />
-                    Prepare Image
-                  </>
-                )}
-              </button>
-
-              <button
                 onClick={downloadImage}
                 disabled={!cachedImage || isProcessing}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
@@ -846,9 +817,9 @@ export default function Home() {
                 </div>
               )}
 
-              {downloadStatus === 'idle' && !isBackgroundConverting && (
-                <div className="text-gray-400 text-sm">
-                  Klik "Prepare Image" untuk menyiapkan gambar
+              {!cachedImage && !isBackgroundConverting && (
+                <div className="text-cyan-400 text-sm font-semibold">
+                  👇 Klik tombol "Screenshot" di pojok kanan bawah preview untuk mulai
                 </div>
               )}
 
@@ -900,8 +871,8 @@ export default function Home() {
             </div>
           )}
 
-          {/* RTP Preview - Hidden, only for screenshot */}
-          <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+          {/* RTP Preview */}
+          <div className="overflow-x-auto">
             <RTPPreview
               ref={previewRef}
               selectedWebsite={selectedWebsite}
@@ -936,12 +907,12 @@ export default function Home() {
             <li>Atur jumlah game yang ingin ditampilkan untuk Pragmatic Play dan PG Soft</li>
             <li>Klik tombol "Acak" untuk mengacak games, jam, background, atau style</li>
             <li>Preview RTP akan otomatis diperbarui sesuai pilihan Anda</li>
-            <li>Klik <strong className="text-blue-400">"Prepare Image"</strong> untuk memproses gambar</li>
-            <li>Setelah siap, pilih salah satu opsi:
+            <li>Klik tombol <strong className="text-cyan-400">"Screenshot"</strong> (camera icon) di pojok kanan bawah preview</li>
+            <li>Tunggu proses screenshot selesai, lalu pilih:
               <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
-                <li><strong className="text-emerald-400">"Download PNG"</strong> - Download gambar ke komputer</li>
-                <li><strong className="text-purple-400">"Copy to Clipboard"</strong> - Copy gambar ke clipboard untuk paste langsung</li>
-                <li><strong className="text-indigo-400">"Share"</strong> - Share gambar via aplikasi lain (mobile/desktop)</li>
+                <li><strong className="text-emerald-400">"Download"</strong> - Download gambar PNG ke komputer</li>
+                <li><strong className="text-purple-400">"Copy"</strong> - Copy gambar ke clipboard untuk paste langsung</li>
+                <li><strong className="text-indigo-400">"Share"</strong> - Share gambar via aplikasi lain</li>
               </ul>
             </li>
           </ol>
