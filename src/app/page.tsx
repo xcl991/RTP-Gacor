@@ -7,6 +7,39 @@ import RTPPreview from '@/components/RTPPreview';
 import { WEBSITES, RTP_STYLES, BACKGROUND_CATEGORIES, GAMES_PRAGMATIC, GAMES_PGSOFT, LAYOUT_OPTIONS, TEXTURE_OPTIONS, CARD_STYLE_OPTIONS } from '@/data/games';
 import { WebsiteOption, RTPStyle, Game, LayoutOption, TextureOption, CardStyleOption, TrikConfig } from '@/types';
 
+// Gold Tier Games - WAJIB muncul minimal 1 setiap acak
+const GOLD_TIER_PRAGMATIC = [
+  'Gates of Olympus',
+  'Gates of Olympus Super Scatter',
+  'Gates of Olympus 1000',
+  'Mahjong Wins 3 - Black Scatter',
+  'Starlight Princess',
+  'Starlight Princess 1000',
+  'Starlight Princess Super Scatter',
+  'Sweet Bonanza 1000',
+  'Sweet Bonanza',
+  'Sweet Bonanza Super Scatter',
+  'Gates of Gatot Kaca 1000',
+  'Gates of Gatot Kaca Super Scatter',
+];
+
+const GOLD_TIER_PGSOFT = [
+  'Mahjong Ways',
+  'Mahjong Ways 2',
+  'Lucky Neko',
+  'Wild Bounty Showdown',
+  'Wild Bandito',
+  'Treasures of Aztec',
+  'Ways of the Qilin',
+  'Gemstones Gold',
+  'Asgardian Rising',
+  'Lucky Piggy',
+  'Mafia Mayhem',
+  'Cai Shen Wins',
+  'Phoenix Rises',
+  'The Great Icescape',
+];
+
 export default function Home() {
   const [selectedWebsite, setSelectedWebsite] = useState<WebsiteOption>(WEBSITES[0]);
   const [selectedStyle, setSelectedStyle] = useState<RTPStyle>(RTP_STYLES[0]);
@@ -88,12 +121,50 @@ export default function Home() {
   const [selectedPgSoftGames, setSelectedPgSoftGames] = useState<Game[]>([]);
 
   // Generate random games saat pertama kali atau saat count berubah
+  // WAJIB include 1 gold tier game setiap acak
   const generateRandomGames = useCallback(() => {
-    const shuffledPragmatic = [...GAMES_PRAGMATIC].sort(() => Math.random() - 0.5);
-    const shuffledPgSoft = [...GAMES_PGSOFT].sort(() => Math.random() - 0.5);
+    // === PRAGMATIC PLAY ===
+    // 1. Pilih 1 random gold tier game
+    const goldTierPragmaticGames = GAMES_PRAGMATIC.filter(game =>
+      GOLD_TIER_PRAGMATIC.includes(game.name)
+    );
+    const randomGoldPragmatic = goldTierPragmaticGames[Math.floor(Math.random() * goldTierPragmaticGames.length)];
 
-    setSelectedPragmaticGames(shuffledPragmatic.slice(0, pragmaticCount));
-    setSelectedPgSoftGames(shuffledPgSoft.slice(0, pgSoftCount));
+    // 2. Shuffle remaining games untuk fill sisanya
+    const remainingPragmatic = GAMES_PRAGMATIC.filter(game => game.name !== randomGoldPragmatic.name);
+    const shuffledRemainingPragmatic = [...remainingPragmatic].sort(() => Math.random() - 0.5);
+
+    // 3. Combine: 1 gold tier + (pragmaticCount - 1) random games
+    const selectedPragmatic = [
+      randomGoldPragmatic,
+      ...shuffledRemainingPragmatic.slice(0, pragmaticCount - 1)
+    ];
+
+    // 4. Shuffle final placement (acak urutan)
+    const finalPragmatic = [...selectedPragmatic].sort(() => Math.random() - 0.5);
+
+    // === PG SOFT ===
+    // 1. Pilih 1 random gold tier game
+    const goldTierPgSoftGames = GAMES_PGSOFT.filter(game =>
+      GOLD_TIER_PGSOFT.includes(game.name)
+    );
+    const randomGoldPgSoft = goldTierPgSoftGames[Math.floor(Math.random() * goldTierPgSoftGames.length)];
+
+    // 2. Shuffle remaining games untuk fill sisanya
+    const remainingPgSoft = GAMES_PGSOFT.filter(game => game.name !== randomGoldPgSoft.name);
+    const shuffledRemainingPgSoft = [...remainingPgSoft].sort(() => Math.random() - 0.5);
+
+    // 3. Combine: 1 gold tier + (pgSoftCount - 1) random games
+    const selectedPgSoft = [
+      randomGoldPgSoft,
+      ...shuffledRemainingPgSoft.slice(0, pgSoftCount - 1)
+    ];
+
+    // 4. Shuffle final placement (acak urutan)
+    const finalPgSoft = [...selectedPgSoft].sort(() => Math.random() - 0.5);
+
+    setSelectedPragmaticGames(finalPragmatic);
+    setSelectedPgSoftGames(finalPgSoft);
   }, [pragmaticCount, pgSoftCount]);
 
   // Generate games saat pertama kali load
