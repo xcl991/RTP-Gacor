@@ -1119,6 +1119,8 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
   }
 ];
 
+// Total: 17 layout options available
+
 export const TEXTURE_OPTIONS: TextureOption[] = [
   {
     id: "none",
