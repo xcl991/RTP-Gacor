@@ -815,9 +815,9 @@ export const WEBSITES: WebsiteOption[] = [
   {
     id: "mandala77",
     name: "MANDALA77",
-    logo: "https://ik.imagekit.io/1vumvaap1/DUTASLOT.png",
+    logo: "https://ik.imagekit.io/1vumvaap1/MANDALA.png",
     backgrounds: [
-      "https://ik.imagekit.io/1vumvaap1/Dutaslot%20BACKGROUND%20RTP.jpg"
+      "https://ik.imagekit.io/1vumvaap1/Mandala%20%20BG.jpg"
     ]
   },
   {
