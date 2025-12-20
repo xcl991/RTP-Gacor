@@ -1040,7 +1040,7 @@ export const RTP_STYLES: RTPStyle[] = [
   }
 ];
 
-// Layout Options - Updated with Medieval Kingdom
+// Layout Options - Updated with Medieval Kingdom (v0.1.1)
 export const LAYOUT_OPTIONS: LayoutOption[] = [
   {
     id: "default",
