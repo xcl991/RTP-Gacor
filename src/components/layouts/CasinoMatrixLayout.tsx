@@ -157,7 +157,7 @@ export default function CasinoMatrixLayout({
             className="h-20 mx-auto mb-1.5"
             style={{ filter: `drop-shadow(0 0 15px ${primaryColor}80)`, transform: 'scale(1.3)' }}
           />
-          <h1 className="text-xl font-bold mb-1.5 tracking-wider" style={{ color: primaryColor, textShadow: `0 0 20px ${primaryColor}` }}>
+          <h1 className="text-3xl font-bold mb-1.5 tracking-wider" style={{ color: primaryColor, textShadow: `0 0 20px ${primaryColor}` }}>
             {customHeaderText}
           </h1>
           <div className="text-xl opacity-80" style={{ color: secondaryColor }}>
