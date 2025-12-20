@@ -4,6 +4,7 @@ import { TrikConfig, CardStyleOption } from '@/types';
 import { Check, X } from 'lucide-react';
 
 // Font size configurations
+// Default: All trick gacor text values set to 20px
 const fontSizeConfig = {
   xs: {
     title: 'text-sm',
@@ -13,8 +14,8 @@ const fontSizeConfig = {
     value: 'text-sm',
     badge: 'text-[10px]',
     itemName: 'text-[11px]',
-    itemValue: 10,
-    customText: 10,
+    itemValue: 20,
+    customText: 20,
     iconSize: 12,
     padding: 'p-2',
     headerPadding: 'px-2 py-1',
@@ -29,8 +30,8 @@ const fontSizeConfig = {
     value: 'text-lg',
     badge: 'text-[14px]',
     itemName: 'text-[15px]',
-    itemValue: 14,
-    customText: 17,
+    itemValue: 20,
+    customText: 20,
     iconSize: 20,
     padding: 'p-2',
     headerPadding: 'px-2 py-1',
@@ -45,8 +46,8 @@ const fontSizeConfig = {
     value: 'text-base',
     badge: 'text-sm',
     itemName: 'text-sm',
-    itemValue: 12,
-    customText: 12,
+    itemValue: 20,
+    customText: 20,
     iconSize: 16,
     padding: 'p-3',
     headerPadding: 'px-3 py-2',
@@ -61,8 +62,8 @@ const fontSizeConfig = {
     value: 'text-lg',
     badge: 'text-base',
     itemName: 'text-base',
-    itemValue: 13,
-    customText: 13,
+    itemValue: 20,
+    customText: 20,
     iconSize: 18,
     padding: 'p-4',
     headerPadding: 'px-4 py-2.5',
@@ -77,8 +78,8 @@ const fontSizeConfig = {
     value: 'text-xl',
     badge: 'text-lg',
     itemName: 'text-lg',
-    itemValue: 14,
-    customText: 14,
+    itemValue: 20,
+    customText: 20,
     iconSize: 20,
     padding: 'p-5',
     headerPadding: 'px-5 py-3',
