@@ -340,6 +340,20 @@ export default function Home() {
     isLocked: true
   });
 
+  // Casino Medieval Kingdom Layout - Medieval fantasy sizing
+  const [casinoMedievalLayoutSize, setCasinoMedievalLayoutSize] = useState<DefaultLayoutSizeConfig>({
+    gameCardSize: 52,  // Slightly larger for ornamental details
+    gameGap: 12,  // More spacing for royal aesthetic
+    trikPanelWidth: 380,  // Wider for medieval tricks panel
+    providerLogoHeight: 32,
+    providerTitleSize: 16,
+    providerBadgeSize: 4,
+    modalPadding: 4,
+    headerPadding: 5,
+    headerMarginBottom: 2,
+    isLocked: true
+  });
+
   // Casino Luxury Layout - Semua diperkecil 50%
   const [casinoLuxuryLayoutSize, setCasinoLuxuryLayoutSize] = useState<DefaultLayoutSizeConfig>({
     gameCardSize: 58,  // 115px - 50% = 57.5 ≈ 58px
@@ -493,6 +507,8 @@ export default function Home() {
         return casinoQuantumLayoutSize;
       case 'casinospacestation':
         return casinoSpaceStationLayoutSize;
+      case 'casinomedieval':
+        return casinoMedievalLayoutSize;
       default:
         return defaultLayoutSize;
     }
@@ -530,6 +546,8 @@ export default function Home() {
         return setCasinoQuantumLayoutSize;
       case 'casinospacestation':
         return setCasinoSpaceStationLayoutSize;
+      case 'casinomedieval':
+        return setCasinoMedievalLayoutSize;
       default:
         return setDefaultLayoutSize;
     }
