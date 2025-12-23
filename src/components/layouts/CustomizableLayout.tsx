@@ -119,13 +119,13 @@ function AdaptiveTrikPanel({
   const itemCount = trik.trikItems?.length || 0;
   const totalRows = itemCount + 4; // deposit, putaran, fitur ganda, custom text
 
-  // Adaptive font sizes berdasarkan jumlah rows
+  // Adaptive font sizes berdasarkan jumlah rows - DIPERBESAR
   const getFontSize = () => {
-    if (totalRows <= 5) return { title: 18, label: 12, depositKode: 28, value: 16, itemName: 16, itemValue: 24, icon: 18, gap: 6, padding: 8 };
-    if (totalRows <= 6) return { title: 16, label: 11, depositKode: 24, value: 14, itemName: 14, itemValue: 22, icon: 16, gap: 5, padding: 6 };
-    if (totalRows <= 7) return { title: 14, label: 10, depositKode: 20, value: 12, itemName: 13, itemValue: 20, icon: 14, gap: 4, padding: 5 };
-    if (totalRows <= 8) return { title: 13, label: 9, depositKode: 18, value: 11, itemName: 12, itemValue: 18, icon: 12, gap: 3, padding: 4 };
-    return { title: 12, label: 8, depositKode: 16, value: 10, itemName: 11, itemValue: 16, icon: 10, gap: 2, padding: 3 };
+    if (totalRows <= 5) return { title: 24, label: 14, depositKode: 36, value: 20, itemName: 20, itemValue: 28, icon: 24, gap: 8, padding: 10 };
+    if (totalRows <= 6) return { title: 22, label: 13, depositKode: 32, value: 18, itemName: 18, itemValue: 26, icon: 22, gap: 7, padding: 8 };
+    if (totalRows <= 7) return { title: 20, label: 12, depositKode: 28, value: 16, itemName: 16, itemValue: 24, icon: 20, gap: 6, padding: 7 };
+    if (totalRows <= 8) return { title: 18, label: 11, depositKode: 24, value: 14, itemName: 14, itemValue: 22, icon: 18, gap: 5, padding: 6 };
+    return { title: 16, label: 10, depositKode: 20, value: 12, itemName: 12, itemValue: 20, icon: 16, gap: 4, padding: 5 };
   };
 
   const sizes = getFontSize();
@@ -460,11 +460,11 @@ export default function CustomizableLayout({
           />
         </div>
 
-        {/* Time & Date */}
+        {/* Time & Date - 1 Row */}
         <div className="flex items-center gap-4">
-          <div className="flex flex-col items-end leading-tight">
+          <div className="flex items-center gap-3">
             <span
-              className="text-sm font-bold"
+              className="text-base font-bold"
               style={{
                 color: selectedStyle.secondaryColor,
                 textShadow: `0 0 10px ${selectedStyle.secondaryColor}`
@@ -472,7 +472,8 @@ export default function CustomizableLayout({
             >
               {customTimeLabel}
             </span>
-            <span className="text-white text-xs opacity-80">
+            <span className="text-gray-400">|</span>
+            <span className="text-white text-sm opacity-90">
               {getCurrentDate()}
             </span>
           </div>
