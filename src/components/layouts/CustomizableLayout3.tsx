@@ -213,9 +213,9 @@ function CyberpunkTrikPanel({
             <span
               className="font-black leading-tight"
               style={{
-                color: '#ff0000',
+                color: '#ffffff',
                 fontSize: `${sizes.depositKode}px`,
-                textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 15px #ff0000'
+                textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
               }}
             >
               {trik.depositKode}
@@ -229,7 +229,7 @@ function CyberpunkTrikPanel({
             <span
               className="font-bold leading-tight"
               style={{
-                color: '#ff0000',
+                color: '#ffffff',
                 fontSize: `${sizes.value}px`,
                 textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
               }}
