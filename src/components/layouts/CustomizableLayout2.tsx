@@ -34,8 +34,8 @@ function GameCard({ game, rtp, style, cardSize }: { game: Game; rtp: number; sty
         flexShrink: 0
       }}
     >
-      {/* Game Image */}
-      <div className="relative w-full overflow-hidden" style={{ height: `${cardSize}px` }}>
+      {/* Game Image - tinggi +5px */}
+      <div className="relative w-full overflow-hidden" style={{ height: `${cardSize + 5}px` }}>
         <img
           src={game.src}
           alt={game.name}
