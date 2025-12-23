@@ -3,20 +3,30 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface MatrixGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   index: number;
+  darkBackground: string;
 }
 
-function MatrixGameCard({ game, rtp, primaryColor, secondaryColor, index }: MatrixGameCardProps) {
+function MatrixGameCard({ game, rtp, primaryColor, secondaryColor, index, darkBackground }: MatrixGameCardProps) {
   return (
     <div
       className="relative overflow-hidden group cursor-pointer"
       style={{
-        background: 'linear-gradient(135deg, #000000, #0a0f0a)',
+        background: `linear-gradient(135deg, ${darkBackground}, ${darkBackground}f5)`,
         border: `1px solid ${primaryColor}40`,
         borderRadius: '4px',
         boxShadow: `0 0 20px ${primaryColor}20`,
@@ -109,6 +119,10 @@ export default function CasinoMatrixLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const darkPrimary = adjustColor(primaryColor, -85);
+  const darkerPrimary = adjustColor(primaryColor, -95);
+  const darkSecondary = adjustColor(secondaryColor, -85);
+
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
     return selectedCardStyle.blur;
@@ -161,7 +175,7 @@ export default function CasinoMatrixLayout({
           <div
             className={`relative inline-block px-6 py-4 rounded-lg ${getBlurClass()}`}
             style={{
-              background: selectedCardStyle?.background || 'linear-gradient(135deg, rgba(0,0,0,0.85), rgba(10,15,10,0.9))',
+              background: selectedCardStyle?.background || `linear-gradient(135deg, ${darkerPrimary}d9, ${darkPrimary}e6)`,
               border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${primaryColor}` : `2px solid ${primaryColor}60`,
               boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? `${selectedCardStyle.shadow} ${primaryColor}` : selectedCardStyle.shadow) : `0 0 30px ${primaryColor}40, inset 0 0 20px ${primaryColor}15`,
               opacity: selectedCardStyle?.opacity || 1,
@@ -194,7 +208,7 @@ export default function CasinoMatrixLayout({
             style={{
               ...getSectionStyle(primaryColor),
               border: `1px solid ${primaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkPrimary}99`
             }}
           >
           {/* Pattern Overlay */}
@@ -221,6 +235,7 @@ export default function CasinoMatrixLayout({
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   index={index}
+                  darkBackground={darkPrimary}
                 />
               </div>
             ))}
@@ -246,7 +261,7 @@ export default function CasinoMatrixLayout({
             style={{
               ...getSectionStyle(secondaryColor),
               border: `1px solid ${secondaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkSecondary}99`
             }}
           >
             {/* Pattern Overlay */}
@@ -273,6 +288,7 @@ export default function CasinoMatrixLayout({
                     primaryColor={secondaryColor}
                     secondaryColor={primaryColor}
                     index={index + 10}
+                    darkBackground={darkSecondary}
                   />
                 </div>
               ))}

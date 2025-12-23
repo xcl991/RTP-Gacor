@@ -3,15 +3,25 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CyberpunkGameCardProps {
   game: Game;
   rtp: number;
   index: number;
   primaryColor: string;
   secondaryColor: string;
+  darkBackground: string;
 }
 
-function CyberpunkGameCard({ game, rtp, index, primaryColor, secondaryColor }: CyberpunkGameCardProps) {
+function CyberpunkGameCard({ game, rtp, index, primaryColor, secondaryColor, darkBackground }: CyberpunkGameCardProps) {
   const status = rtp >= 95 ? 'OPTIMAL' : rtp >= 90 ? 'STABLE' : 'ACTIVE';
   const statusColor = rtp >= 95 ? secondaryColor : rtp >= 90 ? primaryColor : '#888';
 
@@ -19,7 +29,7 @@ function CyberpunkGameCard({ game, rtp, index, primaryColor, secondaryColor }: C
     <div
       className="relative overflow-hidden w-full"
       style={{
-        background: 'linear-gradient(90deg, rgba(0,0,0,0.9), rgba(20,20,30,0.95))',
+        background: `linear-gradient(90deg, ${darkBackground}e6, ${darkBackground}f2)`,
         borderLeft: `3px solid ${primaryColor}`,
         borderBottom: `1px solid ${primaryColor}30`
       }}
@@ -130,6 +140,10 @@ export default function CyberpunkLayout2({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const darkPrimary = adjustColor(primaryColor, -80);
+  const darkerPrimary = adjustColor(primaryColor, -90);
+  const darkSecondary = adjustColor(secondaryColor, -80);
+
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
     return selectedCardStyle.blur;
@@ -166,7 +180,7 @@ export default function CyberpunkLayout2({
       <div
         className="relative z-10 mb-3 p-3"
         style={{
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.95), rgba(10,10,20,0.9))',
+          background: `linear-gradient(180deg, ${darkerPrimary}f2, ${darkPrimary}e6)`,
           border: `2px solid ${primaryColor}`,
           boxShadow: `0 0 20px ${primaryColor}30, inset 0 0 30px rgba(0,0,0,0.8)`
         }}
@@ -275,6 +289,7 @@ export default function CyberpunkLayout2({
                 index={index}
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
+                darkBackground={darkPrimary}
               />
             ))}
           </div>
@@ -341,6 +356,7 @@ export default function CyberpunkLayout2({
                 index={index}
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
+                darkBackground={darkSecondary}
               />
             ))}
           </div>
@@ -362,7 +378,7 @@ export default function CyberpunkLayout2({
         <div
           className="flex items-center justify-center gap-2 p-3 font-mono"
           style={{
-            background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.8), transparent)',
+            background: `linear-gradient(90deg, transparent, ${darkPrimary}cc, transparent)`,
             borderTop: `1px solid ${primaryColor}`,
             borderBottom: `1px solid ${primaryColor}`
           }}

@@ -2,6 +2,15 @@
 
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig, FooterConfig } from '@/types';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CustomizableLayout3Props {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
@@ -22,17 +31,17 @@ interface CustomizableLayout3Props {
 }
 
 // Neon Game Card dengan glow effect
-function NeonGameCard({ game, rtp, style, cardSize }: { game: Game; rtp: number; style: RTPStyle; cardSize: number }) {
+function NeonGameCard({ game, rtp, style, cardSize, darkPrimary, darkerPrimary }: { game: Game; rtp: number; style: RTPStyle; cardSize: number; darkPrimary: string; darkerPrimary: string }) {
   return (
     <div
       className="relative overflow-hidden"
       style={{
         width: `${cardSize}px`,
         flexShrink: 0,
-        background: 'linear-gradient(145deg, rgba(0,0,0,0.9), rgba(20,20,30,0.95))',
+        background: `linear-gradient(145deg, ${darkerPrimary}, ${darkPrimary})`,
         border: `3px solid transparent`,
         borderImage: `linear-gradient(135deg, ${style.primaryColor}, ${style.secondaryColor}, ${style.primaryColor}) 1`,
-        boxShadow: `0 0 20px ${style.primaryColor}40, inset 0 0 30px rgba(0,0,0,0.5)`
+        boxShadow: `0 0 20px ${style.primaryColor}40, inset 0 0 30px ${darkerPrimary}80`
       }}
     >
       {/* Animated corner accents */}
@@ -76,7 +85,7 @@ function NeonGameCard({ game, rtp, style, cardSize }: { game: Game; rtp: number;
       <div
         className="p-1.5 text-center"
         style={{
-          background: `linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(10,10,20,0.95))`
+          background: `linear-gradient(to bottom, ${darkerPrimary}cc, ${darkerPrimary}f2)`
         }}
       >
         <h3
@@ -124,11 +133,15 @@ function PatternDisplay({ pattern, size }: { pattern: string; size: number }) {
 function CyberpunkTrikPanel({
   trik,
   providerColor,
-  hideFiturGanda = false
+  hideFiturGanda = false,
+  darkPrimary,
+  darkerPrimary
 }: {
   trik: TrikConfig;
   providerColor: string;
   hideFiturGanda?: boolean;
+  darkPrimary: string;
+  darkerPrimary: string;
 }) {
   const itemCount = trik.trikItems?.length || 0;
   const totalRows = itemCount + 4;
@@ -147,9 +160,9 @@ function CyberpunkTrikPanel({
     <div
       className="h-full overflow-hidden flex flex-col relative"
       style={{
-        background: 'linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(10,10,30,0.98) 100%)',
+        background: `linear-gradient(135deg, ${darkerPrimary}f2 0%, ${darkPrimary}fa 100%)`,
         border: `2px solid ${providerColor}`,
-        boxShadow: `0 0 30px ${providerColor}30, inset 0 0 50px rgba(0,0,0,0.8)`,
+        boxShadow: `0 0 30px ${providerColor}30, inset 0 0 50px ${darkerPrimary}cc`,
         clipPath: 'polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px))'
       }}
     >
@@ -328,7 +341,9 @@ function NeonProviderSection({
   style,
   trik,
   trikPanelWidth,
-  hideFiturGanda = false
+  hideFiturGanda = false,
+  darkPrimary,
+  darkerPrimary
 }: {
   title: string;
   games: Game[];
@@ -337,6 +352,8 @@ function NeonProviderSection({
   trik: TrikConfig;
   trikPanelWidth: number;
   hideFiturGanda?: boolean;
+  darkPrimary: string;
+  darkerPrimary: string;
 }) {
   const displayGames = games.slice(0, 3).map(game => ({
     ...game,
@@ -355,9 +372,9 @@ function NeonProviderSection({
       <div
         className="overflow-hidden p-3 self-center relative"
         style={{
-          background: 'linear-gradient(145deg, rgba(0,0,0,0.95), rgba(15,15,25,0.98))',
+          background: `linear-gradient(145deg, ${darkerPrimary}f2, ${darkPrimary}fa)`,
           border: `2px solid ${providerColor}`,
-          boxShadow: `0 0 25px ${providerColor}40, inset 0 0 40px rgba(0,0,0,0.8)`,
+          boxShadow: `0 0 25px ${providerColor}40, inset 0 0 40px ${darkerPrimary}cc`,
           width: trik.enabled ? `${(cardSize * 3) + 32}px` : '100%',
           flexShrink: 0
         }}
@@ -391,6 +408,8 @@ function NeonProviderSection({
               rtp={game.rtp}
               style={style}
               cardSize={cardSize}
+              darkPrimary={darkPrimary}
+              darkerPrimary={darkerPrimary}
             />
           ))}
         </div>
@@ -403,6 +422,8 @@ function NeonProviderSection({
             trik={trik}
             providerColor={providerColor}
             hideFiturGanda={hideFiturGanda}
+            darkPrimary={darkPrimary}
+            darkerPrimary={darkerPrimary}
           />
         </div>
       )}
@@ -426,6 +447,12 @@ export default function CustomizableLayout3({
   defaultLayoutSize,
   footerConfig
 }: CustomizableLayout3Props) {
+  const primaryColor = selectedStyle.primaryColor;
+  const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
+  const darkSecondary = adjustColor(secondaryColor, -70);
+
   const getFontSizeClass = () => {
     switch (headerFontSize) {
       case 'small': return 'text-lg';
@@ -477,7 +504,7 @@ export default function CustomizableLayout3({
         className="flex-shrink-0 flex items-center justify-between px-4"
         style={{
           height: '45px',
-          background: 'linear-gradient(90deg, rgba(0,0,0,0.8), rgba(20,20,40,0.9), rgba(0,0,0,0.8))',
+          background: `linear-gradient(90deg, ${darkerPrimary}cc, ${darkPrimary}e6, ${darkerPrimary}cc)`,
           borderBottom: `1px solid ${selectedStyle.primaryColor}40`
         }}
       >
@@ -546,6 +573,8 @@ export default function CustomizableLayout3({
           style={selectedStyle}
           trik={pragmaticTrik}
           trikPanelWidth={defaultLayoutSize.trikPanelWidth}
+          darkPrimary={darkPrimary}
+          darkerPrimary={darkerPrimary}
         />
 
         <NeonProviderSection
@@ -556,6 +585,8 @@ export default function CustomizableLayout3({
           trik={pgSoftTrik}
           trikPanelWidth={defaultLayoutSize.trikPanelWidth}
           hideFiturGanda={true}
+          darkPrimary={darkPrimary}
+          darkerPrimary={darkerPrimary}
         />
       </div>
 

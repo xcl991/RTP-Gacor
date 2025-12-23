@@ -3,15 +3,25 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CasinoGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   isShowcase?: boolean;
+  darkBackground: string;
 }
 
-function CasinoGameCard({ game, rtp, primaryColor, secondaryColor, isShowcase = false }: CasinoGameCardProps) {
+function CasinoGameCard({ game, rtp, primaryColor, secondaryColor, isShowcase = false, darkBackground }: CasinoGameCardProps) {
   const cardSize = isShowcase ? 220 : 150;
 
   return (
@@ -20,7 +30,7 @@ function CasinoGameCard({ game, rtp, primaryColor, secondaryColor, isShowcase = 
       style={{
         width: cardSize + 'px',
         height: cardSize + 'px',
-        background: "linear-gradient(145deg, rgba(30,20,10,0.95), rgba(15,10,5,0.98))",
+        background: `linear-gradient(145deg, ${darkBackground}f2, ${darkBackground})`,
         border: "2px solid " + primaryColor,
         borderRadius: "12px",
         boxShadow: "0 0 20px " + primaryColor + "40, inset 0 0 30px rgba(0,0,0,0.5)"
@@ -95,6 +105,10 @@ export default function CasinoLuxuryLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
+  const darkSecondary = adjustColor(secondaryColor, -70);
+
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
     return selectedCardStyle.blur;
@@ -133,7 +147,7 @@ export default function CasinoLuxuryLayout({
       <div
         className="relative z-10 text-center mb-1.5 p-3 rounded-2xl"
         style={{
-          background: "linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,20,10,0.9))",
+          background: `linear-gradient(135deg, ${darkerPrimary}cc, ${darkPrimary}e6)`,
           border: "3px solid " + primaryColor,
           boxShadow: "0 0 40px " + primaryColor + "30, inset 0 0 60px rgba(0,0,0,0.5)"
         }}
@@ -199,6 +213,7 @@ export default function CasinoLuxuryLayout({
                 rtp={game.rtp}
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
+                darkBackground={darkPrimary}
               />
             ))}
           </div>
@@ -257,6 +272,7 @@ export default function CasinoLuxuryLayout({
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   isShowcase={true}
+                  darkBackground={darkPrimary}
                 />
               </div>
             </div>
@@ -277,6 +293,7 @@ export default function CasinoLuxuryLayout({
                   primaryColor={secondaryColor}
                   secondaryColor={primaryColor}
                   isShowcase={true}
+                  darkBackground={darkSecondary}
                 />
               </div>
             </div>
@@ -328,6 +345,7 @@ export default function CasinoLuxuryLayout({
                 rtp={game.rtp}
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
+                darkBackground={darkSecondary}
               />
             ))}
           </div>
@@ -350,7 +368,7 @@ export default function CasinoLuxuryLayout({
         <div
           className="inline-flex items-center gap-2 px-4 py-4 rounded-full"
           style={{
-            background: "linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,20,10,0.9))",
+            background: `linear-gradient(135deg, ${darkerPrimary}cc, ${darkPrimary}e6)`,
             border: "2px solid " + primaryColor,
             boxShadow: "0 0 30px " + primaryColor + "30"
           }}

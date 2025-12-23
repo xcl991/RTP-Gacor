@@ -3,6 +3,15 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface HolographicGameCardProps {
   game: Game;
   rtp: number;
@@ -126,6 +135,8 @@ export default function CasinoHolographicLayout({
 
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -80);
+  const darkerPrimary = adjustColor(primaryColor, -90);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -171,7 +182,7 @@ export default function CasinoHolographicLayout({
         <div
           className="p-3 rounded-2xl"
           style={{
-            background: 'rgba(0,0,0,0.4)',
+            background: `${darkPrimary}66`,
             backdropFilter: 'blur(10px)',
             border: `1px solid ${primaryColor}40`,
             display: 'flex',
@@ -208,7 +219,7 @@ export default function CasinoHolographicLayout({
             style={{
               ...getSectionStyle(primaryColor),
               border: `1px solid ${primaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkPrimary}99`
             }}
           >
             {/* Pattern Overlay */}
@@ -260,7 +271,7 @@ export default function CasinoHolographicLayout({
             style={{
               ...getSectionStyle(secondaryColor),
               border: `1px solid ${secondaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkPrimary}99`
             }}
           >
             {/* Pattern Overlay */}

@@ -4,20 +4,30 @@ import { useEffect, useRef, useState } from 'react';
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface MedievalGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   sealNumber: number;
+  darkBackground: string;
 }
 
-function MedievalGameCard({ game, rtp, primaryColor, secondaryColor, sealNumber }: MedievalGameCardProps) {
+function MedievalGameCard({ game, rtp, primaryColor, secondaryColor, sealNumber, darkBackground }: MedievalGameCardProps) {
   return (
     <div
       className="relative group cursor-pointer"
       style={{
-        background: `linear-gradient(135deg, rgba(40,20,10,0.95), rgba(60,30,15,0.9))`,
+        background: `linear-gradient(135deg, ${darkBackground}f2, ${darkBackground}e6)`,
         border: `2px solid ${primaryColor}`,
         borderRadius: '4px',
         boxShadow: `0 8px 16px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,215,0,0.3), 0 0 20px ${primaryColor}40`,
@@ -218,6 +228,10 @@ export default function CasinoMedievalKingdomLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const darkPrimary = adjustColor(primaryColor, -60);
+  const darkerPrimary = adjustColor(primaryColor, -75);
+  const darkSecondary = adjustColor(secondaryColor, -60);
+
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
     return selectedCardStyle.blur;
@@ -268,7 +282,7 @@ export default function CasinoMedievalKingdomLayout({
         <div
           className="relative p-4"
           style={{
-            background: `linear-gradient(180deg, rgba(80,40,20,0.9), rgba(40,20,10,0.95))`,
+            background: `linear-gradient(180deg, ${darkPrimary}e6, ${darkerPrimary}f2)`,
             border: `3px solid ${primaryColor}`,
             borderRadius: '8px',
             boxShadow: `0 10px 30px rgba(0,0,0,0.8), inset 0 2px 0 rgba(255,215,0,0.2), 0 0 40px ${primaryColor}30`
@@ -379,7 +393,7 @@ export default function CasinoMedievalKingdomLayout({
             style={{
               ...getSectionStyle(primaryColor),
               border: `3px double ${primaryColor}`,
-              background: `linear-gradient(135deg, rgba(60,30,15,0.85), rgba(40,20,10,0.9))`,
+              background: `linear-gradient(135deg, ${darkPrimary}d9, ${darkerPrimary}e6)`,
               borderRadius: '8px',
               boxShadow: `0 8px 24px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,215,0,0.15), 0 0 30px ${primaryColor}20`
             }}
@@ -470,6 +484,7 @@ export default function CasinoMedievalKingdomLayout({
                     primaryColor={primaryColor}
                     secondaryColor={secondaryColor}
                     sealNumber={index + 1}
+                    darkBackground={darkerPrimary}
                   />
                 </div>
               ))}
@@ -502,7 +517,7 @@ export default function CasinoMedievalKingdomLayout({
             style={{
               ...getSectionStyle(secondaryColor),
               border: `3px double ${secondaryColor}`,
-              background: `linear-gradient(135deg, rgba(60,30,15,0.85), rgba(40,20,10,0.9))`,
+              background: `linear-gradient(135deg, ${darkSecondary}d9, ${darkSecondary}e6)`,
               borderRadius: '8px',
               boxShadow: `0 8px 24px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,215,0,0.15), 0 0 30px ${secondaryColor}20`
             }}
@@ -593,6 +608,7 @@ export default function CasinoMedievalKingdomLayout({
                     primaryColor={secondaryColor}
                     secondaryColor={primaryColor}
                     sealNumber={index + 100}
+                    darkBackground={darkSecondary}
                   />
                 </div>
               ))}
@@ -625,7 +641,7 @@ export default function CasinoMedievalKingdomLayout({
         <div
           className="relative p-4 flex items-center justify-center gap-3"
           style={{
-            background: `linear-gradient(135deg, rgba(60,30,15,0.85), rgba(40,20,10,0.9))`,
+            background: `linear-gradient(135deg, ${darkPrimary}d9, ${darkerPrimary}e6)`,
             border: `3px double ${primaryColor}`,
             borderRadius: '8px',
             boxShadow: `0 8px 24px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,215,0,0.15), 0 0 30px ${primaryColor}20`

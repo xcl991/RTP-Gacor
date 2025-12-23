@@ -2,6 +2,15 @@
 
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig, FooterConfig, MaxwinConfig } from '@/types';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CustomizableLayout2Props {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
@@ -108,12 +117,16 @@ function CompactTrikPanel({
   trik,
   providerColor,
   cardStyle,
-  hideFiturGanda = false
+  hideFiturGanda = false,
+  darkPrimary,
+  darkerPrimary
 }: {
   trik: TrikConfig;
   providerColor: string;
   cardStyle: CardStyleOption;
   hideFiturGanda?: boolean;
+  darkPrimary: string;
+  darkerPrimary: string;
 }) {
   const itemCount = trik.trikItems?.length || 0;
   const totalRows = itemCount + 3;
@@ -132,9 +145,9 @@ function CompactTrikPanel({
     <div
       className="h-full rounded-xl overflow-hidden flex flex-col"
       style={{
-        background: cardStyle?.background || 'linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20,20,40,0.95) 100%)',
+        background: cardStyle?.background || `linear-gradient(135deg, ${darkerPrimary} 0%, ${darkPrimary} 100%)`,
         border: `2px solid ${providerColor}`,
-        boxShadow: `0 0 15px ${providerColor}30, inset 0 0 20px rgba(0,0,0,0.5)`
+        boxShadow: `0 0 15px ${providerColor}30, inset 0 0 20px ${darkerPrimary}80`
       }}
     >
       {/* Header */}
@@ -166,7 +179,7 @@ function CompactTrikPanel({
         {/* Deposit Kode & Putaran Bet - 1 Row */}
         <div
           className="flex items-center gap-2 rounded-lg"
-          style={{ background: 'rgba(0,0,0,0.5)', padding: `${sizes.padding}px` }}
+          style={{ background: `${darkerPrimary}80`, padding: `${sizes.padding}px` }}
         >
           <div className="flex-1 text-center">
             <span className="text-gray-400 block leading-tight" style={{ fontSize: `${sizes.label}px` }}>
@@ -198,7 +211,7 @@ function CompactTrikPanel({
         {!hideFiturGanda && (
           <div
             className="rounded-lg text-center"
-            style={{ background: 'rgba(0,0,0,0.5)', padding: `${sizes.padding}px` }}
+            style={{ background: `${darkerPrimary}80`, padding: `${sizes.padding}px` }}
           >
             <span className="text-gray-400 block leading-tight" style={{ fontSize: `${sizes.label}px` }}>
               FITUR GANDA
@@ -220,7 +233,7 @@ function CompactTrikPanel({
             <div
               key={index}
               className="flex items-center rounded"
-              style={{ background: 'rgba(0,0,0,0.5)', padding: `${sizes.padding}px ${sizes.padding * 1.5}px` }}
+              style={{ background: `${darkerPrimary}80`, padding: `${sizes.padding}px ${sizes.padding * 1.5}px` }}
             >
               <span className="text-white font-semibold flex-1 text-left" style={{ fontSize: `${sizes.itemName}px` }}>
                 {item.name}
@@ -269,7 +282,8 @@ function GameModal({
   providerColor,
   style,
   cardStyle,
-  cardSize
+  cardSize,
+  darkPrimary
 }: {
   title: string;
   games: Game[];
@@ -277,6 +291,7 @@ function GameModal({
   style: RTPStyle;
   cardStyle: CardStyleOption;
   cardSize: number;
+  darkPrimary: string;
 }) {
   const displayGames = games.slice(0, 3).map(game => ({
     ...game,
@@ -287,7 +302,7 @@ function GameModal({
     <div
       className="flex-1 rounded-lg overflow-hidden p-2"
       style={{
-        background: cardStyle?.background || `${style.backgroundColor}dd`,
+        background: cardStyle?.background || `${darkPrimary}dd`,
         border: cardStyle?.border ? `${cardStyle.border} ${providerColor}` : `2px solid ${providerColor}40`
       }}
     >
@@ -346,6 +361,15 @@ export default function CustomizableLayout2({
     }
   };
 
+  // Extract theme colors
+  const primaryColor = selectedStyle.primaryColor;
+  const secondaryColor = selectedStyle.secondaryColor;
+
+  // Create dynamic theme colors
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
+  const darkSecondary = adjustColor(secondaryColor, -70);
+
   // Card size untuk 3 game per side (total 6 games dalam 1 row)
   const cardSize = 140;
 
@@ -364,8 +388,8 @@ export default function CustomizableLayout2({
         className="flex-shrink-0 flex items-center justify-between px-6"
         style={{
           height: '60px',
-          background: `linear-gradient(135deg, ${selectedStyle.primaryColor}40 0%, ${selectedStyle.backgroundColor}80 50%, ${selectedStyle.secondaryColor}40 100%)`,
-          borderBottom: `2px solid ${selectedStyle.primaryColor}60`
+          background: `linear-gradient(135deg, ${primaryColor}40 0%, ${darkPrimary}80 50%, ${secondaryColor}40 100%)`,
+          borderBottom: `2px solid ${primaryColor}60`
         }}
       >
         {/* Logo */}
@@ -375,7 +399,7 @@ export default function CustomizableLayout2({
             alt={`${selectedWebsite.name} logo`}
             className="h-10 object-contain"
             style={{
-              filter: `drop-shadow(0 0 8px ${selectedStyle.primaryColor}60)`
+              filter: `drop-shadow(0 0 8px ${primaryColor}60)`
             }}
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="80"%3E%3Crect width="200" height="80" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3E' + selectedWebsite.name + '%3C/text%3E%3C/svg%3E';
@@ -387,8 +411,8 @@ export default function CustomizableLayout2({
         <h1
           className={`${getFontSizeClass()} font-black uppercase tracking-wider leading-tight text-center flex-1`}
           style={{
-            color: selectedStyle.primaryColor,
-            textShadow: `0 0 20px ${selectedStyle.primaryColor}, 0 0 40px ${selectedStyle.primaryColor}50, 0 2px 4px rgba(0,0,0,0.8)`
+            color: primaryColor,
+            textShadow: `0 0 20px ${primaryColor}, 0 0 40px ${primaryColor}50, 0 2px 4px ${darkerPrimary}`
           }}
         >
           {customHeaderText}
@@ -403,8 +427,8 @@ export default function CustomizableLayout2({
         className="flex-shrink-0 flex items-center justify-center px-4"
         style={{
           height: '40px',
-          background: `linear-gradient(90deg, ${selectedStyle.backgroundColor}90 0%, ${selectedStyle.primaryColor}20 50%, ${selectedStyle.backgroundColor}90 100%)`,
-          borderBottom: `1px solid ${selectedStyle.primaryColor}40`
+          background: `linear-gradient(90deg, ${darkPrimary}90 0%, ${primaryColor}20 50%, ${darkPrimary}90 100%)`,
+          borderBottom: `1px solid ${primaryColor}40`
         }}
       >
         <div className="flex items-center gap-4">
@@ -412,7 +436,7 @@ export default function CustomizableLayout2({
             className="font-bold text-white"
             style={{
               fontSize: '20px',
-              textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
+              textShadow: `-1px -1px 0 ${darkerPrimary}, 1px -1px 0 ${darkerPrimary}, -1px 1px 0 ${darkerPrimary}, 1px 1px 0 ${darkerPrimary}`
             }}
           >
             {customTimeLabel}
@@ -422,7 +446,7 @@ export default function CustomizableLayout2({
             className="text-white font-medium"
             style={{
               fontSize: '18px',
-              textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
+              textShadow: `-1px -1px 0 ${darkerPrimary}, 1px -1px 0 ${darkerPrimary}, -1px 1px 0 ${darkerPrimary}, 1px 1px 0 ${darkerPrimary}`
             }}
           >
             {getCurrentDate()}
@@ -452,6 +476,7 @@ export default function CustomizableLayout2({
             style={selectedStyle}
             cardStyle={selectedCardStyle}
             cardSize={cardSize}
+            darkPrimary={darkPrimary}
           />
           <GameModal
             title="PG SOFT"
@@ -460,6 +485,7 @@ export default function CustomizableLayout2({
             style={selectedStyle}
             cardStyle={selectedCardStyle}
             cardSize={cardSize}
+            darkPrimary={darkPrimary}
           />
         </div>
 
@@ -472,6 +498,8 @@ export default function CustomizableLayout2({
                 providerColor="#ffd700"
                 cardStyle={selectedCardStyle}
                 hideFiturGanda={false}
+                darkPrimary={darkPrimary}
+                darkerPrimary={darkerPrimary}
               />
             </div>
           )}
@@ -482,6 +510,8 @@ export default function CustomizableLayout2({
                 providerColor="#00f0ff"
                 cardStyle={selectedCardStyle}
                 hideFiturGanda={true}
+                darkPrimary={darkPrimary}
+                darkerPrimary={darkerPrimary}
               />
             </div>
           )}
@@ -492,24 +522,24 @@ export default function CustomizableLayout2({
           <div
             className="rounded-xl p-3"
             style={{
-              background: selectedCardStyle?.background || 'linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20,20,40,0.95) 100%)',
-              border: `2px solid ${selectedStyle.secondaryColor}`,
-              boxShadow: `0 0 15px ${selectedStyle.secondaryColor}30`
+              background: selectedCardStyle?.background || `linear-gradient(135deg, ${darkerPrimary} 0%, ${darkPrimary} 100%)`,
+              border: `2px solid ${secondaryColor}`,
+              boxShadow: `0 0 15px ${secondaryColor}30`
             }}
           >
             {/* Heading 1 */}
             <div
               className="text-center mb-2 p-2 rounded-lg"
               style={{
-                background: `linear-gradient(135deg, ${selectedStyle.primaryColor}20, ${selectedStyle.secondaryColor}20)`,
-                border: `1px solid ${selectedStyle.secondaryColor}`,
-                boxShadow: `0 0 8px ${selectedStyle.secondaryColor}20`
+                background: `linear-gradient(135deg, ${primaryColor}20, ${secondaryColor}20)`,
+                border: `1px solid ${secondaryColor}`,
+                boxShadow: `0 0 8px ${secondaryColor}20`
               }}
             >
               <h2
                 className="text-xl font-black uppercase tracking-tight leading-tight"
                 style={{
-                  background: `linear-gradient(to bottom, ${selectedStyle.secondaryColor} 0%, ${selectedStyle.primaryColor} 50%, ${selectedStyle.primaryColor}aa 100%)`,
+                  background: `linear-gradient(to bottom, ${secondaryColor} 0%, ${primaryColor} 50%, ${primaryColor}aa 100%)`,
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent'
                 }}
@@ -523,7 +553,7 @@ export default function CustomizableLayout2({
               <div className="text-center mb-2">
                 <h3
                   className="text-base font-bold uppercase tracking-tight leading-tight"
-                  style={{ color: selectedStyle.secondaryColor }}
+                  style={{ color: secondaryColor }}
                 >
                   {maxwinConfig.heading2}
                 </h3>
@@ -539,9 +569,9 @@ export default function CustomizableLayout2({
                       key={index}
                       className="p-2 rounded-lg text-center"
                       style={{
-                        background: 'rgba(0,0,0,0.5)',
-                        border: `1px solid ${selectedStyle.secondaryColor}50`,
-                        boxShadow: `0 0 4px ${selectedStyle.secondaryColor}20`
+                        background: `${darkerPrimary}80`,
+                        border: `1px solid ${secondaryColor}50`,
+                        boxShadow: `0 0 4px ${secondaryColor}20`
                       }}
                     >
                       <p className="text-white font-semibold text-sm leading-tight">{text}</p>
@@ -560,16 +590,16 @@ export default function CustomizableLayout2({
           className="flex items-center justify-center gap-2 px-4"
           style={{
             height: '40px',
-            background: `linear-gradient(90deg, ${selectedStyle.primaryColor}30 0%, ${selectedStyle.backgroundColor}80 50%, ${selectedStyle.primaryColor}30 100%)`,
-            borderTop: `1px solid ${selectedStyle.primaryColor}40`
+            background: `linear-gradient(90deg, ${primaryColor}30 0%, ${darkPrimary}80 50%, ${primaryColor}30 100%)`,
+            borderTop: `1px solid ${primaryColor}40`
           }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill={selectedStyle.primaryColor}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill={primaryColor}>
             <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
           </svg>
           <span
             className="text-base font-bold"
-            style={{ color: selectedStyle.primaryColor }}
+            style={{ color: primaryColor }}
           >
             {footerConfig.footer1 || `Join Telegram: @${telegramUsername || selectedWebsite.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
           </span>

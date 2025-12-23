@@ -3,20 +3,30 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface ElegantGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   cardSize: number;
+  darkBackground: string;
 }
 
-function ElegantGameCard({ game, rtp, primaryColor, secondaryColor, cardSize }: ElegantGameCardProps) {
+function ElegantGameCard({ game, rtp, primaryColor, secondaryColor, cardSize, darkBackground }: ElegantGameCardProps) {
   return (
     <div
       className="rounded-lg overflow-hidden"
       style={{
-        background: 'linear-gradient(145deg, #2a2215 0%, #1a1508 100%)',
+        background: `linear-gradient(145deg, ${darkBackground}f2 0%, ${darkBackground} 100%)`,
         border: `1px solid ${primaryColor}`,
         boxShadow: `0 4px 20px ${primaryColor}30`,
         width: `${cardSize}px`
@@ -90,6 +100,9 @@ export default function ElegantLayout({
 
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -202,7 +215,7 @@ export default function ElegantLayout({
           </div>
           <div className="relative z-10 flex flex-wrap justify-center" style={{ gap: `${defaultLayoutSize.gameGap}px` }}>
             {pragmaticGamesWithRTP.map((game, index) => (
-              <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} />
+              <ElegantGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} darkBackground={darkerPrimary} />
             ))}
           </div>
         </div>
@@ -253,7 +266,7 @@ export default function ElegantLayout({
           </div>
           <div className="relative z-10 flex flex-wrap justify-center" style={{ gap: `${defaultLayoutSize.gameGap}px` }}>
             {pgSoftGamesWithRTP.map((game, index) => (
-              <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} />
+              <ElegantGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} darkBackground={darkerPrimary} />
             ))}
           </div>
         </div>

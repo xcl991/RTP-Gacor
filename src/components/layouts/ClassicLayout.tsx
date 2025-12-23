@@ -3,6 +3,15 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface ClassicGameCardProps {
   game: Game;
   rtp: number;
@@ -13,12 +22,13 @@ interface ClassicGameCardProps {
 function ClassicGameCard({ game, rtp, style, cardSize }: ClassicGameCardProps) {
   const primaryColor = style.primaryColor;
   const secondaryColor = style.secondaryColor;
+  const darkerPrimary = adjustColor(primaryColor, -80);
 
   return (
     <div
       className="rounded overflow-hidden shadow-lg"
       style={{
-        background: 'rgba(0,0,0,0.7)',
+        background: `${darkerPrimary}b3`,
         border: `1px solid ${primaryColor}`,
         width: `${cardSize}px`
       }}
@@ -87,6 +97,8 @@ export default function ClassicLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
   const backgroundColor = selectedStyle.backgroundColor;
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -80);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -94,7 +106,7 @@ export default function ClassicLayout({
   };
 
   const getSectionStyle = (color: string) => ({
-    background: selectedCardStyle?.background || `linear-gradient(to bottom, ${color}20, rgba(0,0,0,0.8))`,
+    background: selectedCardStyle?.background || `linear-gradient(to bottom, ${primaryColor}20, ${darkerPrimary}cc)`,
     border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${color}` : `1px solid ${color}30`,
     opacity: selectedCardStyle?.opacity || 1,
     boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? `${selectedCardStyle.shadow} ${color}` : selectedCardStyle.shadow) : undefined
@@ -273,7 +285,7 @@ export default function ClassicLayout({
         style={{
           borderTop: `1px solid ${primaryColor}`,
           borderBottom: `1px solid ${primaryColor}`,
-          background: `linear-gradient(90deg, ${backgroundColor} 0%, ${primaryColor}40 50%, ${backgroundColor} 100%)`
+          background: `linear-gradient(90deg, ${darkerPrimary} 0%, ${primaryColor}40 50%, ${darkerPrimary} 100%)`
         }}
       >
         <img

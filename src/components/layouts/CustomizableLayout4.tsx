@@ -2,6 +2,15 @@
 
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig, FooterConfig, MaxwinConfig } from '@/types';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CustomizableLayout4Props {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
@@ -24,6 +33,8 @@ interface CustomizableLayout4Props {
 
 // Glassmorphism Game Card
 function GlassGameCard({ game, rtp, style, cardSize }: { game: Game; rtp: number; style: RTPStyle; cardSize: number }) {
+  const darkPrimary = adjustColor(style.primaryColor, -70);
+
   return (
     <div
       className="relative overflow-hidden rounded-2xl"
@@ -33,7 +44,7 @@ function GlassGameCard({ game, rtp, style, cardSize }: { game: Game; rtp: number
         background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
         backdropFilter: 'blur(10px)',
         border: '1px solid rgba(255,255,255,0.2)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 0 30px rgba(255,255,255,0.05)'
+        boxShadow: `0 8px 32px ${darkPrimary}80, inset 0 0 30px rgba(255,255,255,0.05)`
       }}
     >
       {/* Holographic shine effect */}
@@ -65,7 +76,7 @@ function GlassGameCard({ game, rtp, style, cardSize }: { game: Game; rtp: number
                 ? 'linear-gradient(135deg, #eab308, #ca8a04)'
                 : 'linear-gradient(135deg, #ef4444, #dc2626)',
             color: 'white',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+            boxShadow: `0 2px 10px ${darkPrimary}80`
           }}
         >
           {rtp}%
@@ -76,7 +87,7 @@ function GlassGameCard({ game, rtp, style, cardSize }: { game: Game; rtp: number
       <div
         className="p-2 text-center"
         style={{
-          background: 'linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3))'
+          background: `linear-gradient(to top, ${darkPrimary}CC, ${darkPrimary}4D)`
         }}
       >
         <h3
@@ -128,14 +139,17 @@ function PatternDisplay({ pattern, size }: { pattern: string; size: number }) {
 function HolographicTrikPanel({
   trik,
   providerColor,
-  hideFiturGanda = false
+  hideFiturGanda = false,
+  style
 }: {
   trik: TrikConfig;
   providerColor: string;
   hideFiturGanda?: boolean;
+  style: RTPStyle;
 }) {
   const itemCount = trik.trikItems?.length || 0;
   const totalRows = itemCount + 3;
+  const darkPrimary = adjustColor(style.primaryColor, -70);
 
   const getFontSize = () => {
     if (totalRows <= 4) return { title: 23, label: 16, depositKode: 31, value: 19, itemName: 19, itemValue: 23, icon: 23, gap: 5, padding: 6 };
@@ -153,7 +167,7 @@ function HolographicTrikPanel({
         background: 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))',
         backdropFilter: 'blur(20px)',
         border: `2px solid ${providerColor}60`,
-        boxShadow: `0 8px 32px ${providerColor}20, inset 0 0 60px rgba(0,0,0,0.3)`
+        boxShadow: `0 8px 32px ${providerColor}20, inset 0 0 60px ${darkPrimary}4D`
       }}
     >
       {/* Rainbow border effect */}
@@ -403,6 +417,12 @@ export default function CustomizableLayout4({
     }
   };
 
+  const primaryColor = selectedStyle.primaryColor;
+  const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
+  const darkSecondary = adjustColor(secondaryColor, -70);
+
   const cardSize = 140;
 
   return (
@@ -457,7 +477,7 @@ export default function CustomizableLayout4({
         className="flex-shrink-0 flex items-center justify-center px-4"
         style={{
           height: '40px',
-          background: 'rgba(0,0,0,0.3)',
+          background: `linear-gradient(135deg, ${darkPrimary}80, ${darkerPrimary}80)`,
           borderBottom: '1px solid rgba(255,255,255,0.05)'
         }}
       >
@@ -514,6 +534,7 @@ export default function CustomizableLayout4({
                 trik={pragmaticTrik}
                 providerColor="#ffd700"
                 hideFiturGanda={false}
+                style={selectedStyle}
               />
             </div>
           )}
@@ -523,6 +544,7 @@ export default function CustomizableLayout4({
                 trik={pgSoftTrik}
                 providerColor="#00f0ff"
                 hideFiturGanda={true}
+                style={selectedStyle}
               />
             </div>
           )}
@@ -598,7 +620,7 @@ export default function CustomizableLayout4({
           className="flex items-center justify-center gap-2 px-4"
           style={{
             height: '40px',
-            background: 'rgba(0,0,0,0.3)',
+            background: `linear-gradient(135deg, ${darkPrimary}80, ${darkerPrimary}80)`,
             borderTop: '1px solid rgba(255,255,255,0.05)'
           }}
         >

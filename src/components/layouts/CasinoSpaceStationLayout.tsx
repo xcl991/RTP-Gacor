@@ -4,20 +4,30 @@ import { useEffect, useRef, useState } from 'react';
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface SpaceGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   bayNumber: number;
+  darkBackground: string;
 }
 
-function SpaceGameCard({ game, rtp, primaryColor, secondaryColor, bayNumber }: SpaceGameCardProps) {
+function SpaceGameCard({ game, rtp, primaryColor, secondaryColor, bayNumber, darkBackground }: SpaceGameCardProps) {
   return (
     <div
       className="relative group cursor-pointer"
       style={{
-        background: `linear-gradient(135deg, rgba(0,20,40,0.9), rgba(0,10,30,0.95))`,
+        background: `linear-gradient(135deg, ${darkBackground}e6, ${darkBackground}f2)`,
         border: `1px solid ${primaryColor}60`,
         borderRadius: '8px',
         boxShadow: `0 0 30px ${primaryColor}40, inset 0 0 20px rgba(0,50,100,0.3)`
@@ -197,6 +207,10 @@ export default function CasinoSpaceStationLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const darkPrimary = adjustColor(primaryColor, -80);
+  const darkerPrimary = adjustColor(primaryColor, -90);
+  const darkSecondary = adjustColor(secondaryColor, -80);
+
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
     return selectedCardStyle.blur;
@@ -241,7 +255,7 @@ export default function CasinoSpaceStationLayout({
         <div
           className="p-3"
           style={{
-            background: 'rgba(0,0,0,0.6)',
+            background: `${darkPrimary}99`,
             backdropFilter: 'blur(5px)',
             border: `1px solid ${primaryColor}50`,
             borderRadius: '8px',
@@ -278,7 +292,7 @@ export default function CasinoSpaceStationLayout({
             style={{
               ...getSectionStyle(primaryColor),
               border: `1px solid ${primaryColor}30`,
-              background: 'rgba(0,0,0,0.6)',
+              background: `${darkPrimary}99`,
               borderRadius: '8px'
             }}
           >
@@ -310,6 +324,7 @@ export default function CasinoSpaceStationLayout({
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   bayNumber={index + 1}
+                  darkBackground={darkerPrimary}
                 />
               </div>
             ))}
@@ -341,7 +356,7 @@ export default function CasinoSpaceStationLayout({
             style={{
               ...getSectionStyle(secondaryColor),
               border: `1px solid ${secondaryColor}30`,
-              background: 'rgba(0,0,0,0.6)',
+              background: `${darkSecondary}99`,
               borderRadius: '8px'
             }}
           >
@@ -373,6 +388,7 @@ export default function CasinoSpaceStationLayout({
                     primaryColor={secondaryColor}
                     secondaryColor={primaryColor}
                     bayNumber={index + 101}
+                    darkBackground={adjustColor(secondaryColor, -90)}
                   />
                 </div>
               ))}

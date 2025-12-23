@@ -3,20 +3,32 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface FuturisticGameCardProps {
   game: Game;
   rtp: number;
   style: RTPStyle;
   cardSize: number;
+  darkPrimary: string;
+  darkerPrimary: string;
+  primaryColor: string;
 }
 
-function FuturisticGameCard({ game, rtp, style, cardSize }: FuturisticGameCardProps) {
+function FuturisticGameCard({ game, rtp, style, cardSize, darkPrimary, darkerPrimary, primaryColor }: FuturisticGameCardProps) {
   return (
     <div
       className="rounded-lg overflow-hidden shadow-lg"
       style={{
-        background: '#0f172a',
-        border: '1px solid #334155',
+        background: darkerPrimary,
+        border: `1px solid ${primaryColor}40`,
         width: `${cardSize}px`
       }}
     >
@@ -32,7 +44,7 @@ function FuturisticGameCard({ game, rtp, style, cardSize }: FuturisticGameCardPr
       </div>
       <div
         className="p-2"
-        style={{ background: 'linear-gradient(to bottom, #1e293b, #0f172a)' }}
+        style={{ background: `linear-gradient(to bottom, ${darkPrimary}, ${darkerPrimary})` }}
       >
         <h3 className="text-white font-bold text-base text-center truncate">
           {game.name}
@@ -77,6 +89,11 @@ export default function FuturisticLayout({
   headerFontSize,
   defaultLayoutSize
 }: FuturisticLayoutProps) {
+  const primaryColor = selectedStyle.primaryColor;
+  const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -80);
+
   const getFontSizeClass = () => {
     switch (headerFontSize) {
       case 'small': return 'text-base';
@@ -92,7 +109,7 @@ export default function FuturisticLayout({
   };
 
   const getSectionStyle = () => ({
-    background: selectedCardStyle?.background || 'rgba(0, 0, 0, 0.4)',
+    background: selectedCardStyle?.background || `${darkerPrimary}66`,
     border: selectedCardStyle?.border ? `${selectedCardStyle.border} ${selectedStyle.primaryColor}` : '3px solid rgba(255,255,255,0.05)',
     opacity: selectedCardStyle?.opacity || 1,
     boxShadow: selectedCardStyle?.shadow || undefined
@@ -122,7 +139,7 @@ export default function FuturisticLayout({
       <div
         className="relative z-10 flex justify-between items-center mb-1.5 p-3 rounded-xl backdrop-blur-md"
         style={{
-          background: 'rgba(15, 23, 42, 0.6)',
+          background: `${darkerPrimary}99`,
           border: '1px solid rgba(255, 255, 255, 0.1)',
           borderBottom: `4px solid ${selectedStyle.primaryColor}`
         }}
@@ -203,6 +220,9 @@ export default function FuturisticLayout({
                 rtp={game.rtp}
                 style={selectedStyle}
                 cardSize={defaultLayoutSize.gameCardSize}
+                darkPrimary={darkPrimary}
+                darkerPrimary={darkerPrimary}
+                primaryColor={primaryColor}
               />
             ))}
           </div>
@@ -257,6 +277,9 @@ export default function FuturisticLayout({
                 rtp={game.rtp}
                 style={selectedStyle}
                 cardSize={defaultLayoutSize.gameCardSize}
+                darkPrimary={darkPrimary}
+                darkerPrimary={darkerPrimary}
+                primaryColor={primaryColor}
               />
             ))}
           </div>

@@ -3,6 +3,15 @@
 import TrikPanel from '../TrikPanel';
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig, FooterConfig } from '@/types';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CustomizableLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
@@ -23,12 +32,12 @@ interface CustomizableLayoutProps {
 }
 
 // Custom Game Card untuk layout 3x1 - Dikecilkan 10%
-function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; style: RTPStyle; cardSize: number }) {
+function GameCard3x1({ game, rtp, style, cardSize, darkPrimary }: { game: Game; rtp: number; style: RTPStyle; cardSize: number; darkPrimary: string }) {
   return (
     <div
       className="relative overflow-hidden rounded-lg shadow-lg"
       style={{
-        backgroundColor: style.backgroundColor,
+        backgroundColor: darkPrimary,
         border: `2px solid ${style.primaryColor}`,
         width: `${cardSize}px`,
         flexShrink: 0
@@ -61,7 +70,7 @@ function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; 
       <div
         className="p-1.5 text-center"
         style={{
-          background: `linear-gradient(to bottom, ${style.backgroundColor}ee, ${style.backgroundColor})`
+          background: `linear-gradient(to bottom, ${darkPrimary}ee, ${darkPrimary})`
         }}
       >
         <h3
@@ -108,12 +117,14 @@ function AdaptiveTrikPanel({
   trik,
   providerColor,
   cardStyle,
-  hideFiturGanda = false
+  hideFiturGanda = false,
+  darkerPrimary
 }: {
   trik: TrikConfig;
   providerColor: string;
   cardStyle: CardStyleOption;
   hideFiturGanda?: boolean;
+  darkerPrimary: string;
 }) {
   // Hitung total rows untuk menentukan font size
   const itemCount = trik.trikItems?.length || 0;
@@ -134,9 +145,9 @@ function AdaptiveTrikPanel({
     <div
       className="h-full rounded-xl overflow-hidden flex flex-col"
       style={{
-        background: cardStyle?.background || 'linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20,20,40,0.95) 100%)',
+        background: cardStyle?.background || `linear-gradient(135deg, ${darkerPrimary}e6 0%, ${darkerPrimary}f2 100%)`,
         border: `2px solid ${providerColor}`,
-        boxShadow: `0 0 15px ${providerColor}30, inset 0 0 20px rgba(0,0,0,0.5)`
+        boxShadow: `0 0 15px ${providerColor}30, inset 0 0 20px ${darkerPrimary}80`
       }}
     >
       {/* Header */}
@@ -168,7 +179,7 @@ function AdaptiveTrikPanel({
         {/* Deposit Kode & Putaran Bet - 1 Row */}
         <div
           className="flex items-center gap-3 rounded-lg"
-          style={{ background: 'rgba(0,0,0,0.5)', padding: `${sizes.padding}px` }}
+          style={{ background: `${darkerPrimary}80`, padding: `${sizes.padding}px` }}
         >
           {/* Deposit Kode - Left */}
           <div className="flex-1 text-center">
@@ -213,7 +224,7 @@ function AdaptiveTrikPanel({
           <div
             className="rounded-lg text-center"
             style={{
-              background: 'rgba(0,0,0,0.5)',
+              background: `${darkerPrimary}80`,
               padding: `${sizes.padding}px`
             }}
           >
@@ -240,7 +251,7 @@ function AdaptiveTrikPanel({
             <div
               key={index}
               className="flex items-center rounded"
-              style={{ background: 'rgba(0,0,0,0.5)', padding: `${sizes.padding}px ${sizes.padding * 1.5}px` }}
+              style={{ background: `${darkerPrimary}80`, padding: `${sizes.padding}px ${sizes.padding * 1.5}px` }}
             >
               {/* Item Name - Left */}
               <span
@@ -300,7 +311,10 @@ function ProviderSection3x1({
   cardStyle,
   trik,
   trikPanelWidth,
-  hideFiturGanda = false
+  hideFiturGanda = false,
+  darkPrimary,
+  darkSecondary,
+  darkerPrimary
 }: {
   title: string;
   games: Game[];
@@ -310,6 +324,9 @@ function ProviderSection3x1({
   trik: TrikConfig;
   trikPanelWidth: number;
   hideFiturGanda?: boolean;
+  darkPrimary: string;
+  darkSecondary: string;
+  darkerPrimary: string;
 }) {
   // Ambil hanya 3 game untuk grid 3x1
   const displayGames = games.slice(0, 3).map(game => ({
@@ -331,7 +348,7 @@ function ProviderSection3x1({
       <div
         className="rounded-lg overflow-hidden p-2 self-center"
         style={{
-          background: cardStyle?.background || `${style.backgroundColor}dd`,
+          background: cardStyle?.background || `${darkPrimary}dd`,
           border: cardStyle?.border ? `${cardStyle.border} ${providerColor}` : `1px solid ${providerColor}40`,
           width: trik.enabled ? `${(cardSize * 3) + 24}px` : '100%',
           flexShrink: 0
@@ -360,6 +377,7 @@ function ProviderSection3x1({
               rtp={game.rtp}
               style={style}
               cardSize={cardSize}
+              darkPrimary={darkPrimary}
             />
           ))}
         </div>
@@ -376,6 +394,7 @@ function ProviderSection3x1({
             providerColor={providerColor}
             cardStyle={cardStyle}
             hideFiturGanda={hideFiturGanda}
+            darkerPrimary={darkerPrimary}
           />
         </div>
       )}
@@ -399,6 +418,13 @@ export default function CustomizableLayout({
   defaultLayoutSize,
   footerConfig
 }: CustomizableLayoutProps) {
+  // Extract theme colors and create darker variants
+  const primaryColor = selectedStyle.primaryColor;
+  const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
+  const darkSecondary = adjustColor(secondaryColor, -70);
+
   const getFontSizeClass = () => {
     switch (headerFontSize) {
       case 'small': return 'text-lg';
@@ -516,6 +542,9 @@ export default function CustomizableLayout({
           cardStyle={selectedCardStyle}
           trik={pragmaticTrik}
           trikPanelWidth={defaultLayoutSize.trikPanelWidth}
+          darkPrimary={darkPrimary}
+          darkSecondary={darkSecondary}
+          darkerPrimary={darkerPrimary}
         />
 
         {/* PG Soft Section */}
@@ -528,6 +557,9 @@ export default function CustomizableLayout({
           trik={pgSoftTrik}
           trikPanelWidth={defaultLayoutSize.trikPanelWidth}
           hideFiturGanda={true}
+          darkPrimary={darkPrimary}
+          darkSecondary={darkSecondary}
+          darkerPrimary={darkerPrimary}
         />
       </div>
 

@@ -3,19 +3,29 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface NeonGameCardProps {
   game: Game;
   rtp: number;
   glowColor: string;
   cardSize: number;
+  darkBackground: string;
 }
 
-function NeonGameCard({ game, rtp, glowColor, cardSize }: NeonGameCardProps) {
+function NeonGameCard({ game, rtp, glowColor, cardSize, darkBackground }: NeonGameCardProps) {
   return (
     <div
       className="rounded-xl overflow-hidden relative group"
       style={{
-        background: 'linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%)',
+        background: `linear-gradient(145deg, ${darkBackground}f2 0%, ${darkBackground} 100%)`,
         border: `2px solid ${glowColor}`,
         boxShadow: `0 0 20px ${glowColor}40, inset 0 0 20px ${glowColor}10`,
         width: `${cardSize}px`
@@ -31,7 +41,7 @@ function NeonGameCard({ game, rtp, glowColor, cardSize }: NeonGameCardProps) {
           }}
         />
       </div>
-      <div className="p-3" style={{ background: 'linear-gradient(to bottom, #1a1a2e, #0f0f1a)' }}>
+      <div className="p-3" style={{ background: `linear-gradient(to bottom, ${darkBackground}f2, ${darkBackground})` }}>
         <h3
           className="font-bold text-xs text-center truncate"
           style={{ color: glowColor }}
@@ -89,6 +99,11 @@ export default function NeonLayout({
 
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
+  const darkSecondary = adjustColor(secondaryColor, -70);
+  const darkerSecondary = adjustColor(secondaryColor, -85);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -208,7 +223,7 @@ export default function NeonLayout({
           </div>
           <div className="relative z-10 flex flex-wrap justify-center" style={{ gap: `${defaultLayoutSize.gameGap}px` }}>
             {pragmaticGamesWithRTP.map((game, index) => (
-              <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} cardSize={defaultLayoutSize.gameCardSize} />
+              <NeonGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} glowColor={primaryColor} cardSize={defaultLayoutSize.gameCardSize} darkBackground={darkerPrimary} />
             ))}
           </div>
         </div>
@@ -256,7 +271,7 @@ export default function NeonLayout({
           </div>
           <div className="relative z-10 flex flex-wrap justify-center" style={{ gap: `${defaultLayoutSize.gameGap}px` }}>
             {pgSoftGamesWithRTP.map((game, index) => (
-              <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} />
+              <NeonGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} glowColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} darkBackground={darkerSecondary} />
             ))}
           </div>
         </div>

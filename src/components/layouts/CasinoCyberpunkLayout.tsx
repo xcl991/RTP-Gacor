@@ -3,6 +3,15 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CyberpunkGameCardProps {
   game: Game;
   rtp: number;
@@ -109,6 +118,8 @@ export default function CasinoCyberpunkLayout({
 
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -80);
+  const darkerPrimary = adjustColor(primaryColor, -90);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -153,7 +164,7 @@ export default function CasinoCyberpunkLayout({
       <div className="relative z-10 mb-3">
         <div
           className="p-3 border-b-2"
-          style={{ borderColor: primaryColor, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center' }}
+          style={{ borderColor: primaryColor, background: `${darkerPrimary}cc`, display: 'flex', alignItems: 'center' }}
         >
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-3">
@@ -190,7 +201,7 @@ export default function CasinoCyberpunkLayout({
             style={{
               ...getSectionStyle(primaryColor),
               border: `1px solid ${primaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkPrimary}99`
             }}
           >
           {/* Pattern Overlay */}
@@ -241,7 +252,7 @@ export default function CasinoCyberpunkLayout({
             style={{
               ...getSectionStyle(secondaryColor),
               border: `1px solid ${secondaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkPrimary}99`
             }}
           >
           {/* Pattern Overlay */}

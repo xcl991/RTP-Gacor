@@ -3,15 +3,25 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface SteampunkGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   rotation?: number;
+  darkBackground: string;
 }
 
-function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation = 0 }: SteampunkGameCardProps) {
+function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation = 0, darkBackground }: SteampunkGameCardProps) {
   return (
     <div className="relative w-[120px]">
       {/* Shadow layer with rotation */}
@@ -19,7 +29,7 @@ function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation =
         className="absolute inset-0"
         style={{
           transform: `rotate(${rotation}deg)`,
-          background: 'rgba(30,20,10,0.8)',
+          background: `${darkBackground}cc`,
           border: `2px solid ${primaryColor}60`,
           borderRadius: '12px',
           boxShadow: `0 10px 25px rgba(0,0,0,0.4)`
@@ -30,7 +40,7 @@ function SteampunkGameCard({ game, rtp, primaryColor, secondaryColor, rotation =
         className="relative p-3"
         style={{
           transform: `rotate(${-rotation / 2}deg)`,
-          background: `linear-gradient(145deg, rgba(45,35,25,0.95), rgba(25,18,12,0.98))`,
+          background: `linear-gradient(145deg, ${darkBackground}f2, ${darkBackground})`,
           border: `2px solid ${primaryColor}`,
           borderRadius: '10px',
           boxShadow: `0 5px 20px rgba(0,0,0,0.3), inset 0 0 20px ${secondaryColor}20`
@@ -107,6 +117,10 @@ export default function SteampunkLayout({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const darkPrimary = adjustColor(primaryColor, -65);
+  const darkerPrimary = adjustColor(primaryColor, -80);
+  const darkSecondary = adjustColor(secondaryColor, -65);
+
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
     return selectedCardStyle.blur;
@@ -166,7 +180,7 @@ export default function SteampunkLayout({
       <div
         className="relative z-10 text-center mb-1.5 p-3 rounded-2xl"
         style={{
-          background: `linear-gradient(145deg, rgba(45,35,25,0.95), rgba(25,18,12,0.98))`,
+          background: `linear-gradient(145deg, ${darkPrimary}f2, ${darkerPrimary})`,
           border: `4px solid ${primaryColor}`,
           boxShadow: `inset 0 0 40px ${secondaryColor}30, 0 10px 30px rgba(0,0,0,0.5)`
         }}
@@ -255,6 +269,7 @@ export default function SteampunkLayout({
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
                 rotation={index % 2 === 0 ? 2 : -2}
+                darkBackground={darkPrimary}
               />
             ))}
           </div>
@@ -318,6 +333,7 @@ export default function SteampunkLayout({
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
                 rotation={index % 2 === 0 ? -2 : 2}
+                darkBackground={darkSecondary}
               />
             ))}
           </div>
@@ -339,7 +355,7 @@ export default function SteampunkLayout({
         <div
           className="inline-flex items-center gap-2 px-4 py-4 rounded-full"
           style={{
-            background: `linear-gradient(145deg, rgba(45,35,25,0.95), rgba(25,18,12,0.98))`,
+            background: `linear-gradient(145deg, ${darkPrimary}f2, ${darkerPrimary})`,
             border: `3px solid ${primaryColor}`,
             boxShadow: `inset 0 0 20px ${secondaryColor}30`
           }}

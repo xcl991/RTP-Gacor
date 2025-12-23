@@ -3,6 +3,15 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, MaxwinConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CasinoGameCardProps {
   game: Game;
   rtp: number;
@@ -86,6 +95,8 @@ export default function SingleFeaturedLayout({
 
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -70);
+  const darkerPrimary = adjustColor(primaryColor, -85);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -149,7 +160,7 @@ export default function SingleFeaturedLayout({
       />
 
       {/* Compact Header */}
-      <div className="relative z-10 text-center mb-1.5 p-1.5 rounded-lg" style={{ background: "linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,20,10,0.9))", border: "1.5px solid " + primaryColor }}>
+      <div className="relative z-10 text-center mb-1.5 p-1.5 rounded-lg" style={{ background: `linear-gradient(135deg, ${darkerPrimary}cc, ${darkPrimary}e6)`, border: "1.5px solid " + primaryColor }}>
         <img
           src={selectedWebsite.logo}
           alt={selectedWebsite.name}
@@ -349,7 +360,7 @@ export default function SingleFeaturedLayout({
         <div
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
           style={{
-            background: "linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,20,10,0.9))",
+            background: `linear-gradient(135deg, ${darkerPrimary}cc, ${darkPrimary}e6)`,
             border: "1.5px solid " + primaryColor,
             boxShadow: "0 0 20px " + primaryColor + "30"
           }}

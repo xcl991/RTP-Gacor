@@ -3,20 +3,30 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface QuantumGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   quantumId: string;
+  darkBackground: string;
 }
 
-function QuantumGameCard({ game, rtp, primaryColor, secondaryColor, quantumId }: QuantumGameCardProps) {
+function QuantumGameCard({ game, rtp, primaryColor, secondaryColor, quantumId, darkBackground }: QuantumGameCardProps) {
   return (
     <div
       className="relative group cursor-pointer"
       style={{
-        background: `linear-gradient(135deg, rgba(0,0,0,0.9), ${primaryColor}15)`,
+        background: `linear-gradient(135deg, ${darkBackground}e6, ${primaryColor}15)`,
         border: `1px solid ${primaryColor}60`,
         borderRadius: '8px',
         boxShadow: `0 0 20px ${primaryColor}40, inset 0 0 15px rgba(0,0,0,0.5)`
@@ -142,6 +152,9 @@ export default function CasinoQuantumLayout({
 
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+  const darkPrimary = adjustColor(primaryColor, -80);
+  const darkerPrimary = adjustColor(primaryColor, -90);
+  const darkSecondary = adjustColor(secondaryColor, -80);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -187,7 +200,7 @@ export default function CasinoQuantumLayout({
         <div
           className="p-3 rounded-lg"
           style={{
-            background: 'rgba(0,0,0,0.8)',
+            background: `${darkerPrimary}cc`,
             backdropFilter: 'blur(5px)',
             border: `1px solid ${primaryColor}50`,
             display: 'flex',
@@ -223,7 +236,7 @@ export default function CasinoQuantumLayout({
             style={{
               ...getSectionStyle(primaryColor),
               border: `1px solid ${primaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkPrimary}99`
             }}
           >
           {/* Pattern Overlay */}
@@ -250,6 +263,7 @@ export default function CasinoQuantumLayout({
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   quantumId={`Q${(index + 1).toString().padStart(3, '0')}`}
+                  darkBackground={darkPrimary}
                 />
               </div>
             ))}
@@ -275,7 +289,7 @@ export default function CasinoQuantumLayout({
             style={{
               ...getSectionStyle(secondaryColor),
               border: `1px solid ${secondaryColor}30`,
-              background: 'rgba(0,0,0,0.6)'
+              background: `${darkSecondary}99`
             }}
           >
             {/* Pattern Overlay */}
@@ -302,6 +316,7 @@ export default function CasinoQuantumLayout({
                     primaryColor={secondaryColor}
                     secondaryColor={primaryColor}
                     quantumId={`Q${(index + 101).toString().padStart(3, '0')}`}
+                    darkBackground={darkSecondary}
                   />
                 </div>
               ))}

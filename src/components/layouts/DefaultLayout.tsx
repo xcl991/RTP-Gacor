@@ -4,6 +4,15 @@ import GameGrid from '../GameGrid';
 import TrikPanel from '../TrikPanel';
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface DefaultLayoutProps {
   selectedWebsite: WebsiteOption;
   selectedStyle: RTPStyle;
@@ -39,6 +48,8 @@ export default function DefaultLayout({
   headerFontSize,
   defaultLayoutSize
 }: DefaultLayoutProps) {
+  const darkPrimary = adjustColor(selectedStyle.primaryColor, -70);
+
   const getFontSizeClass = () => {
     switch (headerFontSize) {
       case 'small': return 'text-2xl';
@@ -166,7 +177,7 @@ export default function DefaultLayout({
         <div
           className="inline-flex items-center gap-2 px-8 py-4 rounded-full"
           style={{
-            backgroundColor: 'rgba(0,0,0,0.8)',
+            backgroundColor: `${darkPrimary}cc`,
             border: `2px solid ${selectedStyle.primaryColor}`
           }}
         >

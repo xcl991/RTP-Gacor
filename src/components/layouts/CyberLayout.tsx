@@ -3,6 +3,15 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface CyberGameCardProps {
   game: Game;
   rtp: number;
@@ -10,16 +19,17 @@ interface CyberGameCardProps {
   primaryColor: string;
   secondaryColor: string;
   cardSize: number;
+  darkBackground: string;
 }
 
-function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor, cardSize }: CyberGameCardProps) {
+function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor, cardSize, darkBackground }: CyberGameCardProps) {
   const isHot = rtp >= 95;
 
   return (
     <div
       className="relative overflow-hidden"
       style={{
-        background: '#0a0a0a',
+        background: darkBackground,
         clipPath: 'polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%)',
         border: `1px solid ${primaryColor}`,
         width: `${cardSize}px`
@@ -56,7 +66,7 @@ function CyberGameCard({ game, rtp, index, primaryColor, secondaryColor, cardSiz
           }}
         />
       </div>
-      <div className="p-2" style={{ background: 'linear-gradient(to bottom, #111, #0a0a0a)' }}>
+      <div className="p-2" style={{ background: `linear-gradient(to bottom, ${darkBackground}f5, ${darkBackground})` }}>
         <div>
           <h3 className="font-bold text-sm truncate text-white text-center">{game.name}</h3>
         </div>
@@ -111,6 +121,9 @@ export default function CyberLayout({
 
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
+
+  const darkPrimary = adjustColor(primaryColor, -80);
+  const darkSecondary = adjustColor(secondaryColor, -80);
 
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
@@ -207,7 +220,7 @@ export default function CyberLayout({
           </div>
           <div className="relative z-10 flex flex-wrap justify-center" style={{ gap: `${defaultLayoutSize.gameGap}px` }}>
             {pragmaticGamesWithRTP.map((game, index) => (
-              <CyberGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} />
+              <CyberGameCard key={`pragmatic-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} darkBackground={darkPrimary} />
             ))}
           </div>
         </div>
@@ -255,7 +268,7 @@ export default function CyberLayout({
           </div>
           <div className="relative z-10 flex flex-wrap justify-center" style={{ gap: `${defaultLayoutSize.gameGap}px` }}>
             {pgSoftGamesWithRTP.map((game, index) => (
-              <CyberGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} />
+              <CyberGameCard key={`pgsoft-${index}`} game={game} rtp={game.rtp} index={index} primaryColor={primaryColor} secondaryColor={secondaryColor} cardSize={defaultLayoutSize.gameCardSize} darkBackground={darkSecondary} />
             ))}
           </div>
         </div>

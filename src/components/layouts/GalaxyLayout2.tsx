@@ -3,15 +3,25 @@
 import { RTPStyle, WebsiteOption, Game, CardStyleOption, TrikConfig, DefaultLayoutSizeConfig } from '@/types';
 import TrikPanel from '../TrikPanel';
 
+// Helper function to create darker/lighter colors from hex
+function adjustColor(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent / 100)));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100)));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent / 100)));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
 interface GalaxyGameCardProps {
   game: Game;
   rtp: number;
   primaryColor: string;
   secondaryColor: string;
   cardSize: number;
+  darkBackground: string;
 }
 
-function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor, cardSize }: GalaxyGameCardProps) {
+function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor, cardSize, darkBackground }: GalaxyGameCardProps) {
   const isHot = rtp >= 95;
 
   return (
@@ -21,7 +31,7 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor, cardSize }: G
         width: `${cardSize}px`,
         minWidth: `${cardSize}px`,
         maxWidth: `${cardSize}px`,
-        backgroundColor: 'rgb(5, 11, 20)',
+        backgroundColor: darkBackground,
         border: '2px solid ' + primaryColor,
         flexShrink: 0
       }}
@@ -45,7 +55,7 @@ function GalaxyGameCard({ game, rtp, primaryColor, secondaryColor, cardSize }: G
           }}
         />
       </div>
-      <div className="p-3" style={{ background: 'linear-gradient(rgba(5, 11, 20, 0.867), rgb(5, 11, 20))' }}>
+      <div className="p-3" style={{ background: `linear-gradient(${darkBackground}dd, ${darkBackground})` }}>
         <h3
           data-game-title="true"
           className="text-white font-bold text-sm text-center mb-1.5"
@@ -111,17 +121,26 @@ export default function GalaxyLayout2({
   const primaryColor = selectedStyle.primaryColor;
   const secondaryColor = selectedStyle.secondaryColor;
 
+  const darkPrimary = adjustColor(primaryColor, -75);
+  const darkerPrimary = adjustColor(primaryColor, -85);
+  const darkSecondary = adjustColor(secondaryColor, -75);
+  const darkerSecondary = adjustColor(secondaryColor, -85);
+
   const getBlurClass = () => {
     if (!selectedCardStyle?.blur || selectedCardStyle.blur === 'none') return '';
     return selectedCardStyle.blur;
   };
 
-  const getSectionStyle = (color: string) => ({
-    background: selectedCardStyle?.background || "linear-gradient(145deg, rgba(15,15,35,0.95), rgba(5,5,20,0.98))",
-    border: selectedCardStyle?.border ? selectedCardStyle.border + " " + color : "2px solid " + color + "60",
-    opacity: selectedCardStyle?.opacity || 1,
-    boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? selectedCardStyle.shadow + " " + color : selectedCardStyle.shadow) : "0 0 20px " + color + "30, inset 0 0 30px rgba(0,0,0,0.5)"
-  });
+  const getSectionStyle = (color: string) => {
+    const darkColor = adjustColor(color, -80);
+    const darkerColor = adjustColor(color, -88);
+    return {
+      background: selectedCardStyle?.background || `linear-gradient(145deg, ${darkColor}f2, ${darkerColor}fa)`,
+      border: selectedCardStyle?.border ? selectedCardStyle.border + " " + color : "2px solid " + color + "60",
+      opacity: selectedCardStyle?.opacity || 1,
+      boxShadow: selectedCardStyle?.shadow ? (selectedCardStyle.shadow.includes('0 0 20px') ? selectedCardStyle.shadow + " " + color : selectedCardStyle.shadow) : "0 0 20px " + color + "30, inset 0 0 30px rgba(0,0,0,0.5)"
+    };
+  };
 
   const pragmaticGamesWithRTP = selectedPragmaticGames.slice(0, pragmaticCount).map(game => ({
     ...game,
@@ -161,7 +180,7 @@ export default function GalaxyLayout2({
       <div
         className="relative z-10 text-center mb-1.5 p-2 rounded-2xl"
         style={{
-          background: "linear-gradient(135deg, rgba(10,10,30,0.9), rgba(20,10,40,0.95))",
+          background: `linear-gradient(135deg, ${darkPrimary}e6, ${darkerPrimary}f2)`,
           border: "2px solid " + primaryColor + "60",
           boxShadow: "0 0 40px " + primaryColor + "30, inset 0 0 60px rgba(0,0,0,0.5)"
         }}
@@ -237,6 +256,7 @@ export default function GalaxyLayout2({
                 primaryColor={primaryColor}
                 secondaryColor={secondaryColor}
                 cardSize={defaultLayoutSize.gameCardSize}
+                darkBackground={darkerPrimary}
               />
             ))}
           </div>
@@ -301,6 +321,7 @@ export default function GalaxyLayout2({
                 primaryColor={secondaryColor}
                 secondaryColor={primaryColor}
                 cardSize={defaultLayoutSize.gameCardSize}
+                darkBackground={darkerSecondary}
               />
             ))}
           </div>
