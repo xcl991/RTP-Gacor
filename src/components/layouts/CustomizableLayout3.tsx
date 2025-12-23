@@ -207,7 +207,7 @@ function CyberpunkTrikPanel({
           }}
         >
           <div className="flex-1 text-center">
-            <span className="text-gray-500 block leading-tight" style={{ fontSize: `${sizes.label}px` }}>
+            <span className="text-white block leading-tight" style={{ fontSize: `${sizes.label}px` }}>
               DEPOSIT KODE
             </span>
             <span
