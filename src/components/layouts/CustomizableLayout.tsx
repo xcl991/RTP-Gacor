@@ -94,17 +94,18 @@ function AdaptiveTrikPanel({
   hideFiturGanda?: boolean;
 }) {
   // Hitung total rows untuk menentukan font size
-  const itemCount = trik.items?.length || 0;
-  const hasDepositCode = !!trik.depositCode;
-  const hasPutaranBet = !!trik.putaranBet;
-  const totalRows = itemCount + (hasDepositCode ? 1 : 0) + (hasPutaranBet ? 1 : 0) + 1; // +1 for title
+  const itemCount = trik.trikItems?.length || 0;
+  const hasDepositKode = !!trik.depositKode;
+  const hasPutaranBet = trik.putaranBetMin > 0 || trik.putaranBetMax > 0;
+  const hasCustomText = !!trik.customText;
+  const totalRows = itemCount + (hasDepositKode ? 1 : 0) + (hasPutaranBet ? 1 : 0) + (hasCustomText ? 1 : 0) + 2; // +2 for title & fitur ganda
 
   // Adaptive font sizes berdasarkan jumlah rows
   const getFontSize = () => {
-    if (totalRows <= 4) return { title: '14px', item: '12px', label: '10px' };
-    if (totalRows <= 5) return { title: '12px', item: '11px', label: '9px' };
-    if (totalRows <= 6) return { title: '11px', item: '10px', label: '8px' };
-    return { title: '10px', item: '9px', label: '7px' };
+    if (totalRows <= 5) return { title: '13px', item: '11px', label: '9px', value: '18px' };
+    if (totalRows <= 6) return { title: '12px', item: '10px', label: '8px', value: '16px' };
+    if (totalRows <= 7) return { title: '11px', item: '9px', label: '7px', value: '14px' };
+    return { title: '10px', item: '8px', label: '7px', value: '12px' };
   };
 
   const fontSize = getFontSize();
@@ -113,48 +114,74 @@ function AdaptiveTrikPanel({
     <div
       className="h-full rounded-lg overflow-hidden p-2 flex flex-col"
       style={{
-        background: cardStyle?.background || `rgba(0,0,0,0.6)`,
-        border: `1px solid ${providerColor}40`,
+        background: cardStyle?.background || `rgba(0,0,0,0.7)`,
+        border: `1px solid ${providerColor}50`,
       }}
     >
       {/* Title */}
       <div
-        className="text-center font-bold mb-1.5 flex-shrink-0"
+        className="text-center font-bold mb-1 flex-shrink-0 py-1"
         style={{
           color: providerColor,
           fontSize: fontSize.title,
-          textShadow: `0 0 10px ${providerColor}80`
+          textShadow: `0 0 10px ${providerColor}80`,
+          borderBottom: `1px solid ${providerColor}30`
         }}
       >
         {trik.title || 'TRIK GACOR'}
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col justify-center gap-1 overflow-hidden">
-        {/* Deposit Code */}
-        {trik.depositCode && (
-          <div className="text-center">
-            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>Deposit Kode: </span>
-            <span className="font-bold" style={{ color: providerColor, fontSize: fontSize.item }}>
-              {trik.depositCode}
-            </span>
+      <div className="flex-1 flex flex-col justify-center gap-1.5 overflow-hidden py-1">
+        {/* Deposit Kode */}
+        {trik.depositKode && (
+          <div
+            className="text-center py-1 rounded"
+            style={{ background: `${providerColor}15` }}
+          >
+            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>DEPOSIT KODE UNIK</span>
+            <div className="font-bold" style={{ color: providerColor, fontSize: fontSize.value }}>
+              {trik.depositKode}
+            </div>
           </div>
         )}
 
         {/* Putaran Bet */}
-        {trik.putaranBet && (
-          <div className="text-center">
-            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>Putaran Bet: </span>
-            <span className="font-bold" style={{ color: providerColor, fontSize: fontSize.item }}>
-              {trik.putaranBet}
-            </span>
+        {hasPutaranBet && (
+          <div
+            className="text-center py-1 rounded"
+            style={{ background: `${providerColor}15` }}
+          >
+            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>PUTARAN BET</span>
+            <div className="font-bold" style={{ color: providerColor, fontSize: fontSize.item }}>
+              {trik.putaranBetMin.toLocaleString()} - {trik.putaranBetMax.toLocaleString()}
+            </div>
+          </div>
+        )}
+
+        {/* Fitur Ganda */}
+        {!hideFiturGanda && (
+          <div
+            className="text-center py-1 rounded"
+            style={{ background: `${providerColor}15` }}
+          >
+            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>FITUR GANDA</span>
+            <div
+              className="font-bold"
+              style={{
+                color: trik.fiturGanda ? '#22c55e' : '#ef4444',
+                fontSize: fontSize.item
+              }}
+            >
+              MODE {trik.fiturGanda ? 'ON' : 'OFF'}
+            </div>
           </div>
         )}
 
         {/* Trik Items */}
-        {trik.items && trik.items.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-1 mt-1">
-            {trik.items.map((item, index) => (
+        {trik.trikItems && trik.trikItems.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-1">
+            {trik.trikItems.map((item, index) => (
               <div
                 key={index}
                 className="flex items-center gap-1 px-1.5 py-0.5 rounded"
@@ -166,10 +193,7 @@ function AdaptiveTrikPanel({
                 <span style={{ fontSize: fontSize.item, color: '#fff' }}>{item.name}</span>
                 <span
                   className="font-bold"
-                  style={{
-                    fontSize: fontSize.item,
-                    color: item.value === 'X' ? '#ef4444' : '#22c55e'
-                  }}
+                  style={{ color: providerColor, fontSize: fontSize.item }}
                 >
                   {item.value}
                 </span>
@@ -178,12 +202,24 @@ function AdaptiveTrikPanel({
           </div>
         )}
 
-        {/* Fitur Ganda */}
-        {!hideFiturGanda && trik.fiturGanda && (
-          <div className="text-center mt-1">
-            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>Fitur Ganda: </span>
-            <span className="font-bold" style={{ color: '#22c55e', fontSize: fontSize.item }}>
-              {trik.fiturGanda}
+        {/* Custom Text */}
+        {trik.customText && (
+          <div
+            className="text-center py-1 rounded mt-1"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${providerColor}20, transparent)`,
+              border: `1px solid ${providerColor}30`
+            }}
+          >
+            <span
+              className="font-bold uppercase"
+              style={{
+                color: providerColor,
+                fontSize: fontSize.item,
+                textShadow: `0 0 5px ${providerColor}50`
+              }}
+            >
+              {trik.customText}
             </span>
           </div>
         )}
