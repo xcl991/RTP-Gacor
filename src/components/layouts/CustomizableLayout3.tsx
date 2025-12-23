@@ -223,7 +223,7 @@ function CyberpunkTrikPanel({
           </div>
           <div style={{ width: '2px', height: '40px', background: `linear-gradient(180deg, transparent, ${providerColor}, transparent)` }} />
           <div className="flex-1 text-center">
-            <span className="text-gray-500 block leading-tight" style={{ fontSize: `${sizes.label}px` }}>
+            <span className="text-white block leading-tight" style={{ fontSize: `${sizes.label}px` }}>
               PUTARAN BET
             </span>
             <span
