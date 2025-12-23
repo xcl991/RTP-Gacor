@@ -22,15 +22,16 @@ interface CustomizableLayoutProps {
   footerConfig: FooterConfig;
 }
 
-// Custom Game Card untuk layout 3x1
+// Custom Game Card untuk layout 3x1 - Dikecilkan 10%
 function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; style: RTPStyle; cardSize: number }) {
   return (
     <div
-      className="relative overflow-hidden rounded-lg shadow-lg flex-1"
+      className="relative overflow-hidden rounded-lg shadow-lg"
       style={{
         backgroundColor: style.backgroundColor,
         border: `2px solid ${style.primaryColor}`,
-        maxWidth: `${cardSize}px`
+        width: `${cardSize}px`,
+        flexShrink: 0
       }}
     >
       {/* Game Image */}
@@ -45,7 +46,7 @@ function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; 
         />
         {/* RTP Badge */}
         <div
-          className="absolute top-1 right-1 px-2 py-0.5 rounded text-xs font-bold"
+          className="absolute top-1 right-1 px-1.5 py-0.5 rounded text-[10px] font-bold"
           style={{
             backgroundColor: rtp >= 95 ? '#22c55e' : rtp >= 90 ? '#eab308' : '#ef4444',
             color: 'white',
@@ -58,16 +59,16 @@ function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; 
 
       {/* Game Name */}
       <div
-        className="p-2 text-center"
+        className="p-1.5 text-center"
         style={{
           background: `linear-gradient(to bottom, ${style.backgroundColor}ee, ${style.backgroundColor})`
         }}
       >
         <h3
-          className="text-white font-bold text-xs leading-tight"
+          className="text-white font-bold text-[10px] leading-tight"
           style={{
             overflow: 'hidden',
-            height: '28px',
+            height: '22px',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical'
@@ -80,7 +81,7 @@ function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; 
   );
 }
 
-// Provider Section dengan 3x1 Grid
+// Provider Section dengan 3x1 Grid - Game dikecilkan 10%, Trik Panel diperlebar
 function ProviderSection3x1({
   title,
   games,
@@ -106,30 +107,31 @@ function ProviderSection3x1({
     rtp: Math.floor(Math.random() * 13) + 86
   }));
 
-  // Hitung card size berdasarkan space yang tersedia
-  // Container width: ~1000px - padding (16px) = 984px
-  // Jika trik enabled: 984 - trikPanelWidth - gap (8px) = available for games
-  // Dibagi 3 game + 2 gap (8px each) = card size
-  const availableWidth = trik.enabled ? (984 - trikPanelWidth - 8) : 984;
-  const cardSize = Math.floor((availableWidth - 16) / 3); // 16px for gaps between cards
+  // Hitung card size - dikurangi 10% dan modal game dipersempit
+  // Base: availableWidth / 3, lalu dikurangi 10%
+  const baseAvailableWidth = trik.enabled ? (980 - trikPanelWidth - 16) : 980;
+  const baseCardSize = Math.floor(baseAvailableWidth / 3.2); // Lebih kecil untuk menyisakan space
+  const cardSize = Math.floor(baseCardSize * 0.9); // Kurangi 10%
 
   return (
     <div
-      className="flex-1 flex gap-2 overflow-hidden"
+      className="flex-1 flex gap-3 overflow-hidden"
       style={{ minHeight: 0 }}
     >
-      {/* Games Grid 3x1 */}
+      {/* Games Grid 3x1 - Lebih sempit */}
       <div
-        className="flex-1 rounded-lg overflow-hidden p-3"
+        className="rounded-lg overflow-hidden p-2 flex flex-col"
         style={{
           background: cardStyle?.background || `${style.backgroundColor}dd`,
           border: cardStyle?.border ? `${cardStyle.border} ${providerColor}` : `1px solid ${providerColor}40`,
+          width: trik.enabled ? `${(cardSize * 3) + 24}px` : '100%', // Fixed width when trik enabled
+          flexShrink: 0
         }}
       >
         {/* Provider Title */}
-        <div className="text-center mb-2">
+        <div className="text-center mb-1.5 flex-shrink-0">
           <h2
-            className="font-bold text-base"
+            className="font-bold text-sm"
             style={{
               color: providerColor,
               textShadow: `0 0 10px ${providerColor}80`
@@ -139,25 +141,27 @@ function ProviderSection3x1({
           </h2>
         </div>
 
-        {/* 3x1 Game Grid */}
-        <div className="flex gap-2 justify-center">
-          {displayGames.map((game, index) => (
-            <GameCard3x1
-              key={`${game.name}-${index}`}
-              game={game}
-              rtp={game.rtp}
-              style={style}
-              cardSize={cardSize}
-            />
-          ))}
+        {/* 3x1 Game Grid - Vertical Middle Align */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex gap-2 justify-center">
+            {displayGames.map((game, index) => (
+              <GameCard3x1
+                key={`${game.name}-${index}`}
+                game={game}
+                rtp={game.rtp}
+                style={style}
+                cardSize={cardSize}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Trik Panel */}
+      {/* Trik Panel - Mengisi sisa space */}
       {trik.enabled && (
         <div
-          className="flex-shrink-0 overflow-hidden"
-          style={{ width: `${trikPanelWidth}px` }}
+          className="flex-1 overflow-hidden min-w-0"
+          style={{ minWidth: `${trikPanelWidth}px` }}
         >
           <TrikPanel
             trik={trik}
