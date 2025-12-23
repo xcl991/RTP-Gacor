@@ -232,31 +232,30 @@ function AdaptiveTrikPanel({
           </span>
         </div>
 
-        {/* Trik Items - Horizontal: name | value | pattern */}
+        {/* Trik Items - Horizontal: name (left) | value (center) | pattern (right) */}
         <div className="flex-1 flex flex-col justify-center" style={{ gap: `${sizes.gap}px` }}>
           {trik.trikItems && trik.trikItems.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-between rounded"
+              className="flex items-center rounded"
               style={{ background: 'rgba(0,0,0,0.5)', padding: `${sizes.padding}px ${sizes.padding * 1.5}px` }}
             >
-              {/* Item Name */}
+              {/* Item Name - Left */}
               <span
                 className="text-white font-semibold flex-1 text-left"
                 style={{ fontSize: `${sizes.itemName}px` }}
               >
                 {item.name}
               </span>
-              {/* Value & Pattern */}
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <span className="text-gray-500" style={{ fontSize: `${sizes.itemValue}px` }}>|</span>
-                <span
-                  className="font-bold min-w-[40px] text-center"
-                  style={{ color: providerColor, fontSize: `${sizes.itemValue}px` }}
-                >
-                  {item.value}
-                </span>
-                <span className="text-gray-500" style={{ fontSize: `${sizes.itemValue}px` }}>|</span>
+              {/* Value - Center */}
+              <span
+                className="font-bold flex-1 text-center"
+                style={{ color: providerColor, fontSize: `${sizes.itemValue}px` }}
+              >
+                {item.value}
+              </span>
+              {/* Pattern - Right */}
+              <div className="flex-1 flex justify-end">
                 {item.pattern && <PatternDisplay pattern={item.pattern} size={sizes.icon} />}
               </div>
             </div>
