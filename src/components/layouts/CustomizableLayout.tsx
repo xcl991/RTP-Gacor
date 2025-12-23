@@ -103,7 +103,7 @@ function PatternDisplay({ pattern, size }: { pattern: string; size: number }) {
   );
 }
 
-// Adaptive Trik Panel - Font diperbesar, items per row dengan pattern
+// Adaptive Trik Panel - Font BESAR, row tinggi, value centered, icon besar
 function AdaptiveTrikPanel({
   trik,
   providerColor,
@@ -122,20 +122,20 @@ function AdaptiveTrikPanel({
   const hasCustomText = !!trik.customText;
   const totalRows = itemCount + (hasDepositKode ? 1 : 0) + (hasPutaranBet ? 1 : 0) + (hasCustomText ? 1 : 0) + 2;
 
-  // Adaptive font sizes - DIPERBESAR
+  // Adaptive font sizes - SANGAT BESAR, icon diperbesar
   const getFontSize = () => {
-    if (totalRows <= 5) return { title: '16px', item: '14px', label: '11px', value: '22px', icon: 16 };
-    if (totalRows <= 6) return { title: '15px', item: '13px', label: '10px', value: '20px', icon: 14 };
-    if (totalRows <= 7) return { title: '14px', item: '12px', label: '9px', value: '18px', icon: 13 };
-    if (totalRows <= 8) return { title: '13px', item: '11px', label: '8px', value: '16px', icon: 12 };
-    return { title: '12px', item: '10px', label: '8px', value: '14px', icon: 11 };
+    if (totalRows <= 5) return { title: '22px', item: '18px', label: '14px', value: '28px', icon: 28 };
+    if (totalRows <= 6) return { title: '20px', item: '17px', label: '13px', value: '26px', icon: 26 };
+    if (totalRows <= 7) return { title: '18px', item: '16px', label: '12px', value: '24px', icon: 24 };
+    if (totalRows <= 8) return { title: '16px', item: '14px', label: '11px', value: '20px', icon: 20 };
+    return { title: '14px', item: '12px', label: '10px', value: '18px', icon: 18 };
   };
 
   const fontSize = getFontSize();
 
   return (
     <div
-      className="h-full rounded-lg overflow-hidden p-2 flex flex-col"
+      className="h-full rounded-lg overflow-hidden p-3 flex flex-col"
       style={{
         background: cardStyle?.background || `rgba(0,0,0,0.7)`,
         border: `1px solid ${providerColor}50`,
@@ -143,7 +143,7 @@ function AdaptiveTrikPanel({
     >
       {/* Title */}
       <div
-        className="text-center font-bold mb-1.5 flex-shrink-0 py-1"
+        className="text-center font-bold mb-2 flex-shrink-0 py-2"
         style={{
           color: providerColor,
           fontSize: fontSize.title,
@@ -155,11 +155,11 @@ function AdaptiveTrikPanel({
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col justify-center gap-1.5 overflow-hidden py-1">
+      <div className="flex-1 flex flex-col justify-center gap-2 overflow-hidden py-1">
         {/* Deposit Kode */}
         {trik.depositKode && (
           <div
-            className="text-center py-1.5 rounded"
+            className="text-center py-3 rounded"
             style={{ background: `${providerColor}15` }}
           >
             <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>DEPOSIT KODE UNIK</span>
@@ -172,7 +172,7 @@ function AdaptiveTrikPanel({
         {/* Putaran Bet */}
         {hasPutaranBet && (
           <div
-            className="text-center py-1.5 rounded"
+            className="text-center py-3 rounded"
             style={{ background: `${providerColor}15` }}
           >
             <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>PUTARAN BET</span>
@@ -185,7 +185,7 @@ function AdaptiveTrikPanel({
         {/* Fitur Ganda */}
         {!hideFiturGanda && (
           <div
-            className="text-center py-1.5 rounded"
+            className="text-center py-3 rounded"
             style={{ background: `${providerColor}15` }}
           >
             <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>FITUR GANDA</span>
@@ -201,22 +201,24 @@ function AdaptiveTrikPanel({
           </div>
         )}
 
-        {/* Trik Items - VERTICAL per row dengan Pattern (centang/silang) */}
+        {/* Trik Items - VERTICAL per row, value centered, pattern besar */}
         {trik.trikItems && trik.trikItems.length > 0 && (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             {trik.trikItems.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between px-2 py-1 rounded"
+                className="flex flex-col items-center justify-center px-3 py-3 rounded"
                 style={{
                   background: `${providerColor}15`,
                   border: `1px solid ${providerColor}30`
                 }}
               >
-                <span className="font-semibold" style={{ fontSize: fontSize.item, color: '#fff' }}>
+                {/* Item Name */}
+                <span className="font-semibold mb-1" style={{ fontSize: fontSize.label, color: '#9ca3af' }}>
                   {item.name}
                 </span>
-                <div className="flex items-center gap-2">
+                {/* Value & Pattern - Centered */}
+                <div className="flex items-center justify-center gap-3">
                   <span
                     className="font-bold"
                     style={{ color: providerColor, fontSize: fontSize.item }}
@@ -233,7 +235,7 @@ function AdaptiveTrikPanel({
         {/* Custom Text */}
         {trik.customText && (
           <div
-            className="text-center py-1.5 rounded mt-1"
+            className="text-center py-3 rounded mt-1"
             style={{
               background: `linear-gradient(90deg, transparent, ${providerColor}20, transparent)`,
               border: `1px solid ${providerColor}30`
