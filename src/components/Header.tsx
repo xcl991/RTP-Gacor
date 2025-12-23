@@ -861,8 +861,8 @@ export default function Header({
           Trik Gacor
         </button>
 
-        {/* Maxwin Info Button - Only for Single Featured Layout */}
-        {selectedLayout.id === 'singlefeatured' && (
+        {/* Maxwin Info Button - For Single Featured Layout & Custom Layout 2 */}
+        {(selectedLayout.id === 'singlefeatured' || selectedLayout.id === 'customizable2') && (
           <button
             onClick={() => setIsMaxwinPanelOpen(!isMaxwinPanelOpen)}
             className={`flex items-center gap-2 ${isMaxwinPanelOpen ? 'bg-purple-500' : 'bg-purple-600 hover:bg-purple-700'} text-white px-4 py-2 rounded-lg transition-colors font-semibold`}
@@ -1133,8 +1133,8 @@ export default function Header({
         </div>
       )}
 
-      {/* Maxwin Info Panel - Only for Single Featured Layout */}
-      {isMaxwinPanelOpen && selectedLayout.id === 'singlefeatured' && (
+      {/* Maxwin Info Panel - For Single Featured Layout & Custom Layout 2 */}
+      {isMaxwinPanelOpen && (selectedLayout.id === 'singlefeatured' || selectedLayout.id === 'customizable2') && (
         <div className="mt-4 bg-gray-800 border border-gray-700 rounded-lg p-4">
           <h3 className="text-lg font-semibold text-purple-400 mb-4">Konfigurasi Maxwin Info</h3>
 
