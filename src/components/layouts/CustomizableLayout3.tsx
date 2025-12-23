@@ -336,7 +336,9 @@ function NeonProviderSection({
     rtp: Math.floor(Math.random() * 13) + 86
   }));
 
-  const baseAvailableWidth = trik.enabled ? (980 - trikPanelWidth - 16) : 980;
+  // Trik panel 100px lebih kecil, provider modal lebih besar
+  const adjustedTrikWidth = trikPanelWidth - 100;
+  const baseAvailableWidth = trik.enabled ? (980 - adjustedTrikWidth - 16) : 980;
   const baseCardSize = Math.floor(baseAvailableWidth / 3.2);
   const cardSize = Math.floor(baseCardSize * 0.9);
 
@@ -389,7 +391,7 @@ function NeonProviderSection({
 
       {/* Trik Panel */}
       {trik.enabled && (
-        <div className="flex-1 overflow-hidden min-w-0 h-full" style={{ minWidth: `${trikPanelWidth}px` }}>
+        <div className="flex-1 overflow-hidden min-w-0 h-full" style={{ minWidth: `${adjustedTrikWidth}px` }}>
           <CyberpunkTrikPanel
             trik={trik}
             providerColor={providerColor}
