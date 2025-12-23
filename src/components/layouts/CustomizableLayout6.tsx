@@ -173,10 +173,10 @@ function VegasTrikPanel({
   const totalRows = itemCount + 4;
 
   const getFontSize = () => {
-    if (totalRows <= 5) return { title: 24, label: 14, depositKode: 36, value: 20, itemName: 20, itemValue: 26, icon: 26, gap: 8, padding: 10 };
-    if (totalRows <= 6) return { title: 22, label: 13, depositKode: 32, value: 18, itemName: 18, itemValue: 24, icon: 24, gap: 7, padding: 9 };
-    if (totalRows <= 7) return { title: 20, label: 12, depositKode: 28, value: 16, itemName: 16, itemValue: 22, icon: 22, gap: 6, padding: 8 };
-    return { title: 18, label: 11, depositKode: 24, value: 14, itemName: 14, itemValue: 20, icon: 20, gap: 5, padding: 7 };
+    if (totalRows <= 5) return { title: 24, label: 14, depositKode: 36, value: 20, itemName: 20, itemValue: 24, icon: 26, gap: 8, padding: 10 };
+    if (totalRows <= 6) return { title: 22, label: 13, depositKode: 32, value: 18, itemName: 18, itemValue: 22, icon: 24, gap: 7, padding: 9 };
+    if (totalRows <= 7) return { title: 20, label: 12, depositKode: 28, value: 16, itemName: 16, itemValue: 20, icon: 22, gap: 6, padding: 8 };
+    return { title: 18, label: 11, depositKode: 24, value: 14, itemName: 14, itemValue: 18, icon: 20, gap: 5, padding: 7 };
   };
 
   const sizes = getFontSize();
@@ -219,8 +219,7 @@ function VegasTrikPanel({
           </h3>
           <span className="text-lg">🎰</span>
         </div>
-        <div className="text-[12px] text-gray-400 mt-1">{providerName}</div>
-      </div>
+              </div>
 
       {/* Content */}
       <div

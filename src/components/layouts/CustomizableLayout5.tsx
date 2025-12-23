@@ -169,11 +169,11 @@ function PokerTrikPanel({
   const totalRows = itemCount + 4;
 
   const getFontSize = () => {
-    if (totalRows <= 5) return { title: 22, label: 13, depositKode: 34, value: 18, itemName: 18, itemValue: 23, icon: 24, gap: 8, padding: 10 };
-    if (totalRows <= 6) return { title: 20, label: 12, depositKode: 30, value: 16, itemName: 16, itemValue: 21, icon: 22, gap: 7, padding: 8 };
-    if (totalRows <= 7) return { title: 18, label: 11, depositKode: 26, value: 14, itemName: 14, itemValue: 19, icon: 20, gap: 6, padding: 7 };
-    if (totalRows <= 8) return { title: 16, label: 10, depositKode: 22, value: 12, itemName: 12, itemValue: 17, icon: 18, gap: 5, padding: 6 };
-    return { title: 14, label: 9, depositKode: 18, value: 11, itemName: 11, itemValue: 15, icon: 16, gap: 4, padding: 5 };
+    if (totalRows <= 5) return { title: 22, label: 13, depositKode: 34, value: 18, itemName: 21, itemValue: 23, icon: 24, gap: 8, padding: 10 };
+    if (totalRows <= 6) return { title: 20, label: 12, depositKode: 30, value: 16, itemName: 19, itemValue: 21, icon: 22, gap: 7, padding: 8 };
+    if (totalRows <= 7) return { title: 18, label: 11, depositKode: 26, value: 14, itemName: 17, itemValue: 19, icon: 20, gap: 6, padding: 7 };
+    if (totalRows <= 8) return { title: 16, label: 10, depositKode: 22, value: 12, itemName: 15, itemValue: 17, icon: 18, gap: 5, padding: 6 };
+    return { title: 14, label: 9, depositKode: 18, value: 11, itemName: 14, itemValue: 15, icon: 16, gap: 4, padding: 5 };
   };
 
   const sizes = getFontSize();
