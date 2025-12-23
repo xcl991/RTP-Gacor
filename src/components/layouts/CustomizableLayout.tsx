@@ -81,7 +81,7 @@ function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; 
   );
 }
 
-// Adaptive Trik Panel - Font mengecil jika item banyak
+// Adaptive Trik Panel - Font mengecil jika item banyak, items per row
 function AdaptiveTrikPanel({
   trik,
   providerColor,
@@ -98,14 +98,15 @@ function AdaptiveTrikPanel({
   const hasDepositKode = !!trik.depositKode;
   const hasPutaranBet = trik.putaranBetMin > 0 || trik.putaranBetMax > 0;
   const hasCustomText = !!trik.customText;
-  const totalRows = itemCount + (hasDepositKode ? 1 : 0) + (hasPutaranBet ? 1 : 0) + (hasCustomText ? 1 : 0) + 2; // +2 for title & fitur ganda
+  const totalRows = itemCount + (hasDepositKode ? 1 : 0) + (hasPutaranBet ? 1 : 0) + (hasCustomText ? 1 : 0) + 2;
 
   // Adaptive font sizes berdasarkan jumlah rows
   const getFontSize = () => {
     if (totalRows <= 5) return { title: '13px', item: '11px', label: '9px', value: '18px' };
     if (totalRows <= 6) return { title: '12px', item: '10px', label: '8px', value: '16px' };
     if (totalRows <= 7) return { title: '11px', item: '9px', label: '7px', value: '14px' };
-    return { title: '10px', item: '8px', label: '7px', value: '12px' };
+    if (totalRows <= 8) return { title: '10px', item: '8px', label: '7px', value: '12px' };
+    return { title: '9px', item: '7px', label: '6px', value: '11px' };
   };
 
   const fontSize = getFontSize();
@@ -132,7 +133,7 @@ function AdaptiveTrikPanel({
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col justify-center gap-1.5 overflow-hidden py-1">
+      <div className="flex-1 flex flex-col justify-center gap-1 overflow-hidden py-1">
         {/* Deposit Kode */}
         {trik.depositKode && (
           <div
@@ -178,16 +179,16 @@ function AdaptiveTrikPanel({
           </div>
         )}
 
-        {/* Trik Items */}
+        {/* Trik Items - VERTICAL per row */}
         {trik.trikItems && trik.trikItems.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-1">
+          <div className="flex flex-col gap-0.5">
             {trik.trikItems.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center gap-1 px-1.5 py-0.5 rounded"
+                className="flex items-center justify-between px-2 py-0.5 rounded"
                 style={{
-                  background: `${providerColor}20`,
-                  border: `1px solid ${providerColor}40`
+                  background: `${providerColor}15`,
+                  border: `1px solid ${providerColor}30`
                 }}
               >
                 <span style={{ fontSize: fontSize.item, color: '#fff' }}>{item.name}</span>
@@ -228,7 +229,7 @@ function AdaptiveTrikPanel({
   );
 }
 
-// Provider Section dengan 3x1 Grid - Game dikecilkan 10%, Trik Panel diperlebar
+// Provider Section dengan 3x1 Grid - Modal game shrink-to-fit, vertical center dengan Trik
 function ProviderSection3x1({
   title,
   games,
@@ -261,12 +262,12 @@ function ProviderSection3x1({
 
   return (
     <div
-      className="flex-1 flex gap-3 overflow-hidden"
+      className="flex-1 flex gap-3 overflow-hidden items-center"
       style={{ minHeight: 0 }}
     >
-      {/* Games Grid 3x1 - Lebih sempit */}
+      {/* Games Grid 3x1 - Shrink to fit, vertical center (levitating) */}
       <div
-        className="rounded-lg overflow-hidden p-2 flex flex-col"
+        className="rounded-lg overflow-hidden p-2 self-center"
         style={{
           background: cardStyle?.background || `${style.backgroundColor}dd`,
           border: cardStyle?.border ? `${cardStyle.border} ${providerColor}` : `1px solid ${providerColor}40`,
@@ -275,12 +276,12 @@ function ProviderSection3x1({
         }}
       >
         {/* Provider Title - Diperbesar 30% */}
-        <div className="text-center mb-2 flex-shrink-0">
+        <div className="text-center mb-1">
           <h2
             className="font-bold"
             style={{
               color: providerColor,
-              fontSize: '18px', // Dari 14px (text-sm) diperbesar 30% = ~18px
+              fontSize: '18px',
               textShadow: `0 0 15px ${providerColor}80`
             }}
           >
@@ -288,26 +289,24 @@ function ProviderSection3x1({
           </h2>
         </div>
 
-        {/* 3x1 Game Grid - Vertical Middle Align */}
-        <div className="flex-1 flex items-center justify-center">
-          <div className="flex gap-2 justify-center">
-            {displayGames.map((game, index) => (
-              <GameCard3x1
-                key={`${game.name}-${index}`}
-                game={game}
-                rtp={game.rtp}
-                style={style}
-                cardSize={cardSize}
-              />
-            ))}
-          </div>
+        {/* 3x1 Game Grid */}
+        <div className="flex gap-2 justify-center">
+          {displayGames.map((game, index) => (
+            <GameCard3x1
+              key={`${game.name}-${index}`}
+              game={game}
+              rtp={game.rtp}
+              style={style}
+              cardSize={cardSize}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Adaptive Trik Panel */}
+      {/* Adaptive Trik Panel - Full height */}
       {trik.enabled && (
         <div
-          className="flex-1 overflow-hidden min-w-0"
+          className="flex-1 overflow-hidden min-w-0 h-full"
           style={{ minWidth: `${trikPanelWidth}px` }}
         >
           <AdaptiveTrikPanel
