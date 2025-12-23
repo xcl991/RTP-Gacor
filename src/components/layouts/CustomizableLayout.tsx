@@ -81,6 +81,117 @@ function GameCard3x1({ game, rtp, style, cardSize }: { game: Game; rtp: number; 
   );
 }
 
+// Adaptive Trik Panel - Font mengecil jika item banyak
+function AdaptiveTrikPanel({
+  trik,
+  providerColor,
+  cardStyle,
+  hideFiturGanda = false
+}: {
+  trik: TrikConfig;
+  providerColor: string;
+  cardStyle: CardStyleOption;
+  hideFiturGanda?: boolean;
+}) {
+  // Hitung total rows untuk menentukan font size
+  const itemCount = trik.items?.length || 0;
+  const hasDepositCode = !!trik.depositCode;
+  const hasPutaranBet = !!trik.putaranBet;
+  const totalRows = itemCount + (hasDepositCode ? 1 : 0) + (hasPutaranBet ? 1 : 0) + 1; // +1 for title
+
+  // Adaptive font sizes berdasarkan jumlah rows
+  const getFontSize = () => {
+    if (totalRows <= 4) return { title: '14px', item: '12px', label: '10px' };
+    if (totalRows <= 5) return { title: '12px', item: '11px', label: '9px' };
+    if (totalRows <= 6) return { title: '11px', item: '10px', label: '8px' };
+    return { title: '10px', item: '9px', label: '7px' };
+  };
+
+  const fontSize = getFontSize();
+
+  return (
+    <div
+      className="h-full rounded-lg overflow-hidden p-2 flex flex-col"
+      style={{
+        background: cardStyle?.background || `rgba(0,0,0,0.6)`,
+        border: `1px solid ${providerColor}40`,
+      }}
+    >
+      {/* Title */}
+      <div
+        className="text-center font-bold mb-1.5 flex-shrink-0"
+        style={{
+          color: providerColor,
+          fontSize: fontSize.title,
+          textShadow: `0 0 10px ${providerColor}80`
+        }}
+      >
+        {trik.title || 'TRIK GACOR'}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 flex flex-col justify-center gap-1 overflow-hidden">
+        {/* Deposit Code */}
+        {trik.depositCode && (
+          <div className="text-center">
+            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>Deposit Kode: </span>
+            <span className="font-bold" style={{ color: providerColor, fontSize: fontSize.item }}>
+              {trik.depositCode}
+            </span>
+          </div>
+        )}
+
+        {/* Putaran Bet */}
+        {trik.putaranBet && (
+          <div className="text-center">
+            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>Putaran Bet: </span>
+            <span className="font-bold" style={{ color: providerColor, fontSize: fontSize.item }}>
+              {trik.putaranBet}
+            </span>
+          </div>
+        )}
+
+        {/* Trik Items */}
+        {trik.items && trik.items.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-1 mt-1">
+            {trik.items.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-1 px-1.5 py-0.5 rounded"
+                style={{
+                  background: `${providerColor}20`,
+                  border: `1px solid ${providerColor}40`
+                }}
+              >
+                <span style={{ fontSize: fontSize.item, color: '#fff' }}>{item.name}</span>
+                <span
+                  className="font-bold"
+                  style={{
+                    fontSize: fontSize.item,
+                    color: item.value === 'X' ? '#ef4444' : '#22c55e'
+                  }}
+                >
+                  {item.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Fitur Ganda */}
+        {!hideFiturGanda && trik.fiturGanda && (
+          <div className="text-center mt-1">
+            <span style={{ color: '#9ca3af', fontSize: fontSize.label }}>Fitur Ganda: </span>
+            <span className="font-bold" style={{ color: '#22c55e', fontSize: fontSize.item }}>
+              {trik.fiturGanda}
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Provider Section dengan 3x1 Grid - Game dikecilkan 10%, Trik Panel diperlebar
 function ProviderSection3x1({
   title,
@@ -108,10 +219,9 @@ function ProviderSection3x1({
   }));
 
   // Hitung card size - dikurangi 10% dan modal game dipersempit
-  // Base: availableWidth / 3, lalu dikurangi 10%
   const baseAvailableWidth = trik.enabled ? (980 - trikPanelWidth - 16) : 980;
-  const baseCardSize = Math.floor(baseAvailableWidth / 3.2); // Lebih kecil untuk menyisakan space
-  const cardSize = Math.floor(baseCardSize * 0.9); // Kurangi 10%
+  const baseCardSize = Math.floor(baseAvailableWidth / 3.2);
+  const cardSize = Math.floor(baseCardSize * 0.9);
 
   return (
     <div
@@ -124,17 +234,18 @@ function ProviderSection3x1({
         style={{
           background: cardStyle?.background || `${style.backgroundColor}dd`,
           border: cardStyle?.border ? `${cardStyle.border} ${providerColor}` : `1px solid ${providerColor}40`,
-          width: trik.enabled ? `${(cardSize * 3) + 24}px` : '100%', // Fixed width when trik enabled
+          width: trik.enabled ? `${(cardSize * 3) + 24}px` : '100%',
           flexShrink: 0
         }}
       >
-        {/* Provider Title */}
-        <div className="text-center mb-1.5 flex-shrink-0">
+        {/* Provider Title - Diperbesar 30% */}
+        <div className="text-center mb-2 flex-shrink-0">
           <h2
-            className="font-bold text-sm"
+            className="font-bold"
             style={{
               color: providerColor,
-              textShadow: `0 0 10px ${providerColor}80`
+              fontSize: '18px', // Dari 14px (text-sm) diperbesar 30% = ~18px
+              textShadow: `0 0 15px ${providerColor}80`
             }}
           >
             {title}
@@ -157,19 +268,16 @@ function ProviderSection3x1({
         </div>
       </div>
 
-      {/* Trik Panel - Mengisi sisa space */}
+      {/* Adaptive Trik Panel */}
       {trik.enabled && (
         <div
           className="flex-1 overflow-hidden min-w-0"
           style={{ minWidth: `${trikPanelWidth}px` }}
         >
-          <TrikPanel
+          <AdaptiveTrikPanel
             trik={trik}
             providerColor={providerColor}
-            fontFamily="var(--font-orbitron), sans-serif"
             cardStyle={cardStyle}
-            variant="default"
-            horizontalItems={true}
             hideFiturGanda={hideFiturGanda}
           />
         </div>
@@ -233,7 +341,7 @@ export default function CustomizableLayout({
         </h1>
       </div>
 
-      {/* Header 2 - Logo, Time, Date (Height: 45px) */}
+      {/* Header 2 - Logo, Time, Date (Height: 45px) - Website text dihilangkan */}
       <div
         className="flex-shrink-0 flex items-center justify-between px-4"
         style={{
@@ -242,25 +350,19 @@ export default function CustomizableLayout({
           borderBottom: `1px solid ${selectedStyle.primaryColor}40`
         }}
       >
-        {/* Logo */}
-        <div className="flex items-center gap-3">
+        {/* Logo Only - Text website dihilangkan */}
+        <div className="flex items-center">
           <img
             src={selectedWebsite.logo}
             alt={`${selectedWebsite.name} logo`}
-            className="h-8 object-contain"
+            className="h-9 object-contain"
             style={{
-              filter: `drop-shadow(0 0 6px ${selectedStyle.primaryColor}60)`
+              filter: `drop-shadow(0 0 8px ${selectedStyle.primaryColor}60)`
             }}
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="80"%3E%3Crect width="200" height="80" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-family="Arial" font-size="14"%3E' + selectedWebsite.name + '%3C/text%3E%3C/svg%3E';
             }}
           />
-          <span
-            className="text-sm font-bold uppercase"
-            style={{ color: selectedStyle.primaryColor }}
-          >
-            {selectedWebsite.name}
-          </span>
         </div>
 
         {/* Time & Date */}
@@ -296,7 +398,7 @@ export default function CustomizableLayout({
         </div>
       </div>
 
-      {/* Games Container (Height: ~820px) */}
+      {/* Games Container (Height: ~870px - lebih tinggi karena footer dikurangi) */}
       <div
         className="flex-1 flex flex-col gap-3 p-2 overflow-hidden"
         style={{ minHeight: 0 }}
@@ -325,9 +427,8 @@ export default function CustomizableLayout({
         />
       </div>
 
-      {/* Footer Section (Height: ~85px total) */}
+      {/* Footer - Hanya Telegram (Height: 35px) */}
       <div className="flex-shrink-0">
-        {/* Footer 1 - Main Footer with Telegram (Height: 35px) */}
         <div
           className="flex items-center justify-center gap-2 px-4"
           style={{
@@ -346,43 +447,6 @@ export default function CustomizableLayout({
             {footerConfig.footer1 || `Join Telegram: @${telegramUsername || selectedWebsite.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`}
           </span>
         </div>
-
-        {/* Sub Footer 1 (Height: 24px) */}
-        {footerConfig.subFooter1 && (
-          <div
-            className="flex items-center justify-center px-4"
-            style={{
-              height: '24px',
-              background: `${selectedStyle.backgroundColor}60`
-            }}
-          >
-            <span
-              className="text-[11px]"
-              style={{ color: selectedStyle.secondaryColor, opacity: 0.9 }}
-            >
-              {footerConfig.subFooter1}
-            </span>
-          </div>
-        )}
-
-        {/* Footer 2 (Height: 26px) */}
-        {footerConfig.footer2 && (
-          <div
-            className="flex items-center justify-center px-4"
-            style={{
-              height: '26px',
-              background: `linear-gradient(90deg, ${selectedStyle.secondaryColor}20 0%, ${selectedStyle.primaryColor}20 100%)`,
-              borderTop: `1px solid ${selectedStyle.primaryColor}20`
-            }}
-          >
-            <span
-              className="text-[11px] font-medium"
-              style={{ color: 'rgba(255,255,255,0.7)' }}
-            >
-              {footerConfig.footer2}
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );
