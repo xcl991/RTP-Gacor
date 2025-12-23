@@ -1125,10 +1125,15 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     id: "customizable",
     name: "Custom Layout",
     description: "Layout dengan header, footer, dan semua elemen yang bisa dikustomisasi"
+  },
+  {
+    id: "customizable2",
+    name: "Custom Layout 2",
+    description: "Layout dengan game dan trik gacor side by side (Pragmatic | PG Soft)"
   }
 ];
 
-// Total: 16 layout options available
+// Total: 17 layout options available
 
 export const TEXTURE_OPTIONS: TextureOption[] = [
   {
