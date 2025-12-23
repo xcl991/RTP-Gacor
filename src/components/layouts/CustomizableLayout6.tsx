@@ -117,12 +117,12 @@ function VegasGameCard({ game, rtp, cardSize }: { game: Game; rtp: number; cardS
         }}
       >
         <h3
-          className="text-[10px] font-bold leading-tight"
+          className="text-[13px] font-bold leading-tight"
           style={{
             color: '#ff00ff',
             textShadow: '0 0 5px #ff00ff, 0 0 10px #ff00ff50',
             overflow: 'hidden',
-            height: '22px',
+            height: '28px',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical'
@@ -173,10 +173,10 @@ function VegasTrikPanel({
   const totalRows = itemCount + 4;
 
   const getFontSize = () => {
-    if (totalRows <= 5) return { title: 18, label: 11, depositKode: 28, value: 15, itemName: 14, itemValue: 18, icon: 20, gap: 6, padding: 8 };
-    if (totalRows <= 6) return { title: 16, label: 10, depositKode: 24, value: 13, itemName: 12, itemValue: 16, icon: 18, gap: 5, padding: 7 };
-    if (totalRows <= 7) return { title: 14, label: 9, depositKode: 20, value: 11, itemName: 11, itemValue: 14, icon: 16, gap: 4, padding: 6 };
-    return { title: 12, label: 8, depositKode: 18, value: 10, itemName: 10, itemValue: 12, icon: 14, gap: 3, padding: 5 };
+    if (totalRows <= 5) return { title: 24, label: 14, depositKode: 36, value: 20, itemName: 20, itemValue: 26, icon: 26, gap: 8, padding: 10 };
+    if (totalRows <= 6) return { title: 22, label: 13, depositKode: 32, value: 18, itemName: 18, itemValue: 24, icon: 24, gap: 7, padding: 9 };
+    if (totalRows <= 7) return { title: 20, label: 12, depositKode: 28, value: 16, itemName: 16, itemValue: 22, icon: 22, gap: 6, padding: 8 };
+    return { title: 18, label: 11, depositKode: 24, value: 14, itemName: 14, itemValue: 20, icon: 20, gap: 5, padding: 7 };
   };
 
   const sizes = getFontSize();
@@ -219,7 +219,7 @@ function VegasTrikPanel({
           </h3>
           <span className="text-lg">🎰</span>
         </div>
-        <div className="text-[10px] text-gray-400 mt-1">{providerName}</div>
+        <div className="text-[12px] text-gray-400 mt-1">{providerName}</div>
       </div>
 
       {/* Content */}
@@ -499,7 +499,7 @@ export default function CustomizableLayout6({
                 className="font-black tracking-wider"
                 style={{
                   color: '#ff00ff',
-                  fontSize: '16px',
+                  fontSize: '20px',
                   textShadow: '0 0 10px #ff00ff, 0 0 20px #ff00ff'
                 }}
               >
@@ -531,7 +531,7 @@ export default function CustomizableLayout6({
                 className="font-black tracking-wider"
                 style={{
                   color: '#00ffff',
-                  fontSize: '16px',
+                  fontSize: '20px',
                   textShadow: '0 0 10px #00ffff, 0 0 20px #00ffff'
                 }}
               >
@@ -587,7 +587,7 @@ export default function CustomizableLayout6({
                 className="font-black uppercase"
                 style={{
                   color: '#ffff00',
-                  fontSize: '16px',
+                  fontSize: '20px',
                   textShadow: '0 0 10px #ffff00, 0 0 20px #ffff00'
                 }}
               >

@@ -116,10 +116,10 @@ function PokerGameCard({ game, rtp, cardSize }: { game: Game; rtp: number; cardS
         }}
       >
         <h3
-          className="text-[10px] font-bold leading-tight text-yellow-400"
+          className="text-[13px] font-bold leading-tight text-yellow-400"
           style={{
             overflow: 'hidden',
-            height: '22px',
+            height: '28px',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -169,11 +169,11 @@ function PokerTrikPanel({
   const totalRows = itemCount + 4;
 
   const getFontSize = () => {
-    if (totalRows <= 5) return { title: 22, label: 13, depositKode: 34, value: 18, itemName: 18, itemValue: 23, icon: 24, gap: 8, padding: 10 };
-    if (totalRows <= 6) return { title: 20, label: 12, depositKode: 30, value: 16, itemName: 16, itemValue: 21, icon: 22, gap: 7, padding: 8 };
-    if (totalRows <= 7) return { title: 18, label: 11, depositKode: 26, value: 14, itemName: 14, itemValue: 19, icon: 20, gap: 6, padding: 7 };
-    if (totalRows <= 8) return { title: 16, label: 10, depositKode: 22, value: 12, itemName: 12, itemValue: 17, icon: 18, gap: 5, padding: 6 };
-    return { title: 14, label: 9, depositKode: 18, value: 11, itemName: 11, itemValue: 15, icon: 16, gap: 4, padding: 5 };
+    if (totalRows <= 5) return { title: 28, label: 16, depositKode: 42, value: 24, itemName: 24, itemValue: 30, icon: 30, gap: 10, padding: 12 };
+    if (totalRows <= 6) return { title: 26, label: 15, depositKode: 38, value: 22, itemName: 22, itemValue: 28, icon: 28, gap: 9, padding: 10 };
+    if (totalRows <= 7) return { title: 24, label: 14, depositKode: 34, value: 20, itemName: 20, itemValue: 26, icon: 26, gap: 8, padding: 9 };
+    if (totalRows <= 8) return { title: 22, label: 13, depositKode: 30, value: 18, itemName: 18, itemValue: 24, icon: 24, gap: 7, padding: 8 };
+    return { title: 20, label: 12, depositKode: 26, value: 16, itemName: 16, itemValue: 22, icon: 22, gap: 6, padding: 7 };
   };
 
   const sizes = getFontSize();
@@ -390,7 +390,7 @@ function PokerProviderSection({
               className="font-black tracking-wider"
               style={{
                 color: '#ffd700',
-                fontSize: '18px',
+                fontSize: '22px',
                 textShadow: '2px 2px 0 #000, -1px -1px 0 #000'
               }}
             >
