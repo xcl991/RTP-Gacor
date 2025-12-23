@@ -1140,10 +1140,20 @@ export const LAYOUT_OPTIONS: LayoutOption[] = [
     id: "customizable4",
     name: "Custom Layout 4",
     description: "Layout glassmorphism holographic dengan efek glass dan rounded corners (struktur seperti Layout 2)"
+  },
+  {
+    id: "customizable5",
+    name: "Custom Layout 5",
+    description: "Layout poker casino style dengan green felt, poker chips, dan card suits (struktur seperti Layout 1)"
+  },
+  {
+    id: "customizable6",
+    name: "Custom Layout 6",
+    description: "Layout Vegas slots style dengan neon lights, jackpot badges, dan slot machine theme (struktur seperti Layout 2)"
   }
 ];
 
-// Total: 19 layout options available
+// Total: 21 layout options available
 
 export const TEXTURE_OPTIONS: TextureOption[] = [
   {

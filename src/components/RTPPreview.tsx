@@ -22,6 +22,8 @@ import CustomizableLayout from './layouts/CustomizableLayout';
 import CustomizableLayout2 from './layouts/CustomizableLayout2';
 import CustomizableLayout3 from './layouts/CustomizableLayout3';
 import CustomizableLayout4 from './layouts/CustomizableLayout4';
+import CustomizableLayout5 from './layouts/CustomizableLayout5';
+import CustomizableLayout6 from './layouts/CustomizableLayout6';
 import { RTPStyle, WebsiteOption, Game, LayoutOption, TextureOption, CardStyleOption, TrikConfig, MaxwinConfig, DefaultLayoutSizeConfig, FooterConfig } from '@/types';
 
 interface RTPPreviewProps {
@@ -210,6 +212,8 @@ const RTPPreview = forwardRef<HTMLDivElement, RTPPreviewProps>(({
         {selectedLayout.id === 'customizable2' && <CustomizableLayout2 {...layoutProps} />}
         {selectedLayout.id === 'customizable3' && <CustomizableLayout3 {...layoutProps} />}
         {selectedLayout.id === 'customizable4' && <CustomizableLayout4 {...layoutProps} />}
+        {selectedLayout.id === 'customizable5' && <CustomizableLayout5 {...layoutProps} />}
+        {selectedLayout.id === 'customizable6' && <CustomizableLayout6 {...layoutProps} />}
 
         {/* Floating Action Buttons */}
         <div
